@@ -8,6 +8,7 @@ import Icon from '@/components/ui/Icon.astro';
 import Button from '@/components/ui/Button.astro';
 import Input from '@/components/ui/Input.astro';
 import Textarea from '@/components/ui/Textarea.astro';
+import { Card, CardTitle } from '@/components/ui/Card';
 import siteConfig from '@/config/site.config';
 ---
 
@@ -43,10 +44,8 @@ import siteConfig from '@/config/site.config';
     <div class="mx-auto max-w-6xl px-6">
       <div class="grid gap-12 lg:grid-cols-2">
         <!-- Form -->
-        <div class="p-8 rounded-xl border border-border bg-card">
-          <h2 class="font-display text-2xl font-bold text-foreground mb-6">
-            Send us a message
-          </h2>
+        <Card client:visible padding="lg">
+          <CardTitle className="text-2xl font-display mb-6">Send us a message</CardTitle>
 
           <form id="contact-form" action="/api/contact" method="POST" class="space-y-6">
             <Input
@@ -94,7 +93,7 @@ import siteConfig from '@/config/site.config';
               Send Message
             </Button>
           </form>
-        </div>
+        </Card>
 
         <!-- Contact Info -->
         <div class="flex flex-col justify-center">
@@ -104,17 +103,18 @@ import siteConfig from '@/config/site.config';
 
           <div class="space-y-6">
             <!-- Email -->
-            <a
-              href={`mailto:${siteConfig.email}`}
-              class="flex items-center gap-4 p-4 rounded-lg border border-border bg-card hover:bg-muted transition-colors"
-            >
-              <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center">
-                <Icon name="mail" class="w-6 h-6 text-brand-500" />
-              </div>
-              <div>
-                <div class="text-sm text-foreground-muted">Email</div>
-                <div class="font-medium text-foreground">{siteConfig.email}</div>
-              </div>
+            <a href={`mailto:${siteConfig.email}`} class="block">
+              <Card client:visible hover padding="sm">
+                <div class="flex items-center gap-4">
+                  <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+                    <Icon name="mail" size="md" />
+                  </div>
+                  <div>
+                    <p class="text-sm text-foreground-muted">Email</p>
+                    <p class="font-medium text-foreground">{siteConfig.email}</p>
+                  </div>
+                </div>
+              </Card>
             </a>
 
             <!-- GitHub -->
@@ -122,15 +122,19 @@ import siteConfig from '@/config/site.config';
               href="https://github.com/southwellmedia-dev/velocity"
               target="_blank"
               rel="noopener noreferrer"
-              class="flex items-center gap-4 p-4 rounded-lg border border-border bg-card hover:bg-muted transition-colors"
+              class="block"
             >
-              <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center">
-                <Icon name="github" class="w-6 h-6 text-brand-500" />
-              </div>
-              <div>
-                <div class="text-sm text-foreground-muted">GitHub</div>
-                <div class="font-medium text-foreground">velocity</div>
-              </div>
+              <Card client:visible hover padding="sm">
+                <div class="flex items-center gap-4">
+                  <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+                    <Icon name="github" size="md" />
+                  </div>
+                  <div>
+                    <p class="text-sm text-foreground-muted">GitHub</p>
+                    <p class="font-medium text-foreground">velocity</p>
+                  </div>
+                </div>
+              </Card>
             </a>
 
             <!-- Twitter -->
@@ -139,15 +143,19 @@ import siteConfig from '@/config/site.config';
                 href={`https://twitter.com/${siteConfig.twitter.site.replace('@', '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="flex items-center gap-4 p-4 rounded-lg border border-border bg-card hover:bg-muted transition-colors"
+                class="block"
               >
-                <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center">
-                  <Icon name="twitter" class="w-6 h-6 text-brand-500" />
-                </div>
-                <div>
-                  <div class="text-sm text-foreground-muted">Twitter</div>
-                  <div class="font-medium text-foreground">{siteConfig.twitter.site}</div>
-                </div>
+                <Card client:visible hover padding="sm">
+                  <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+                      <Icon name="twitter" size="md" />
+                    </div>
+                    <div>
+                      <p class="text-sm text-foreground-muted">Twitter</p>
+                      <p class="font-medium text-foreground">{siteConfig.twitter.site}</p>
+                    </div>
+                  </div>
+                </Card>
               </a>
             )}
           </div>

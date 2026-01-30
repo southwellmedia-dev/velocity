@@ -7,6 +7,7 @@ import {
   Globe,
   Copy,
   Check,
+  Newspaper,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -23,30 +24,35 @@ interface TabContent {
 }
 
 const tabContent: Record<string, TabContent> = {
-  design: {
-    title: 'CSS-First Design Tokens',
+  theming: {
+    title: 'Design Tokens & Dark Mode',
     content:
-      "Velocity implements a complete design system using Tailwind v4's new CSS-first configuration. No messy JavaScript config files for theme values.",
+      "Complete design system using Tailwind v4's CSS-first configuration with built-in dark mode. Semantic color tokens, system preference detection, and localStorage persistence.",
   },
   seo: {
     title: 'Automated SEO Handling',
     content:
-      "Astro's content collections power strictly typed metadata injection for every page. Social share images are generated automatically.",
+      "Strictly typed metadata injection for every page with automatic OG image generation. Includes sitemap, robots.txt, and JSON-LD structured data.",
   },
   perf: {
     title: 'Zero JS by Default',
     content:
-      "We utilize Astro's island architecture to ensure your marketing pages ship 0kb of JavaScript to the client unless explicitly interactive.",
+      "Astro's island architecture ensures your pages ship 0kb of JavaScript unless explicitly interactive. Optimized for Core Web Vitals.",
   },
   components: {
     title: 'Type-Safe Components',
     content:
-      'Build with confidence using TypeScript-first components. Full prop validation and IDE autocompletion out of the box.',
+      'TypeScript-first UI primitives with full prop validation and IDE autocompletion. Includes buttons, inputs, cards, modals, and more.',
   },
   i18n: {
-    title: 'Built-in Internationalization',
+    title: 'i18n Ready',
     content:
-      'First-class support for multi-language sites with type-safe translations, automatic locale detection, and SEO-friendly URL structures.',
+      'Add multi-language support with the --i18n flag. Includes type-safe translations, automatic locale detection, and SEO-friendly URL structures.',
+  },
+  content: {
+    title: 'Content & Search',
+    content:
+      'Type-safe content collections with Zod schemas, MDX support, RSS feeds, and Pagefind integration for lightning-fast static search.',
   },
 };
 
@@ -54,109 +60,113 @@ const codeExamples: Record<
   string,
   { code: string; filename: string; lang: 'css' | 'astro' | 'typescript' | 'javascript' }
 > = {
-  design: {
+  theming: {
     lang: 'css',
-    code: `/* src/styles/theme.css */
-@theme {
-  --font-display: 'Outfit', sans-serif;
-  --font-body: 'Manrope', sans-serif;
+    code: `/* src/styles/tokens/colors.css */
+:root {
+  /* Brand Scale - International Orange */
+  --brand-500: oklch(62.5% 0.22 38);
+  --brand-600: oklch(53.2% 0.19 38);
 
-  --color-brand-500: oklch(0.623 0.214 25.667);
-  --color-brand-600: oklch(0.553 0.201 25.667);
-
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+  /* Semantic Tokens - Light Mode */
+  --background: var(--gray-0);
+  --foreground: var(--gray-900);
+  --border: var(--gray-200);
+  --primary: var(--gray-900);
+  --accent: var(--brand-500);
 }
 
-/* Usage in components */
-.btn-primary {
-  background: var(--color-brand-500);
-  font-family: var(--font-display);
+/* Dark Mode */
+.dark {
+  --background: var(--gray-950);
+  --foreground: var(--gray-50);
+  --border: var(--gray-800);
+  --primary: var(--gray-0);
 }`,
-    filename: 'src/styles/theme.css',
+    filename: 'src/styles/tokens/colors.css',
   },
   seo: {
     lang: 'astro',
     code: `---
-// src/layouts/Layout.astro
+// src/components/seo/SEO.astro
+import { SEO as AstroSEO } from 'astro-seo';
+import siteConfig from '@/config/site.config';
+
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
   image?: string;
 }
 
 const { title, description, image } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Auto-generate OG image if none provided
+const ogImage = image || \`/og/\${Astro.url.pathname}.png\`;
 ---
 
-<head>
-  <title>{title} | Velocity</title>
-  <meta name="description" content={description} />
-  <link rel="canonical" href={canonicalURL} />
-  <meta property="og:image" content={image} />
-</head>`,
-    filename: 'src/layouts/Layout.astro',
+<AstroSEO
+  title={title}
+  description={description}
+  canonical={canonicalURL.toString()}
+  openGraph={{ basic: { title, image: ogImage } }}
+/>`,
+    filename: 'src/components/seo/SEO.astro',
   },
   perf: {
     lang: 'astro',
     code: `---
 // src/pages/index.astro
-import Hero from '../components/Hero.astro';
-import Calculator from '../components/Calculator.tsx';
+import Hero from '../components/landing/Hero.astro';
+import PricingCalculator from '../components/PricingCalculator.tsx';
 ---
 
-<!-- Static HTML (0kb JS) -->
+<!-- Static HTML - ships 0kb JS -->
 <Hero />
 
-<!-- Hydrates only when visible -->
-<Calculator client:visible />
+<!-- Hydrates only when visible in viewport -->
+<PricingCalculator client:visible />
 
-<script>
-  // Optional: Performance observer
-  const observer = new PerformanceObserver((list) => {
-    list.getEntries().forEach(console.log);
-  });
-  observer.observe({ entryTypes: ['lcp'] });
-</script>`,
+<!-- Hydrates only on user interaction -->
+<Newsletter client:idle />
+
+<!-- Hydrates only on specific media query -->
+<MobileMenu client:media="(max-width: 768px)" />`,
     filename: 'src/pages/index.astro',
   },
   components: {
     lang: 'typescript',
     code: `// src/components/ui/Button.tsx
+import { forwardRef } from 'react';
 import { cn } from '@/lib/cn';
 
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+type ButtonSize = 'sm' | 'md' | 'lg';
+
 interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  loading?: boolean;
   children: React.ReactNode;
-  onClick?: () => void;
 }
 
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  children,
-  onClick
-}: ButtonProps) {
-  return (
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ variant = 'primary', size = 'md', loading, children }, ref) => (
     <button
-      onClick={onClick}
-      className={cn(
-        'font-medium rounded-md transition-colors',
-        variants[variant],
-        sizes[size]
-      )}
+      ref={ref}
+      className={cn(baseStyles, variants[variant], sizes[size])}
+      disabled={loading}
     >
+      {loading && <Spinner />}
       {children}
     </button>
-  );
-}`,
+  )
+);`,
     filename: 'src/components/ui/Button.tsx',
   },
   i18n: {
     lang: 'typescript',
-    code: `// src/i18n/config.ts
+    code: `// src/i18n/config.ts (with --i18n flag)
 export const languages = {
   en: 'English',
   es: 'Español',
@@ -165,22 +175,42 @@ export const languages = {
 
 export const defaultLang = 'en';
 
-// src/i18n/translations.ts
-export const translations = {
-  en: {
-    'nav.home': 'Home',
-    'nav.about': 'About',
-    'hero.title': 'Ship faster with Velocity',
-  },
-  es: {
-    'nav.home': 'Inicio',
-    'nav.about': 'Acerca de',
-    'hero.title': 'Envía más rápido con Velocity',
-  },
+// src/i18n/translations/en.ts
+export default {
+  'nav.home': 'Home',
+  'nav.about': 'About',
+  'hero.title': 'Ship faster with Velocity',
+  'hero.subtitle': 'The modern Astro starter',
 } as const;
 
-// Usage: t('hero.title') → "Ship faster..."`,
+// Usage in components
+import { t } from '@/i18n';
+const title = t('hero.title'); // "Ship faster..."`,
     filename: 'src/i18n/config.ts',
+  },
+  content: {
+    lang: 'typescript',
+    code: `// src/content.config.ts
+import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
+
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string().max(100),
+      description: z.string().max(200),
+      publishedAt: z.coerce.date(),
+      author: z.string().default('Team'),
+      image: image().optional(),
+      tags: z.array(z.string()).default([]),
+      draft: z.boolean().default(false),
+    }),
+});
+
+export const collections = { blog };
+// + Pagefind indexes all content at build time`,
+    filename: 'src/content.config.ts',
   },
 };
 
@@ -402,14 +432,15 @@ function CodeBlock({ code, filename, lang }: { code: string; filename: string; l
 }
 
 export function FeatureTabs() {
-  const [activeTab, setActiveTab] = useState('design');
+  const [activeTab, setActiveTab] = useState('theming');
 
   const tabs: Tab[] = [
-    { id: 'design', label: 'Design System', desc: 'Global tokens & typography', icon: Palette },
-    { id: 'seo', label: 'SEO & Meta', desc: 'OpenGraph & sitemaps', icon: Search },
-    { id: 'perf', label: 'Performance', desc: '100/100 Core Web Vitals', icon: Zap },
-    { id: 'components', label: 'Components', desc: 'Reusable UI primitives', icon: LayoutGrid },
-    { id: 'i18n', label: 'Internationalization', desc: 'Multi-language support', icon: Globe },
+    { id: 'theming', label: 'Theming', desc: 'Design tokens & dark mode', icon: Palette },
+    { id: 'seo', label: 'SEO & Meta', desc: 'OG images & structured data', icon: Search },
+    { id: 'perf', label: 'Performance', desc: 'Zero JS by default', icon: Zap },
+    { id: 'components', label: 'Components', desc: 'Type-safe UI primitives', icon: LayoutGrid },
+    { id: 'i18n', label: 'i18n Ready', desc: 'Optional multi-language', icon: Globe },
+    { id: 'content', label: 'Content', desc: 'Blog, MDX & search', icon: Newspaper },
   ];
 
   const activeTabContent = tabContent[activeTab];

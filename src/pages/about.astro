@@ -5,6 +5,7 @@
  */
 import PageLayout from '@/layouts/PageLayout.astro';
 import Icon from '@/components/ui/Icon.astro';
+import { Card, CardTitle, CardDescription } from '@/components/ui/Card';
 ---
 
 <PageLayout
@@ -57,46 +58,52 @@ import Icon from '@/components/ui/Icon.astro';
 
       <div class="grid gap-8 md:grid-cols-3">
         <!-- Performance -->
-        <div class="p-6 rounded-xl border border-border bg-card">
-          <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center mb-4">
-            <Icon name="zap" class="w-6 h-6 text-brand-500" />
+        <Card client:visible hover>
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+              <Icon name="zap" size="md" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <CardTitle>Performance First</CardTitle>
+              <CardDescription>
+                Every decision is made with performance in mind. Zero JavaScript by default,
+                optimized images, and minimal CSS.
+              </CardDescription>
+            </div>
           </div>
-          <h3 class="font-display text-xl font-bold text-foreground mb-2">
-            Performance First
-          </h3>
-          <p class="text-foreground-muted">
-            Every decision is made with performance in mind. Zero JavaScript by default,
-            optimized images, and minimal CSS.
-          </p>
-        </div>
+        </Card>
 
         <!-- Simplicity -->
-        <div class="p-6 rounded-xl border border-border bg-card">
-          <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center mb-4">
-            <Icon name="box" class="w-6 h-6 text-brand-500" />
+        <Card client:visible hover>
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+              <Icon name="box" size="md" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <CardTitle>Simplicity Matters</CardTitle>
+              <CardDescription>
+                We strip away complexity so you can focus on what matters: building
+                great products for your users.
+              </CardDescription>
+            </div>
           </div>
-          <h3 class="font-display text-xl font-bold text-foreground mb-2">
-            Simplicity Matters
-          </h3>
-          <p class="text-foreground-muted">
-            We strip away complexity so you can focus on what matters: building
-            great products for your users.
-          </p>
-        </div>
+        </Card>
 
         <!-- Open Source -->
-        <div class="p-6 rounded-xl border border-border bg-card">
-          <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center mb-4">
-            <Icon name="github" class="w-6 h-6 text-brand-500" />
+        <Card client:visible hover>
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+              <Icon name="github" size="md" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <CardTitle>Open Source</CardTitle>
+              <CardDescription>
+                Velocity is free and open source. We believe in giving back to the
+                community that made this possible.
+              </CardDescription>
+            </div>
           </div>
-          <h3 class="font-display text-xl font-bold text-foreground mb-2">
-            Open Source
-          </h3>
-          <p class="text-foreground-muted">
-            Velocity is free and open source. We believe in giving back to the
-            community that made this possible.
-          </p>
-        </div>
+        </Card>
       </div>
     </div>
   </section>

@@ -1,10 +1,11 @@
-import { forwardRef, type ButtonHTMLAttributes, type AnchorHTMLAttributes } from 'react';
+import { type ButtonHTMLAttributes, type AnchorHTMLAttributes, type Ref } from 'react';
 import { cn } from '@/lib/cn';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface BaseProps {
+  ref?: Ref<HTMLButtonElement | HTMLAnchorElement>;
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
@@ -13,12 +14,12 @@ interface BaseProps {
 }
 
 type ButtonAsButton = BaseProps &
-  ButtonHTMLAttributes<HTMLButtonElement> & {
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'ref'> & {
     href?: never;
   };
 
 type ButtonAsLink = BaseProps &
-  AnchorHTMLAttributes<HTMLAnchorElement> & {
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'ref'> & {
     href: string;
   };
 
@@ -64,48 +65,45 @@ const LoadingSpinner = () => (
   </svg>
 );
 
-export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-  (props, ref) => {
-    const {
-      variant = 'primary',
-      size = 'md',
-      loading = false,
-      fullWidth = false,
-      className,
-      children,
-      disabled,
-      ...rest
-    } = props;
+export function Button(props: ButtonProps) {
+  const {
+    ref,
+    variant = 'primary',
+    size = 'md',
+    loading = false,
+    fullWidth = false,
+    className,
+    children,
+    disabled,
+    ...rest
+  } = props;
 
-    const classes = cn(baseStyles, variants[variant], sizes[size], fullWidth && 'w-full', className);
+  const classes = cn(baseStyles, variants[variant], sizes[size], fullWidth && 'w-full', className);
 
-    if ('href' in props && props.href) {
-      return (
-        <a
-          ref={ref as React.Ref<HTMLAnchorElement>}
-          className={classes}
-          {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}
-        >
-          {loading && <LoadingSpinner />}
-          {children}
-        </a>
-      );
-    }
-
+  if ('href' in props && props.href) {
     return (
-      <button
-        ref={ref as React.Ref<HTMLButtonElement>}
+      <a
+        ref={ref as Ref<HTMLAnchorElement>}
         className={classes}
-        disabled={disabled || loading}
-        {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}
+        {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}
       >
         {loading && <LoadingSpinner />}
         {children}
-      </button>
+      </a>
     );
   }
-);
 
-Button.displayName = 'Button';
+  return (
+    <button
+      ref={ref as Ref<HTMLButtonElement>}
+      className={classes}
+      disabled={disabled || loading}
+      {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}
+    >
+      {loading && <LoadingSpinner />}
+      {children}
+    </button>
+  );
+}
 
 export default Button;
