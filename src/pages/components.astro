@@ -10,12 +10,12 @@ import Dialog from '@/components/ui/Dialog.astro';
 import Tooltip from '@/components/ui/Tooltip.astro';
 import Avatar from '@/components/ui/Avatar.astro';
 import Skeleton from '@/components/ui/Skeleton.astro';
-import { Input } from '@/components/ui/Input';
-import { Textarea } from '@/components/ui/Textarea';
-import { Select } from '@/components/ui/Select';
-import { Checkbox } from '@/components/ui/Checkbox';
-import { Radio } from '@/components/ui/Radio';
-import { Card, CardTitle, CardByline, CardContent } from '@/components/ui/Card';
+import Input from '@/components/ui/Input.astro';
+import Textarea from '@/components/ui/Textarea.astro';
+import Select from '@/components/ui/Select.astro';
+import Checkbox from '@/components/ui/Checkbox.astro';
+import Radio from '@/components/ui/Radio.astro';
+import Card from '@/components/ui/Card.astro';
 
 // Component categories for navigation
 const categories = [
@@ -189,9 +189,9 @@ const categories = [
               <span class="showcase-hint">With labels & validation</span>
             </div>
             <div class="showcase-content space-y-5">
-              <Input client:visible label="Email address" type="email" placeholder="you@example.com" />
-              <Input client:visible label="Password" type="password" placeholder="••••••••" hint="Must be at least 8 characters" />
-              <Input client:visible label="Disabled" placeholder="Cannot edit" disabled />
+              <Input label="Email address" type="email" placeholder="you@example.com" />
+              <Input label="Password" type="password" placeholder="••••••••" hint="Must be at least 8 characters" />
+              <Input label="Disabled" placeholder="Cannot edit" disabled />
             </div>
           </div>
 
@@ -202,7 +202,7 @@ const categories = [
               <span class="showcase-hint">Multi-line text input</span>
             </div>
             <div class="showcase-content">
-              <Textarea client:visible label="Message" placeholder="Write your message here..." rows={5} hint="Supports markdown formatting" />
+              <Textarea label="Message" placeholder="Write your message here..." rows={5} hint="Supports markdown formatting" />
             </div>
           </div>
 
@@ -213,7 +213,7 @@ const categories = [
               <span class="showcase-hint">Native dropdown</span>
             </div>
             <div class="showcase-content">
-              <Select client:visible label="Country" options={[
+              <Select label="Country" options={[
                 { value: '', label: 'Select a country...' },
                 { value: 'us', label: 'United States' },
                 { value: 'uk', label: 'United Kingdom' },
@@ -231,9 +231,9 @@ const categories = [
               <span class="showcase-hint">Multi-select controls</span>
             </div>
             <div class="showcase-content space-y-4">
-              <Checkbox client:visible label="I agree to the terms of service" />
-              <Checkbox client:visible label="Send me product updates" defaultChecked />
-              <Checkbox client:visible label="Enable notifications" description="Receive alerts for important updates" />
+              <Checkbox label="I agree to the terms of service" />
+              <Checkbox label="Send me product updates" checked />
+              <Checkbox label="Enable notifications" description="Receive alerts for important updates" />
             </div>
           </div>
         </div>
@@ -246,9 +246,9 @@ const categories = [
           </div>
           <div class="showcase-content">
             <div class="grid gap-4 sm:grid-cols-3">
-              <Radio client:visible variant="card" name="plan-cards" value="free" label="Free" description="Basic features for personal projects" defaultChecked />
-              <Radio client:visible variant="card" name="plan-cards" value="pro" label="Pro" description="Advanced tools for professionals" />
-              <Radio client:visible variant="card" name="plan-cards" value="team" label="Team" description="Collaboration features for teams" />
+              <Radio variant="card" name="plan-cards" value="free" label="Free" description="Basic features for personal projects" checked />
+              <Radio variant="card" name="plan-cards" value="pro" label="Pro" description="Advanced tools for professionals" />
+              <Radio variant="card" name="plan-cards" value="team" label="Team" description="Collaboration features for teams" />
             </div>
           </div>
         </div>
@@ -460,49 +460,49 @@ const categories = [
           </div>
           <div class="showcase-content">
             <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              <Card client:visible hover>
+              <Card hover>
                 <div class="flex items-start gap-4">
                   <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
                     <Icon name="zap" size="md" />
                   </div>
                   <div class="flex-1 min-w-0">
-                    <CardTitle>Performance</CardTitle>
-                    <CardByline>100/100 Lighthouse</CardByline>
+                    <h3 class="text-base font-bold text-foreground">Performance</h3>
+                    <p class="text-xs text-foreground-subtle mt-0.5 font-medium">100/100 Lighthouse</p>
                   </div>
                 </div>
-                <CardContent>
+                <div class="mt-4">
                   <p class="text-sm text-foreground-muted leading-relaxed">Zero JavaScript by default. Islands architecture with selective hydration for optimal speed.</p>
-                </CardContent>
+                </div>
               </Card>
 
-              <Card client:visible hover>
+              <Card hover>
                 <div class="flex items-start gap-4">
                   <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
                     <Icon name="shield" size="md" />
                   </div>
                   <div class="flex-1 min-w-0">
-                    <CardTitle>Type-Safe</CardTitle>
-                    <CardByline>Full TypeScript</CardByline>
+                    <h3 class="text-base font-bold text-foreground">Type-Safe</h3>
+                    <p class="text-xs text-foreground-subtle mt-0.5 font-medium">Full TypeScript</p>
                   </div>
                 </div>
-                <CardContent>
+                <div class="mt-4">
                   <p class="text-sm text-foreground-muted leading-relaxed">Strict types throughout with IDE autocompletion and compile-time error checking.</p>
-                </CardContent>
+                </div>
               </Card>
 
-              <Card client:visible hover>
+              <Card hover>
                 <div class="flex items-start gap-4">
                   <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
                     <Icon name="globe" size="md" />
                   </div>
                   <div class="flex-1 min-w-0">
-                    <CardTitle>i18n Ready</CardTitle>
-                    <CardByline>Multi-language</CardByline>
+                    <h3 class="text-base font-bold text-foreground">i18n Ready</h3>
+                    <p class="text-xs text-foreground-subtle mt-0.5 font-medium">Multi-language</p>
                   </div>
                 </div>
-                <CardContent>
+                <div class="mt-4">
                   <p class="text-sm text-foreground-muted leading-relaxed">Built-in translation system with SEO-friendly URLs and automatic locale detection.</p>
-                </CardContent>
+                </div>
               </Card>
             </div>
           </div>

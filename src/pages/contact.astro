@@ -8,7 +8,7 @@ import Icon from '@/components/ui/Icon.astro';
 import Button from '@/components/ui/Button.astro';
 import Input from '@/components/ui/Input.astro';
 import Textarea from '@/components/ui/Textarea.astro';
-import { Card, CardTitle } from '@/components/ui/Card';
+import Card from '@/components/ui/Card.astro';
 import siteConfig from '@/config/site.config';
 ---
 
@@ -44,8 +44,8 @@ import siteConfig from '@/config/site.config';
     <div class="mx-auto max-w-6xl px-6">
       <div class="grid gap-12 lg:grid-cols-2">
         <!-- Form -->
-        <Card client:visible padding="lg">
-          <CardTitle className="text-2xl font-display mb-6">Send us a message</CardTitle>
+        <Card padding="lg">
+          <h2 class="text-2xl font-display font-bold text-foreground mb-6">Send us a message</h2>
 
           <form id="contact-form" action="/api/contact" method="POST" class="space-y-6">
             <Input
@@ -104,7 +104,7 @@ import siteConfig from '@/config/site.config';
           <div class="space-y-6">
             <!-- Email -->
             <a href={`mailto:${siteConfig.email}`} class="block">
-              <Card client:visible hover padding="sm">
+              <Card hover padding="sm">
                 <div class="flex items-center gap-4">
                   <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
                     <Icon name="mail" size="md" />
@@ -124,7 +124,7 @@ import siteConfig from '@/config/site.config';
               rel="noopener noreferrer"
               class="block"
             >
-              <Card client:visible hover padding="sm">
+              <Card hover padding="sm">
                 <div class="flex items-center gap-4">
                   <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
                     <Icon name="github" size="md" />
@@ -145,7 +145,7 @@ import siteConfig from '@/config/site.config';
                 rel="noopener noreferrer"
                 class="block"
               >
-                <Card client:visible hover padding="sm">
+                <Card hover padding="sm">
                   <div class="flex items-center gap-4">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
                       <Icon name="twitter" size="md" />
