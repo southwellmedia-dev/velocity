@@ -1,97 +1,102 @@
 ---
+/**
+ * About page
+ * URL: /about
+ */
 import PageLayout from '@/layouts/PageLayout.astro';
-import Card from '@/components/ui/Card.astro';
-
-const values = [
-  {
-    title: 'Performance First',
-    description: 'Every decision is made with performance in mind. We optimize for Core Web Vitals and real-world loading times.',
-    icon: '⚡',
-  },
-  {
-    title: 'Developer Experience',
-    description: 'Great tools make great products. We invest in developer experience to enable faster, better development.',
-    icon: '🛠️',
-  },
-  {
-    title: 'Accessibility',
-    description: 'The web should be for everyone. We build with accessibility as a core requirement, not an afterthought.',
-    icon: '♿',
-  },
-  {
-    title: 'Open Source',
-    description: 'We believe in giving back to the community. Velocity is open source and free to use.',
-    icon: '💚',
-  },
-];
+import Icon from '@/components/ui/Icon.astro';
 ---
 
 <PageLayout
   title="About Us"
-  description="Learn more about our company and mission"
+  description="Learn about Velocity and the team behind it."
 >
   <!-- Hero Section -->
-  <section class="py-20">
-    <div class="container">
-      <div class="max-w-3xl mx-auto text-center">
-        <h1 class="text-4xl font-bold tracking-tight text-foreground mb-6">
-          About Us
-        </h1>
-        <p class="text-xl text-muted-foreground">
-          Learn more about our company and mission
-        </p>
+  <section class="relative pt-16 pb-20 overflow-hidden">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white,transparent)] pointer-events-none opacity-30"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-500/8 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-4xl px-6 text-center">
+      <!-- Badge -->
+      <div class="mb-6 inline-flex items-center rounded-full border border-border bg-background px-3 py-1 shadow-sm">
+        <span class="flex h-2 w-2 rounded-full bg-brand-500 mr-2 animate-pulse"></span>
+        <span class="text-xs font-medium text-foreground-secondary">Our Story</span>
       </div>
+
+      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
+        Built by developers, <span class="text-brand-500">for developers.</span>
+      </h1>
+
+      <p class="text-lg text-foreground-muted max-w-2xl mx-auto mb-8 leading-relaxed">
+        Velocity was born from the frustration of setting up the same tooling over and over.
+        We decided to create the starter we always wished existed.
+      </p>
     </div>
   </section>
 
-  <!-- Story Section -->
-  <section class="py-12">
-    <div class="container">
-      <div class="max-w-3xl mx-auto prose prose-lg">
-        <h2>Our Story</h2>
-        <p>
-          Velocity was born out of frustration. As web developers, we found ourselves
-          spending hours on boilerplate setup for every new project. SEO configuration,
-          internationalization, design tokens—all the things that should "just work"
-          required significant effort.
-        </p>
-        <p>
-          We built Velocity to solve this problem. It's the starter template we wished
-          existed: modern, fast, and complete. No more piecing together solutions
-          from different sources. No more compromising on features because of time
-          constraints.
-        </p>
-        <p>
-          Today, Velocity powers dozens of production websites, from small business
-          sites to high-traffic applications. And as an open-source project, it's
-          constantly improving thanks to contributions from developers around the world.
-        </p>
-      </div>
+  <!-- Mission Section -->
+  <section class="py-20 bg-surface-secondary">
+    <div class="mx-auto max-w-4xl px-6 text-center">
+      <h2 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-6">
+        Our Mission
+      </h2>
+      <p class="text-lg text-foreground-muted max-w-2xl mx-auto leading-relaxed">
+        To help developers ship beautiful, performant websites faster by eliminating
+        boilerplate and providing sensible defaults.
+      </p>
     </div>
   </section>
 
   <!-- Values Section -->
-  <section class="py-20 bg-muted/50">
-    <div class="container">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold tracking-tight text-foreground mb-4">
-          Our Values
-        </h2>
-        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-          The principles that guide how we build Velocity
-        </p>
-      </div>
+  <section class="py-20">
+    <div class="mx-auto max-w-6xl px-6">
+      <h2 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-12 text-center">
+        What We Believe
+      </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        {
-          values.map((value) => (
-            <Card>
-              <div class="text-3xl mb-3">{value.icon}</div>
-              <h3 class="text-lg font-semibold text-foreground mb-2">{value.title}</h3>
-              <p class="text-muted-foreground">{value.description}</p>
-            </Card>
-          ))
-        }
+      <div class="grid gap-8 md:grid-cols-3">
+        <!-- Performance -->
+        <div class="p-6 rounded-xl border border-border bg-card">
+          <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center mb-4">
+            <Icon name="zap" class="w-6 h-6 text-brand-500" />
+          </div>
+          <h3 class="font-display text-xl font-bold text-foreground mb-2">
+            Performance First
+          </h3>
+          <p class="text-foreground-muted">
+            Every decision is made with performance in mind. Zero JavaScript by default,
+            optimized images, and minimal CSS.
+          </p>
+        </div>
+
+        <!-- Simplicity -->
+        <div class="p-6 rounded-xl border border-border bg-card">
+          <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center mb-4">
+            <Icon name="box" class="w-6 h-6 text-brand-500" />
+          </div>
+          <h3 class="font-display text-xl font-bold text-foreground mb-2">
+            Simplicity Matters
+          </h3>
+          <p class="text-foreground-muted">
+            We strip away complexity so you can focus on what matters: building
+            great products for your users.
+          </p>
+        </div>
+
+        <!-- Open Source -->
+        <div class="p-6 rounded-xl border border-border bg-card">
+          <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center mb-4">
+            <Icon name="github" class="w-6 h-6 text-brand-500" />
+          </div>
+          <h3 class="font-display text-xl font-bold text-foreground mb-2">
+            Open Source
+          </h3>
+          <p class="text-foreground-muted">
+            Velocity is free and open source. We believe in giving back to the
+            community that made this possible.
+          </p>
+        </div>
       </div>
     </div>
   </section>

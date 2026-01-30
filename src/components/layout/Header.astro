@@ -1,6 +1,11 @@
 ---
+/**
+ * Header Component
+ * Dynamic navigation that reads routes from routes.ts
+ * Used by PageLayout for standard content pages
+ */
 import { cn } from '@/lib/cn';
-import { mainNav } from '@/config/navigation.config';
+import { getNavRoutes } from '@/config/routes';
 import ThemeToggle from './ThemeToggle.astro';
 import siteConfig from '@/config/site.config';
 
@@ -10,15 +15,8 @@ interface Props {
 
 const { class: className } = Astro.props;
 
-const navItems = mainNav.map((item) => ({
-  ...item,
-  // Use label directly since it's now just a string key that maps to static text
-  label: item.label === 'nav.home' ? 'Home' :
-         item.label === 'nav.about' ? 'About' :
-         item.label === 'nav.blog' ? 'Blog' :
-         item.label === 'nav.contact' ? 'Contact' :
-         item.label,
-}));
+// Get navigation routes dynamically from routes.ts
+const navRoutes = getNavRoutes();
 
 const currentPath = Astro.url.pathname;
 ---
@@ -52,18 +50,18 @@ const currentPath = Astro.url.pathname;
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-1" aria-label="Main navigation">
         {
-          navItems.map((item) => (
+          navRoutes.map(({ path, label }) => (
             <a
-              href={item.href}
+              href={path}
               class={cn(
                 'px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                currentPath === item.href || currentPath.startsWith(item.href + '/')
+                currentPath === path || currentPath.startsWith(path + '/')
                   ? 'text-foreground'
                   : 'text-foreground-muted hover:text-foreground hover:bg-secondary'
               )}
-              aria-current={currentPath === item.href ? 'page' : undefined}
+              aria-current={currentPath === path ? 'page' : undefined}
             >
-              {item.label}
+              {label}
             </a>
           ))
         }
@@ -132,18 +130,18 @@ const currentPath = Astro.url.pathname;
   >
     <div class="container py-4 space-y-1">
       {
-        navItems.map((item) => (
+        navRoutes.map(({ path, label }) => (
           <a
-            href={item.href}
+            href={path}
             class={cn(
               'block px-3 py-2 rounded-md text-sm font-medium transition-colors',
-              currentPath === item.href || currentPath.startsWith(item.href + '/')
+              currentPath === path || currentPath.startsWith(path + '/')
                 ? 'bg-secondary text-foreground'
                 : 'text-foreground-muted hover:bg-secondary hover:text-foreground'
             )}
-            aria-current={currentPath === item.href ? 'page' : undefined}
+            aria-current={currentPath === path ? 'page' : undefined}
           >
-            {item.label}
+            {label}
           </a>
         ))
       }

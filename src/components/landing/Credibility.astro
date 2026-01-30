@@ -1,185 +1,121 @@
 ---
 import Icon from '@/components/ui/Icon.astro';
 
-const checklistItems = [
-  'No unused CSS in production',
-  'Images optimized at build time',
-  'Type-safe Content Collections',
-  'Accessible primitives pre-configured',
+const cliFlags = [
+  { flag: '--demo', desc: 'Sample landing page + blog posts' },
+  { flag: '--components', desc: '27 production-ready UI primitives' },
+  { flag: '--i18n', desc: 'Multi-language routing configured' },
+  { flag: '--pages', desc: 'Generate pages (+ i18n versions)' },
+  { flag: '-y', desc: 'Skip prompts, use defaults' },
+];
+
+const stats = [
+  { value: '1', label: 'command to start' },
+  { value: '5', label: 'flags to customize' },
+  { value: '27+', label: 'components available' },
 ];
 ---
 
-<section id="architecture" class="bg-surface-invert py-24 text-on-invert">
-  <div class="mx-auto max-w-6xl px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-    <!-- Left Column -->
-    <div>
-      <div class="flex items-center gap-2 text-brand-500 font-bold tracking-wide uppercase text-sm mb-4">
-        <Icon name="shield" size="sm" />
-        <span>Production Tested</span>
+<section id="architecture" class="bg-surface-invert text-on-invert py-24">
+  <div class="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2 lg:gap-16">
+    <!-- Left Column - Content -->
+    <div class="order-2 lg:order-1">
+      <!-- Badge -->
+      <div
+        class="text-brand-500 mb-4 flex items-center gap-2 text-sm font-bold tracking-wide uppercase"
+      >
+        <Icon name="terminal" size="sm" />
+        <span>One Command</span>
       </div>
 
-      <h2 class="font-display text-3xl md:text-4xl font-bold mb-6 text-balance">
-        Built by Southwell Media. Born from <span class="text-brand-500">deadline pressure</span>.
+      <h2 class="font-display mb-6 text-3xl font-bold text-balance md:text-4xl">
+        Scaffold exactly <span class="text-brand-500">what you need.</span>
       </h2>
 
-      <div class="space-y-6 text-on-invert-secondary text-lg leading-relaxed">
+      <div class="text-on-invert-secondary space-y-4 text-lg leading-relaxed">
         <p>
-          We're a digital agency that ships high-performance marketing sites. We got tired of spending the first 3 days of every project setting up the same tooling, SEO configs, and type definitions.
+          Not every project needs everything. The Velocity CLI lets you pick your starting point.
         </p>
         <p>
-          Velocity isn't a theoretical exercise. It's the exact codebase we use to deliver client projects in 14-21 days instead of the industry standard 60.
+          Need custom pages? Use <code class="font-mono text-base text-cyan-400">--pages</code> and they're generated with routes and nav already wired. Pair it with <code class="font-mono text-base text-cyan-400">--i18n</code> and you get localized versions too—translations scaffolded and ready.
+        </p>
+        <p class="text-on-invert-muted">
+          No prompts to click through. No wizard to escape. Just flags that do what they say.
         </p>
       </div>
 
       <!-- Stats -->
-      <div class="mt-10 grid grid-cols-2 gap-8 border-t border-border-invert pt-8">
-        <!-- Lighthouse Score - Radial Progress -->
-        <div class="flex items-center gap-4">
-          <div class="relative w-16 h-16 shrink-0">
-            <!-- Background circle -->
-            <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64">
-              <circle
-                cx="32"
-                cy="32"
-                r="28"
-                stroke="currentColor"
-                stroke-width="6"
-                fill="none"
-                class="text-green-900/50"
-              />
-              <!-- Animated progress circle -->
-              <circle
-                cx="32"
-                cy="32"
-                r="28"
-                stroke="url(#lighthouse-gradient)"
-                stroke-width="6"
-                fill="none"
-                stroke-linecap="round"
-                stroke-dasharray="175.93"
-                stroke-dashoffset="175.93"
-                class="lighthouse-progress"
-              />
-              <defs>
-                <linearGradient id="lighthouse-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#22c55e" />
-                  <stop offset="100%" stop-color="#4ade80" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <!-- Center score -->
-            <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-lg font-display font-bold text-green-400">100</span>
+      <div class="border-border-invert mt-10 grid grid-cols-3 gap-8 border-t pt-8">
+        {
+          stats.map((stat) => (
+            <div>
+              <div class="font-display text-on-invert text-3xl font-bold">{stat.value}</div>
+              <div class="text-on-invert-muted text-sm">{stat.label}</div>
             </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Right Column - Terminal Card -->
+    <div class="relative order-1 lg:order-2">
+      <div
+        class="bg-surface-invert-secondary border-border-invert overflow-hidden rounded-lg border shadow-xl"
+      >
+        <!-- Terminal Header -->
+        <div
+          class="bg-surface-invert-tertiary border-border-invert flex items-center gap-2 border-b px-4 py-3"
+        >
+          <div class="flex gap-2">
+            <span class="h-3 w-3 rounded-full bg-[#FF5F56]"></span>
+            <span class="h-3 w-3 rounded-full bg-[#FFBD2E]"></span>
+            <span class="h-3 w-3 rounded-full bg-[#27C93F]"></span>
           </div>
-          <div>
-            <div class="text-xl font-display font-bold text-on-invert">Perfect</div>
-            <div class="text-sm text-on-invert-muted">Lighthouse Scores</div>
-          </div>
+          <span class="text-on-invert-muted ml-2 font-mono text-xs">terminal</span>
         </div>
 
-        <!-- Delivery Time - Calendar/Sprint Visual -->
-        <div class="flex items-center gap-4">
-          <div class="relative w-16 h-16 shrink-0 overflow-visible">
-            <!-- Calendar container -->
-            <div class="w-16 h-16 rounded-md bg-surface-invert-tertiary border border-border-invert-strong overflow-visible flex flex-col">
-              <!-- Calendar header -->
-              <div class="h-4 bg-brand-500 flex items-center justify-center rounded-t-md">
-                <div class="flex gap-0.5">
-                  <span class="w-1 h-1 rounded-full bg-white/60"></span>
-                  <span class="w-1 h-1 rounded-full bg-white/60"></span>
-                  <span class="w-1 h-1 rounded-full bg-white/60"></span>
-                </div>
-              </div>
-              <!-- Calendar body -->
-              <div class="flex-1 flex items-center justify-center relative overflow-visible">
-                <span class="text-2xl font-display font-bold text-on-invert">14</span>
-                <!-- Animated checkmark -->
-                <svg class="absolute -bottom-1 -right-1 w-5 h-5 text-green-400 delivery-check" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" fill="currentColor" class="text-green-500"/>
-                  <path d="M8 12l2.5 2.5L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="delivery-check-mark"/>
-                </svg>
-              </div>
+        <!-- Terminal Body -->
+        <div class="p-5 font-mono text-sm leading-relaxed">
+          <!-- Command Line -->
+          <div class="mb-4 flex items-start gap-2">
+            <span class="shrink-0 text-green-400 select-none">$</span>
+            <div>
+              <span class="text-on-invert">npm create </span>
+              <span class="text-cyan-400">velocity-astro@latest</span>
+              <span class="text-on-invert"> my-site</span>
             </div>
           </div>
-          <div>
-            <div class="text-xl font-display font-bold text-on-invert">14 Days</div>
-            <div class="text-sm text-on-invert-muted">Avg. Delivery Time</div>
+
+          <!-- Comment -->
+          <div class="text-on-invert-muted mb-3 pl-4"># Add what you need</div>
+
+          <!-- Flags -->
+          <div class="space-y-2 pl-4">
+            {
+              cliFlags.map((item) => (
+                <div class="flex items-center gap-3">
+                  <span class="shrink-0 font-semibold text-cyan-400">{item.flag}</span>
+                  <span class="text-on-invert-muted"># {item.desc}</span>
+                </div>
+              ))
+            }
+          </div>
+
+          <!-- Output -->
+          <div class="border-border-invert mt-6 border-t pt-4">
+            <div class="flex items-center gap-2">
+              <span class="text-green-400">✓</span>
+              <span class="text-on-invert">Project created successfully!</span>
+            </div>
+            <div class="text-on-invert-muted mt-1 pl-5">cd my-site && npm run dev</div>
           </div>
         </div>
       </div>
 
-      <style>
-        /* Lighthouse radial progress animation */
-        .lighthouse-progress {
-          animation: lighthouse-fill 1.5s ease-out 0.5s forwards;
-        }
-
-        @keyframes lighthouse-fill {
-          to {
-            stroke-dashoffset: 0;
-          }
-        }
-
-        /* Delivery checkmark animation */
-        .delivery-check {
-          opacity: 0;
-          transform: scale(0);
-          animation: check-pop 0.4s ease-out 1.2s forwards;
-        }
-
-        @keyframes check-pop {
-          0% {
-            opacity: 0;
-            transform: scale(0);
-          }
-          70% {
-            transform: scale(1.2);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-
-        .delivery-check-mark {
-          stroke-dasharray: 20;
-          stroke-dashoffset: 20;
-          animation: check-draw 0.3s ease-out 1.4s forwards;
-        }
-
-        @keyframes check-draw {
-          to {
-            stroke-dashoffset: 0;
-          }
-        }
-      </style>
-    </div>
-
-    <!-- Right Column - Card -->
-    <div class="relative">
-      <div class="bg-surface-invert-secondary rounded-lg p-8 border border-border-invert relative overflow-hidden">
-        <!-- Decorative glow -->
-        <div class="absolute top-0 right-0 p-32 bg-brand-500/10 rounded-full blur-3xl"></div>
-
-        <h3 class="font-display text-xl font-bold mb-6 relative z-10 text-on-invert">The Velocity Standard</h3>
-
-        <ul class="space-y-4 relative z-10">
-          {checklistItems.map((item) => (
-            <li class="flex items-center gap-3">
-              <span class="text-brand-500 shrink-0">
-                <Icon name="check-circle" size="md" />
-              </span>
-              <span class="text-on-invert-secondary">{item}</span>
-            </li>
-          ))}
-        </ul>
-
-        <!-- Testimonial -->
-        <div class="mt-8 pt-6 border-t border-border-invert relative z-10">
-          <p class="text-sm text-on-invert-muted italic">"The cleanest boilerplate I've seen in 2024. It cuts the fluff."</p>
-          <p class="text-xs text-on-invert-muted/70 mt-2 font-bold uppercase tracking-wider">— Alex C., Senior Frontend Dev</p>
-        </div>
+      <!-- Decorative glow -->
+      <div
+        class="bg-brand-500/10 pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-full blur-3xl"
+      >
       </div>
     </div>
   </div>

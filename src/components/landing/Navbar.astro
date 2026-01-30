@@ -1,11 +1,22 @@
 ---
+/**
+ * Navbar Component
+ * Dynamic navigation that reads routes from routes.ts
+ * Routes with nav.show: true appear in the navigation
+ */
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import ThemeToggle from '@/components/layout/ThemeToggle.astro';
+import { getNavRoutes } from '@/config/routes';
+
+// Get navigation routes dynamically from routes.ts
+const navRoutes = getNavRoutes();
 
 // Check if we're on the landing page to determine link behavior
 const currentPath = Astro.url.pathname;
 const isLandingPage = currentPath === '/';
+
+// Landing page specific links (anchor links)
 const featuresLink = isLandingPage ? '#features' : '/#features';
 const ctaLink = isLandingPage ? '#cta' : '/#cta';
 ---
@@ -20,10 +31,24 @@ const ctaLink = isLandingPage ? '#cta' : '/#cta';
 
     <!-- Desktop Menu -->
     <div class="hidden items-center gap-8 md:flex">
-      <a href={featuresLink} class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors">Features</a>
-      <a href="/components" class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors">Components</a>
-      <a href="/blog" class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors">Blog</a>
-      <a href="/blog" class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors">Docs</a>
+      <!-- Features link (anchor to landing page section) -->
+      <a
+        href={featuresLink}
+        class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors"
+      >
+        Features
+      </a>
+
+      <!-- Dynamic navigation from routes.ts -->
+      {navRoutes.map(({ path, label }) => (
+        <a
+          href={path}
+          class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors"
+        >
+          {label}
+        </a>
+      ))}
+
       <div class="flex items-center gap-2">
         <ThemeToggle />
         <Button
@@ -59,10 +84,24 @@ const ctaLink = isLandingPage ? '#cta' : '/#cta';
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-background border-b border-border p-6 md:hidden flex-col gap-4 shadow-lg">
-    <a href={featuresLink} class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors">Features</a>
-    <a href="/components" class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors">Components</a>
-    <a href="/blog" class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors">Blog</a>
-    <a href="/blog" class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors">Docs</a>
+    <!-- Features link (anchor to landing page section) -->
+    <a
+      href={featuresLink}
+      class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors"
+    >
+      Features
+    </a>
+
+    <!-- Dynamic navigation from routes.ts -->
+    {navRoutes.map(({ path, label }) => (
+      <a
+        href={path}
+        class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors"
+      >
+        {label}
+      </a>
+    ))}
+
     <div class="flex items-center gap-3 pt-2 border-t border-border">
       <ThemeToggle />
     </div>

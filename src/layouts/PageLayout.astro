@@ -1,6 +1,12 @@
 ---
+/**
+ * PageLayout
+ * Layout wrapper for standard content pages (non-landing)
+ * Uses Navbar for consistent navigation across all pages
+ * Differs from LandingLayout only in using simpler Footer (no CTA sections)
+ */
 import BaseLayout from './BaseLayout.astro';
-import Header from '@/components/layout/Header.astro';
+import Navbar from '@/components/landing/Navbar.astro';
 import Footer from '@/components/layout/Footer.astro';
 
 interface Props {
@@ -23,9 +29,11 @@ const { title, description, image, imageAlt, noindex, nofollow } = Astro.props;
   noindex={noindex}
   nofollow={nofollow}
 >
-  <Header slot="header" />
+  <Navbar slot="header" />
 
-  <slot />
+  <main class="min-h-screen pt-16">
+    <slot />
+  </main>
 
   <Footer slot="footer" />
 </BaseLayout>

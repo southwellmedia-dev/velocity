@@ -1,47 +1,68 @@
 ---
+/**
+ * Contact page
+ * URL: /contact
+ */
 import PageLayout from '@/layouts/PageLayout.astro';
-import Card from '@/components/ui/Card.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Button from '@/components/ui/Button.astro';
 import Input from '@/components/ui/Input.astro';
 import Textarea from '@/components/ui/Textarea.astro';
-import Button from '@/components/ui/Button.astro';
 import siteConfig from '@/config/site.config';
 ---
 
 <PageLayout
   title="Contact Us"
-  description="Get in touch with our team"
+  description="Get in touch with the Velocity team."
 >
-  <section class="py-20">
-    <div class="container">
-      <div class="max-w-3xl mx-auto text-center mb-12">
-        <h1 class="text-4xl font-bold tracking-tight text-foreground mb-4">
-          Contact Us
-        </h1>
-        <p class="text-xl text-muted-foreground">
-          Get in touch with our team
-        </p>
+  <!-- Hero Section -->
+  <section class="relative pt-16 pb-20 overflow-hidden">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white,transparent)] pointer-events-none opacity-30"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-500/8 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-4xl px-6 text-center">
+      <!-- Badge -->
+      <div class="mb-6 inline-flex items-center rounded-full border border-border bg-background px-3 py-1 shadow-sm">
+        <span class="flex h-2 w-2 rounded-full bg-brand-500 mr-2 animate-pulse"></span>
+        <span class="text-xs font-medium text-foreground-secondary">Get in Touch</span>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-        <!-- Contact Form -->
-        <Card padding="lg">
-          <h2 class="text-xl font-semibold text-foreground mb-6">
+      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
+        Let's <span class="text-brand-500">connect.</span>
+      </h1>
+
+      <p class="text-lg text-foreground-muted max-w-2xl mx-auto mb-8 leading-relaxed">
+        Have a question, suggestion, or just want to say hello? We'd love to hear from you.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Form Section -->
+  <section class="py-20 bg-surface-secondary">
+    <div class="mx-auto max-w-6xl px-6">
+      <div class="grid gap-12 lg:grid-cols-2">
+        <!-- Form -->
+        <div class="p-8 rounded-xl border border-border bg-card">
+          <h2 class="font-display text-2xl font-bold text-foreground mb-6">
             Send us a message
           </h2>
 
           <form id="contact-form" action="/api/contact" method="POST" class="space-y-6">
             <Input
-              label="Name"
+              label="Your Name"
               name="name"
               type="text"
+              placeholder="John Doe"
               required
               autocomplete="name"
             />
 
             <Input
-              label="Email"
+              label="Email Address"
               name="email"
               type="email"
+              placeholder="john@example.com"
               required
               autocomplete="email"
             />
@@ -50,13 +71,15 @@ import siteConfig from '@/config/site.config';
               label="Subject"
               name="subject"
               type="text"
+              placeholder="How can we help?"
             />
 
             <Textarea
               label="Message"
               name="message"
-              required
+              placeholder="Tell us more about your project or question..."
               rows={5}
+              required
             />
 
             <!-- Honeypot field for spam protection -->
@@ -66,68 +89,67 @@ import siteConfig from '@/config/site.config';
 
             <div id="form-message" class="hidden text-sm"></div>
 
-            <Button type="submit" fullWidth id="submit-button">
-              Submit
+            <Button type="submit" class="w-full" id="submit-button">
+              <Icon name="mail" size="sm" />
+              Send Message
             </Button>
           </form>
-        </Card>
+        </div>
 
-        <!-- Contact Information -->
-        <div class="space-y-8">
-          <div>
-            <h2 class="text-xl font-semibold text-foreground mb-6">
-              Contact Information
-            </h2>
+        <!-- Contact Info -->
+        <div class="flex flex-col justify-center">
+          <h2 class="font-display text-2xl font-bold text-foreground mb-8">
+            Other ways to reach us
+          </h2>
 
-            <div class="space-y-4">
-              <div class="flex items-start gap-4">
-                <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-                  <svg class="w-5 h-5 text-accent-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
+          <div class="space-y-6">
+            <!-- Email -->
+            <a
+              href={`mailto:${siteConfig.email}`}
+              class="flex items-center gap-4 p-4 rounded-lg border border-border bg-card hover:bg-muted transition-colors"
+            >
+              <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center">
+                <Icon name="mail" class="w-6 h-6 text-brand-500" />
+              </div>
+              <div>
+                <div class="text-sm text-foreground-muted">Email</div>
+                <div class="font-medium text-foreground">{siteConfig.email}</div>
+              </div>
+            </a>
+
+            <!-- GitHub -->
+            <a
+              href="https://github.com/southwellmedia-dev/velocity"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-4 p-4 rounded-lg border border-border bg-card hover:bg-muted transition-colors"
+            >
+              <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center">
+                <Icon name="github" class="w-6 h-6 text-brand-500" />
+              </div>
+              <div>
+                <div class="text-sm text-foreground-muted">GitHub</div>
+                <div class="font-medium text-foreground">velocity</div>
+              </div>
+            </a>
+
+            <!-- Twitter -->
+            {siteConfig.twitter && (
+              <a
+                href={`https://twitter.com/${siteConfig.twitter.site.replace('@', '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-4 p-4 rounded-lg border border-border bg-card hover:bg-muted transition-colors"
+              >
+                <div class="w-12 h-12 rounded-lg bg-brand-500/10 flex items-center justify-center">
+                  <Icon name="twitter" class="w-6 h-6 text-brand-500" />
                 </div>
                 <div>
-                  <h3 class="font-medium text-foreground">Email</h3>
-                  <a href={`mailto:${siteConfig.email}`} class="text-muted-foreground hover:text-foreground transition-colors">
-                    {siteConfig.email}
-                  </a>
+                  <div class="text-sm text-foreground-muted">Twitter</div>
+                  <div class="font-medium text-foreground">{siteConfig.twitter.site}</div>
                 </div>
-              </div>
-
-              {siteConfig.phone && (
-                <div class="flex items-start gap-4">
-                  <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-                    <svg class="w-5 h-5 text-accent-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 class="font-medium text-foreground">Phone</h3>
-                    <a href={`tel:${siteConfig.phone}`} class="text-muted-foreground hover:text-foreground transition-colors">
-                      {siteConfig.phone}
-                    </a>
-                  </div>
-                </div>
-              )}
-
-              {siteConfig.address && (
-                <div class="flex items-start gap-4">
-                  <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-                    <svg class="w-5 h-5 text-accent-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 class="font-medium text-foreground">Address</h3>
-                    <p class="text-muted-foreground">
-                      {siteConfig.address.street}<br />
-                      {siteConfig.address.city}, {siteConfig.address.state} {siteConfig.address.zip}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -160,7 +182,7 @@ import siteConfig from '@/config/site.config';
         const data = await response.json();
 
         if (data.success) {
-          message.textContent = 'Message sent successfully!';
+          message.textContent = 'Message sent successfully! We will get back to you soon.';
           message.className = 'text-sm text-success';
           form.reset();
         } else {
@@ -169,11 +191,11 @@ import siteConfig from '@/config/site.config';
           message.className = 'text-sm text-destructive';
         }
       } catch {
-        message.textContent = 'Failed to send message. Please try again.';
+        message.textContent = 'Failed to send message. Please try again later.';
         message.className = 'text-sm text-destructive';
       } finally {
         button.disabled = false;
-        button.textContent = 'Submit';
+        button.textContent = 'Send Message';
         message.classList.remove('hidden');
       }
     });
