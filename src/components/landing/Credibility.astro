@@ -1,0 +1,186 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+
+const checklistItems = [
+  'No unused CSS in production',
+  'Images optimized at build time',
+  'Type-safe Content Collections',
+  'Accessible primitives pre-configured',
+];
+---
+
+<section id="architecture" class="bg-surface-invert py-24 text-on-invert">
+  <div class="mx-auto max-w-6xl px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+    <!-- Left Column -->
+    <div>
+      <div class="flex items-center gap-2 text-brand-500 font-bold tracking-wide uppercase text-sm mb-4">
+        <Icon name="shield" size="sm" />
+        <span>Production Tested</span>
+      </div>
+
+      <h2 class="font-display text-3xl md:text-4xl font-bold mb-6 text-balance">
+        Built by Southwell Media. Born from <span class="text-brand-500">deadline pressure</span>.
+      </h2>
+
+      <div class="space-y-6 text-on-invert-secondary text-lg leading-relaxed">
+        <p>
+          We're a digital agency that ships high-performance marketing sites. We got tired of spending the first 3 days of every project setting up the same tooling, SEO configs, and type definitions.
+        </p>
+        <p>
+          Velocity isn't a theoretical exercise. It's the exact codebase we use to deliver client projects in 14-21 days instead of the industry standard 60.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-10 grid grid-cols-2 gap-8 border-t border-border-invert pt-8">
+        <!-- Lighthouse Score - Radial Progress -->
+        <div class="flex items-center gap-4">
+          <div class="relative w-16 h-16 shrink-0">
+            <!-- Background circle -->
+            <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64">
+              <circle
+                cx="32"
+                cy="32"
+                r="28"
+                stroke="currentColor"
+                stroke-width="6"
+                fill="none"
+                class="text-green-900/50"
+              />
+              <!-- Animated progress circle -->
+              <circle
+                cx="32"
+                cy="32"
+                r="28"
+                stroke="url(#lighthouse-gradient)"
+                stroke-width="6"
+                fill="none"
+                stroke-linecap="round"
+                stroke-dasharray="175.93"
+                stroke-dashoffset="175.93"
+                class="lighthouse-progress"
+              />
+              <defs>
+                <linearGradient id="lighthouse-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#22c55e" />
+                  <stop offset="100%" stop-color="#4ade80" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <!-- Center score -->
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-lg font-display font-bold text-green-400">100</span>
+            </div>
+          </div>
+          <div>
+            <div class="text-xl font-display font-bold text-on-invert">Perfect</div>
+            <div class="text-sm text-on-invert-muted">Lighthouse Scores</div>
+          </div>
+        </div>
+
+        <!-- Delivery Time - Calendar/Sprint Visual -->
+        <div class="flex items-center gap-4">
+          <div class="relative w-16 h-16 shrink-0 overflow-visible">
+            <!-- Calendar container -->
+            <div class="w-16 h-16 rounded-md bg-surface-invert-tertiary border border-border-invert-strong overflow-visible flex flex-col">
+              <!-- Calendar header -->
+              <div class="h-4 bg-brand-500 flex items-center justify-center rounded-t-md">
+                <div class="flex gap-0.5">
+                  <span class="w-1 h-1 rounded-full bg-white/60"></span>
+                  <span class="w-1 h-1 rounded-full bg-white/60"></span>
+                  <span class="w-1 h-1 rounded-full bg-white/60"></span>
+                </div>
+              </div>
+              <!-- Calendar body -->
+              <div class="flex-1 flex items-center justify-center relative overflow-visible">
+                <span class="text-2xl font-display font-bold text-on-invert">14</span>
+                <!-- Animated checkmark -->
+                <svg class="absolute -bottom-1 -right-1 w-5 h-5 text-green-400 delivery-check" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" fill="currentColor" class="text-green-500"/>
+                  <path d="M8 12l2.5 2.5L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="delivery-check-mark"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-xl font-display font-bold text-on-invert">14 Days</div>
+            <div class="text-sm text-on-invert-muted">Avg. Delivery Time</div>
+          </div>
+        </div>
+      </div>
+
+      <style>
+        /* Lighthouse radial progress animation */
+        .lighthouse-progress {
+          animation: lighthouse-fill 1.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes lighthouse-fill {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        /* Delivery checkmark animation */
+        .delivery-check {
+          opacity: 0;
+          transform: scale(0);
+          animation: check-pop 0.4s ease-out 1.2s forwards;
+        }
+
+        @keyframes check-pop {
+          0% {
+            opacity: 0;
+            transform: scale(0);
+          }
+          70% {
+            transform: scale(1.2);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        .delivery-check-mark {
+          stroke-dasharray: 20;
+          stroke-dashoffset: 20;
+          animation: check-draw 0.3s ease-out 1.4s forwards;
+        }
+
+        @keyframes check-draw {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+      </style>
+    </div>
+
+    <!-- Right Column - Card -->
+    <div class="relative">
+      <div class="bg-surface-invert-secondary rounded-lg p-8 border border-border-invert relative overflow-hidden">
+        <!-- Decorative glow -->
+        <div class="absolute top-0 right-0 p-32 bg-brand-500/10 rounded-full blur-3xl"></div>
+
+        <h3 class="font-display text-xl font-bold mb-6 relative z-10 text-on-invert">The Velocity Standard</h3>
+
+        <ul class="space-y-4 relative z-10">
+          {checklistItems.map((item) => (
+            <li class="flex items-center gap-3">
+              <span class="text-brand-500 shrink-0">
+                <Icon name="check-circle" size="md" />
+              </span>
+              <span class="text-on-invert-secondary">{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <!-- Testimonial -->
+        <div class="mt-8 pt-6 border-t border-border-invert relative z-10">
+          <p class="text-sm text-on-invert-muted italic">"The cleanest boilerplate I've seen in 2024. It cuts the fluff."</p>
+          <p class="text-xs text-on-invert-muted/70 mt-2 font-bold uppercase tracking-wider">— Alex C., Senior Frontend Dev</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

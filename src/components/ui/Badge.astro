@@ -1,0 +1,41 @@
+---
+/**
+ * Badge Component
+ * Displays a small status indicator or label with proper icon spacing
+ */
+import { cn } from '@/lib/cn';
+
+interface Props {
+  variant?: 'default' | 'success' | 'warning' | 'error' | 'info';
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const { variant = 'default', size = 'md', class: className } = Astro.props;
+
+const variants = {
+  default: 'bg-secondary text-secondary-foreground border-border',
+  success: 'bg-[var(--success-light)] text-[var(--success)] border-[var(--success)]/20',
+  warning: 'bg-[var(--warning-light)] text-[var(--warning)] border-[var(--warning)]/20',
+  error: 'bg-[var(--error-light)] text-[var(--error)] border-[var(--error)]/20',
+  info: 'bg-[var(--blue-500)]/10 text-[var(--blue-500)] border-[var(--blue-500)]/20',
+};
+
+const sizes = {
+  sm: 'text-[10px] px-2 py-0.5 gap-1',
+  md: 'text-xs px-2.5 py-1 gap-1.5',
+};
+---
+
+<span
+  class={cn(
+    'inline-flex items-center font-medium rounded-md border',
+    'transition-colors',
+    '[&>svg]:shrink-0 [&>svg]:h-3 [&>svg]:w-3',
+    variants[variant],
+    sizes[size],
+    className
+  )}
+>
+  <slot />
+</span>

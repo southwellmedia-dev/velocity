@@ -1,0 +1,61 @@
+---
+/**
+ * Avatar Component
+ * Displays user avatars with fallback initials
+ */
+import { cn } from '@/lib/cn';
+
+interface Props {
+  src?: string;
+  alt?: string;
+  fallback?: string;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  class?: string;
+}
+
+const { src, alt = '', fallback, size = 'md', class: className } = Astro.props;
+
+const sizes = {
+  xs: 'w-6 h-6 text-[10px]',
+  sm: 'w-8 h-8 text-xs',
+  md: 'w-10 h-10 text-sm',
+  lg: 'w-12 h-12 text-base',
+  xl: 'w-16 h-16 text-lg',
+};
+
+// Generate initials from alt text or fallback
+const initials = fallback || alt
+  .split(' ')
+  .map((word) => word[0])
+  .join('')
+  .slice(0, 2)
+  .toUpperCase();
+---
+
+<div
+  class={cn(
+    'relative inline-flex items-center justify-center',
+    'rounded-full overflow-hidden',
+    'bg-secondary text-secondary-foreground font-medium',
+    'ring-2 ring-background',
+    sizes[size],
+    className
+  )}
+>
+  {src ? (
+    <img
+      src={src}
+      alt={alt}
+      class="w-full h-full object-cover"
+      loading="lazy"
+      decoding="async"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+    />
+    <span class="hidden items-center justify-center w-full h-full" aria-hidden="true">
+      {initials || '?'}
+    </span>
+  ) : (
+    <span aria-hidden="true">{initials || '?'}</span>
+  )}
+  <span class="sr-only">{alt || 'User avatar'}</span>
+</div>

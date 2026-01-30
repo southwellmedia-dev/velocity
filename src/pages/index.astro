@@ -1,0 +1,19 @@
+---
+import LandingLayout from '@/layouts/LandingLayout.astro';
+import Hero from '@/components/landing/Hero.astro';
+import TechStack from '@/components/landing/TechStack.astro';
+import FeatureTabs from '@/components/landing/FeatureTabs.tsx';
+import Credibility from '@/components/landing/Credibility.astro';
+import CTA from '@/components/landing/CTA.astro';
+---
+
+<LandingLayout
+  title="The boilerplate we actually use"
+  description="Stop configuring and start shipping. Velocity is the opinionated Astro 6 & Tailwind v4 starter kit used by Southwell Media to deliver production client sites in 14 days."
+>
+  <Hero />
+  <TechStack />
+  <FeatureTabs client:visible />
+  <Credibility />
+  <CTA />
+</LandingLayout>

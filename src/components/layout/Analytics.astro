@@ -1,0 +1,52 @@
+---
+/**
+ * Analytics Component
+ *
+ * Conditionally loads analytics scripts based on environment variables.
+ * Supports Google Analytics (GA4) and Google Tag Manager.
+ *
+ * Environment variables:
+ * - PUBLIC_GA_MEASUREMENT_ID: Google Analytics 4 Measurement ID (e.g., G-XXXXXXXXXX)
+ * - PUBLIC_GTM_ID: Google Tag Manager Container ID (e.g., GTM-XXXXXXX)
+ */
+
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const gtmId = import.meta.env.PUBLIC_GTM_ID;
+---
+
+{/* Google Tag Manager - loads first if configured */}
+{
+  gtmId && (
+    <>
+      <script is:inline define:vars={{ gtmId }}>
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          const f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : '';
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', gtmId);
+      </script>
+    </>
+  )
+}
+
+{/* Google Analytics 4 - only loads if GTM is not configured */}
+{
+  gaId && !gtmId && (
+    <>
+      <script is:inline src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} async />
+      <script is:inline define:vars={{ gaId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(...args) {
+          dataLayer.push(args);
+        }
+        gtag('js', new Date());
+        gtag('config', gaId);
+      </script>
+    </>
+  )
+}

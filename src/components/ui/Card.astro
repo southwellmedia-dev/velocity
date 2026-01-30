@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/cn';
+
+interface Props extends HTMLAttributes<'div'> {
+  variant?: 'default' | 'ghost' | 'outline';
+  padding?: 'none' | 'sm' | 'md' | 'lg';
+  hover?: boolean;
+  href?: string;
+}
+
+const {
+  variant = 'default',
+  padding = 'md',
+  hover = false,
+  href,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const Element = href ? 'a' : 'div';
+
+const variants = {
+  default: 'bg-card border border-card-border',
+  ghost: 'bg-transparent',
+  outline: 'bg-transparent border border-border',
+};
+
+const paddings = {
+  none: '',
+  sm: 'p-4',
+  md: 'p-6',
+  lg: 'p-8',
+};
+
+const cardStyles = cn(
+  'rounded-lg',
+  'transition-all duration-200 ease-out',
+  variants[variant],
+  paddings[padding],
+  hover && 'hover:border-border-strong hover:shadow-md cursor-pointer',
+  href && 'block',
+  className
+);
+---
+
+<Element class={cardStyles} href={href} {...attrs}>
+  <slot />
+</Element>

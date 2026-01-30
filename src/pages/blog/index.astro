@@ -1,0 +1,155 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Navbar from '@/components/landing/Navbar.astro';
+import LandingFooter from '@/components/landing/LandingFooter.astro';
+import BlogCard from '@/components/blog/BlogCard.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { getCollection } from 'astro:content';
+
+// Get all published posts
+const allPosts = await getCollection('blog', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+// Filter by English locale and sort by date
+const posts = allPosts
+  .filter((post) => post.data.locale === 'en')
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+
+// Separate featured posts (shown in hero section)
+const featuredPosts = posts.filter((post) => post.data.featured);
+// Non-featured posts for the main listing
+const nonFeaturedPosts = posts.filter((post) => !post.data.featured);
+// If ALL posts are featured, show them all in the main listing too (to avoid empty section)
+const regularPosts = nonFeaturedPosts.length > 0 ? nonFeaturedPosts : posts;
+
+const getPostUrl = (postId: string) => {
+  // Remove locale prefix from id (e.g., "en/welcome-to-velocity" -> "welcome-to-velocity")
+  const slug = postId.replace('en/', '');
+  return `/blog/${slug}`;
+};
+---
+
+<BaseLayout
+  title="Blog"
+  description="Latest articles and updates"
+>
+  <Navbar slot="header" />
+
+  <!-- Hero Section with decorative background -->
+  <section class="relative overflow-hidden bg-background-secondary border-b border-border">
+    <!-- Decorative grid pattern -->
+    <div class="absolute inset-0 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white_50%,transparent)] pointer-events-none opacity-30"></div>
+
+    <!-- Decorative blur blob -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-200/20 dark:bg-brand-800/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-6xl px-6 py-20 md:py-28">
+      <div class="max-w-3xl">
+        <div class="mb-4 inline-flex items-center rounded-full border border-border bg-background px-3 py-1 shadow-sm">
+          <Icon name="book" size="sm" class="text-brand-500 mr-2" />
+          <span class="text-xs font-medium text-foreground-secondary">All posts</span>
+        </div>
+
+        <h1 class="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl mb-6">
+          Blog
+        </h1>
+
+        <p class="text-xl text-foreground-muted leading-relaxed">
+          Latest articles and updates
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Posts Section -->
+  {featuredPosts.length > 0 && (
+    <section class="py-16 bg-background">
+      <div class="mx-auto max-w-6xl px-6">
+        <h2 class="font-display text-2xl font-bold text-foreground mb-8 flex items-center gap-2">
+          <svg class="h-6 w-6 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          Featured
+        </h2>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          {featuredPosts.map((post) => (
+            <BlogCard
+              title={post.data.title}
+              description={post.data.description}
+              href={getPostUrl(post.id)}
+              publishedAt={post.data.publishedAt}
+              tags={post.data.tags}
+              author={post.data.author}
+              image={post.data.image?.src}
+              featured={true}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- All Posts Section -->
+  <section class="py-16 bg-background-secondary">
+    <div class="mx-auto max-w-6xl px-6">
+      {(featuredPosts.length > 0 && nonFeaturedPosts.length > 0) && (
+        <h2 class="font-display text-2xl font-bold text-foreground mb-8">
+          All posts
+        </h2>
+      )}
+
+      {regularPosts.length > 0 ? (
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {regularPosts.map((post) => (
+            <BlogCard
+              title={post.data.title}
+              description={post.data.description}
+              href={getPostUrl(post.id)}
+              publishedAt={post.data.publishedAt}
+              tags={post.data.tags}
+              author={post.data.author}
+              image={post.data.image?.src}
+            />
+          ))}
+        </div>
+      ) : posts.length === 0 ? (
+        <div class="text-center py-16">
+          <div class="mx-auto w-16 h-16 rounded-full bg-background flex items-center justify-center mb-4">
+            <Icon name="file-text" size="lg" class="text-foreground-muted" />
+          </div>
+          <p class="text-foreground-muted text-lg">No posts found</p>
+        </div>
+      ) : null}
+    </div>
+  </section>
+
+  <!-- Newsletter CTA Section -->
+  <section class="py-20 bg-surface-invert text-on-invert">
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <h2 class="font-display text-3xl font-bold mb-4">
+        Subscribe
+      </h2>
+      <p class="text-on-invert-secondary text-lg mb-8">
+        Get the latest articles and updates delivered to your inbox.
+      </p>
+
+      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+        <input
+          type="email"
+          placeholder="Enter your email"
+          class="flex-1 h-12 px-4 rounded-md bg-surface-invert-secondary border border-border-invert text-on-invert placeholder:text-on-invert-muted focus:outline-none focus:ring-2 focus:ring-brand-500"
+          required
+        />
+        <Button variant="primary" size="lg" type="submit">
+          Subscribe
+          <Icon name="arrow-right" size="sm" />
+        </Button>
+      </form>
+    </div>
+  </section>
+
+  <LandingFooter slot="footer" />
+</BaseLayout>

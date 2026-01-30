@@ -1,0 +1,708 @@
+---
+import LandingLayout from '@/layouts/LandingLayout.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Button from '@/components/ui/Button.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Alert from '@/components/ui/Alert.astro';
+import Tabs from '@/components/ui/Tabs.astro';
+import Dropdown from '@/components/ui/Dropdown.astro';
+import Dialog from '@/components/ui/Dialog.astro';
+import Tooltip from '@/components/ui/Tooltip.astro';
+import Avatar from '@/components/ui/Avatar.astro';
+import Skeleton from '@/components/ui/Skeleton.astro';
+import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/Textarea';
+import { Select } from '@/components/ui/Select';
+import { Checkbox } from '@/components/ui/Checkbox';
+import { Radio } from '@/components/ui/Radio';
+import { Card, CardTitle, CardContent } from '@/components/ui/Card';
+
+// Component categories for navigation
+const categories = [
+  { id: 'buttons', label: 'Buttons', icon: 'box' },
+  { id: 'inputs', label: 'Form Inputs', icon: 'terminal' },
+  { id: 'feedback', label: 'Feedback', icon: 'alert-circle' },
+  { id: 'overlays', label: 'Overlays', icon: 'layers' },
+  { id: 'data', label: 'Data Display', icon: 'layout' },
+  { id: 'loading', label: 'Loading', icon: 'loader' },
+];
+---
+
+<LandingLayout
+  title="Components"
+  description="Explore Velocity's comprehensive UI component library. Production-ready, accessible, and beautifully designed."
+>
+
+  <!-- Hero Section -->
+  <section class="relative pt-32 pb-20 overflow-hidden">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white,transparent)] pointer-events-none opacity-30"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-500/8 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="relative mx-auto max-w-6xl px-6">
+      <div class="max-w-2xl">
+        <!-- Badge -->
+        <div class="mb-6 inline-flex items-center rounded-full border border-border bg-background px-3 py-1 shadow-sm">
+          <span class="flex h-2 w-2 rounded-full bg-brand-500 mr-2 animate-pulse"></span>
+          <span class="text-xs font-medium text-foreground-secondary">{categories.length * 3}+ Production Components</span>
+        </div>
+
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
+          Component <span class="text-brand-500">Library</span>
+        </h1>
+
+        <p class="text-lg text-foreground-muted max-w-xl mb-8 leading-relaxed">
+          Production-ready UI primitives built with accessibility and performance in mind.
+          Copy, paste, and customize to match your brand.
+        </p>
+
+        <div class="flex items-center gap-4">
+          <Button href="#buttons">
+            Browse Components
+            <Icon name="arrow-right" size="sm" />
+          </Button>
+          <Button variant="outline" href="https://github.com/southwellmedia-dev/velocity" target="_blank">
+            <Icon name="github" size="sm" />
+            View Source
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Navigation -->
+  <nav class="sticky top-16 z-40 bg-background/95 backdrop-blur-md border-y border-border">
+    <div class="mx-auto max-w-6xl px-6">
+      <div class="flex items-center gap-1 py-3 overflow-x-auto scrollbar-hide">
+        {categories.map((cat) => (
+          <a
+            href={`#${cat.id}`}
+            class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-foreground-muted hover:text-foreground hover:bg-secondary rounded-md transition-all whitespace-nowrap group"
+          >
+            <Icon name={cat.icon} size="sm" class="text-foreground-subtle group-hover:text-brand-500 transition-colors" />
+            {cat.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Components Showcase -->
+  <div class="mx-auto max-w-6xl px-6 py-20 space-y-32">
+
+    <!-- Buttons Section -->
+    <section id="buttons" class="scroll-mt-32">
+      <div class="flex items-start gap-5 mb-10">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 shrink-0">
+          <Icon name="box" size="lg" />
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-foreground">Buttons</h2>
+          <p class="text-foreground-muted mt-1">Interactive elements for actions and navigation. All variants support icons, loading states, and full accessibility.</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Button Variants -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Variants</span>
+            <span class="showcase-hint">6 styles for different contexts</span>
+          </div>
+          <div class="showcase-content">
+            <div class="flex flex-wrap items-center gap-3">
+              <Button variant="primary">Primary</Button>
+              <Button variant="secondary">Secondary</Button>
+              <Button variant="outline">Outline</Button>
+              <Button variant="ghost">Ghost</Button>
+              <Button variant="link">Link</Button>
+              <Button variant="destructive">Destructive</Button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Button Sizes -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Sizes</span>
+            <span class="showcase-hint">Responsive scaling</span>
+          </div>
+          <div class="showcase-content">
+            <div class="flex flex-wrap items-end gap-3">
+              <Button size="sm">Small</Button>
+              <Button size="md">Medium</Button>
+              <Button size="lg">Large</Button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Button States & Icons -->
+        <div class="grid gap-6 lg:grid-cols-2">
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">States</span>
+            </div>
+            <div class="showcase-content">
+              <div class="flex flex-wrap items-center gap-3">
+                <Button>Default</Button>
+                <Button loading>Loading</Button>
+                <Button disabled>Disabled</Button>
+                <Button icon><Icon name="plus" /></Button>
+              </div>
+            </div>
+          </div>
+
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">With Icons</span>
+            </div>
+            <div class="showcase-content">
+              <div class="flex flex-wrap items-center gap-3">
+                <Button><Icon name="mail" size="sm" /> Send</Button>
+                <Button variant="outline"><Icon name="download" size="sm" /> Export</Button>
+                <Button variant="ghost"><Icon name="star" size="sm" /> Star</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form Inputs Section -->
+    <section id="inputs" class="scroll-mt-32">
+      <div class="flex items-start gap-5 mb-10">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 shrink-0">
+          <Icon name="terminal" size="lg" />
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-foreground">Form Inputs</h2>
+          <p class="text-foreground-muted mt-1">Text fields, selects, checkboxes, and more. Built with native validation and ARIA support.</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="grid gap-6 lg:grid-cols-2">
+          <!-- Text Input -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Text Input</span>
+              <span class="showcase-hint">With labels & validation</span>
+            </div>
+            <div class="showcase-content space-y-5">
+              <Input client:visible label="Email address" type="email" placeholder="you@example.com" />
+              <Input client:visible label="Password" type="password" placeholder="••••••••" hint="Must be at least 8 characters" />
+              <Input client:visible label="Disabled" placeholder="Cannot edit" disabled />
+            </div>
+          </div>
+
+          <!-- Textarea -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Textarea</span>
+              <span class="showcase-hint">Multi-line text input</span>
+            </div>
+            <div class="showcase-content">
+              <Textarea client:visible label="Message" placeholder="Write your message here..." rows={5} hint="Supports markdown formatting" />
+            </div>
+          </div>
+
+          <!-- Select -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Select</span>
+              <span class="showcase-hint">Native dropdown</span>
+            </div>
+            <div class="showcase-content">
+              <Select client:visible label="Country" options={[
+                { value: '', label: 'Select a country...' },
+                { value: 'us', label: 'United States' },
+                { value: 'uk', label: 'United Kingdom' },
+                { value: 'ca', label: 'Canada' },
+                { value: 'de', label: 'Germany' },
+                { value: 'fr', label: 'France' },
+              ]} />
+            </div>
+          </div>
+
+          <!-- Checkboxes -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Checkboxes</span>
+              <span class="showcase-hint">Multi-select controls</span>
+            </div>
+            <div class="showcase-content space-y-4">
+              <Checkbox client:visible label="I agree to the terms of service" />
+              <Checkbox client:visible label="Send me product updates" defaultChecked />
+              <Checkbox client:visible label="Enable notifications" description="Receive alerts for important updates" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Radio Cards - Full width -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Plan Selection</span>
+            <span class="showcase-hint">Card-style radio options</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-4 sm:grid-cols-3">
+              <Radio client:visible variant="card" name="plan-cards" value="free" label="Free" description="Basic features for personal projects" defaultChecked />
+              <Radio client:visible variant="card" name="plan-cards" value="pro" label="Pro" description="Advanced tools for professionals" />
+              <Radio client:visible variant="card" name="plan-cards" value="team" label="Team" description="Collaboration features for teams" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feedback Section -->
+    <section id="feedback" class="scroll-mt-32">
+      <div class="flex items-start gap-5 mb-10">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 shrink-0">
+          <Icon name="alert-circle" size="lg" />
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-foreground">Feedback</h2>
+          <p class="text-foreground-muted mt-1">Badges, alerts, and status indicators to communicate state and guide user actions.</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Badges -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Badges</span>
+            <span class="showcase-hint">Status indicators</span>
+          </div>
+          <div class="showcase-content">
+            <div class="flex flex-wrap items-center gap-3">
+              <Badge>Default</Badge>
+              <Badge variant="success">
+                <Icon name="check" size="xs" />
+                Success
+              </Badge>
+              <Badge variant="warning">
+                <Icon name="alert-triangle" size="xs" />
+                Warning
+              </Badge>
+              <Badge variant="error">
+                <Icon name="x-circle" size="xs" />
+                Error
+              </Badge>
+              <Badge variant="info">
+                <Icon name="info" size="xs" />
+                Info
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Alerts</span>
+            <span class="showcase-hint">Contextual messages</span>
+          </div>
+          <div class="showcase-content space-y-4">
+            <Alert variant="info" title="Tip">
+              Use keyboard shortcuts to navigate faster. Press <kbd class="px-1.5 py-0.5 text-xs font-mono bg-background-secondary rounded border border-border">⌘K</kbd> to open the command palette.
+            </Alert>
+            <Alert variant="success" title="Deployment successful">
+              Your changes are now live at <a href="#" class="underline underline-offset-2 hover:text-inherit/80">velocity.dev</a>
+            </Alert>
+            <Alert variant="warning" title="Approaching limit">
+              You've used 80% of your monthly API quota. Consider upgrading your plan.
+            </Alert>
+            <Alert variant="error" title="Build failed" dismissible>
+              Error in <code class="text-xs font-mono">src/components/Button.tsx</code> — missing required prop "variant"
+            </Alert>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Overlays Section -->
+    <section id="overlays" class="scroll-mt-32">
+      <div class="flex items-start gap-5 mb-10">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 shrink-0">
+          <Icon name="layers" size="lg" />
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-foreground">Overlays</h2>
+          <p class="text-foreground-muted mt-1">Dialogs, dropdowns, tooltips, and tabs. Full keyboard navigation and focus management.</p>
+        </div>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        <!-- Dialog -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Dialog</span>
+            <span class="showcase-hint">Modal overlay</span>
+          </div>
+          <div class="showcase-content">
+            <Button onclick="openDialog('demo-dialog')">
+              <Icon name="external-link" size="sm" />
+              Open Dialog
+            </Button>
+
+            <Dialog id="demo-dialog" title="Delete project?" description="This action cannot be undone.">
+              <p class="text-foreground-muted text-sm">
+                Are you sure you want to delete <strong class="text-foreground">velocity-demo</strong>? All files, deployments, and analytics data will be permanently removed.
+              </p>
+              <div class="flex justify-end gap-3 pt-6">
+                <Button variant="outline" onclick="closeDialog('demo-dialog')">Cancel</Button>
+                <Button variant="destructive" onclick="closeDialog('demo-dialog')">
+                  <Icon name="x" size="sm" />
+                  Delete Project
+                </Button>
+              </div>
+            </Dialog>
+          </div>
+        </div>
+
+        <!-- Dropdown -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Dropdown</span>
+            <span class="showcase-hint">Action menu</span>
+          </div>
+          <div class="showcase-content">
+            <Dropdown
+              items={[
+                { label: 'Edit', href: '#', icon: 'edit' },
+                { label: 'Duplicate', href: '#', icon: 'copy' },
+                { label: 'Share', href: '#', icon: 'share' },
+                { separator: true, label: '' },
+                { label: 'Archive', href: '#', icon: 'archive' },
+                { label: 'Delete', href: '#', disabled: true, icon: 'trash' },
+              ]}
+            >
+              <Button variant="outline" slot="trigger">
+                Actions
+                <Icon name="chevron-down" size="sm" />
+              </Button>
+            </Dropdown>
+          </div>
+        </div>
+
+        <!-- Tooltips -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Tooltips</span>
+            <span class="showcase-hint">Contextual hints</span>
+          </div>
+          <div class="showcase-content">
+            <div class="flex flex-wrap items-center gap-4">
+              <Tooltip content="Tooltip on top" position="top">
+                <Button variant="outline" size="sm">Top</Button>
+              </Tooltip>
+              <Tooltip content="Tooltip on bottom" position="bottom">
+                <Button variant="outline" size="sm">Bottom</Button>
+              </Tooltip>
+              <Tooltip content="Tooltip on left" position="left">
+                <Button variant="outline" size="sm">Left</Button>
+              </Tooltip>
+              <Tooltip content="Tooltip on right" position="right">
+                <Button variant="outline" size="sm">Right</Button>
+              </Tooltip>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Tabs</span>
+            <span class="showcase-hint">Content organization</span>
+          </div>
+          <div class="showcase-content">
+            <Tabs
+              tabs={[
+                { id: 'overview', label: 'Overview' },
+                { id: 'analytics', label: 'Analytics' },
+                { id: 'settings', label: 'Settings' },
+              ]}
+            >
+              <div data-tab-content="overview" class="text-sm text-foreground-muted">
+                <p>Project overview with key metrics and recent activity. Tabs support full keyboard navigation.</p>
+              </div>
+              <div data-tab-content="analytics" class="text-sm text-foreground-muted">
+                <p>Analytics data with charts and performance insights. Press arrow keys to navigate between tabs.</p>
+              </div>
+              <div data-tab-content="settings" class="text-sm text-foreground-muted">
+                <p>Configure your project settings. Use Home/End to jump to first/last tab.</p>
+              </div>
+            </Tabs>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Display Section -->
+    <section id="data" class="scroll-mt-32">
+      <div class="flex items-start gap-5 mb-10">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 shrink-0">
+          <Icon name="layout" size="lg" />
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-foreground">Data Display</h2>
+          <p class="text-foreground-muted mt-1">Cards, avatars, and icons for presenting content and user information.</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Cards -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Cards</span>
+            <span class="showcase-hint">Content containers</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <Card client:visible hover>
+                <div class="flex items-start gap-4">
+                  <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+                    <Icon name="zap" size="md" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <CardTitle>Performance</CardTitle>
+                    <p class="text-xs text-foreground-subtle mt-0.5 font-medium">100/100 Lighthouse</p>
+                  </div>
+                </div>
+                <CardContent>
+                  <p class="text-sm text-foreground-muted leading-relaxed">Zero JavaScript by default. Islands architecture with selective hydration for optimal speed.</p>
+                </CardContent>
+              </Card>
+
+              <Card client:visible hover>
+                <div class="flex items-start gap-4">
+                  <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+                    <Icon name="shield" size="md" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <CardTitle>Type-Safe</CardTitle>
+                    <p class="text-xs text-foreground-subtle mt-0.5 font-medium">Full TypeScript</p>
+                  </div>
+                </div>
+                <CardContent>
+                  <p class="text-sm text-foreground-muted leading-relaxed">Strict types throughout with IDE autocompletion and compile-time error checking.</p>
+                </CardContent>
+              </Card>
+
+              <Card client:visible hover>
+                <div class="flex items-start gap-4">
+                  <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+                    <Icon name="globe" size="md" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <CardTitle>i18n Ready</CardTitle>
+                    <p class="text-xs text-foreground-subtle mt-0.5 font-medium">Multi-language</p>
+                  </div>
+                </div>
+                <CardContent>
+                  <p class="text-sm text-foreground-muted leading-relaxed">Built-in translation system with SEO-friendly URLs and automatic locale detection.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+
+        <!-- Avatars -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Avatars</span>
+            <span class="showcase-hint">User representations</span>
+          </div>
+          <div class="showcase-content">
+            <div class="flex flex-wrap items-end gap-4">
+              <div class="text-center">
+                <Avatar size="xs" alt="John Doe" />
+                <span class="text-xs text-foreground-muted mt-2 block">xs</span>
+              </div>
+              <div class="text-center">
+                <Avatar size="sm" alt="Jane Smith" />
+                <span class="text-xs text-foreground-muted mt-2 block">sm</span>
+              </div>
+              <div class="text-center">
+                <Avatar size="md" alt="Alex Johnson" />
+                <span class="text-xs text-foreground-muted mt-2 block">md</span>
+              </div>
+              <div class="text-center">
+                <Avatar size="lg" alt="Sam Wilson" />
+                <span class="text-xs text-foreground-muted mt-2 block">lg</span>
+              </div>
+              <div class="text-center">
+                <Avatar size="xl" alt="Chris Lee" />
+                <span class="text-xs text-foreground-muted mt-2 block">xl</span>
+              </div>
+              <div class="pl-4 border-l border-border">
+                <div class="flex -space-x-3">
+                  <Avatar size="md" src="https://i.pravatar.cc/150?img=12" alt="User 1" class="ring-2 ring-background" />
+                  <Avatar size="md" src="https://i.pravatar.cc/150?img=33" alt="User 2" class="ring-2 ring-background" />
+                  <Avatar size="md" src="https://i.pravatar.cc/150?img=47" alt="User 3" class="ring-2 ring-background" />
+                  <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-xs font-medium ring-2 ring-background">+5</div>
+                </div>
+                <span class="text-xs text-foreground-muted mt-2 block">Stacked</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Icons -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Icons</span>
+            <span class="showcase-hint">Lucide icon set — 24 included</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2">
+              {['menu', 'x', 'chevron-down', 'arrow-right', 'search', 'plus', 'check', 'mail', 'phone', 'github', 'twitter', 'linkedin', 'sun', 'moon', 'zap', 'globe', 'shield', 'code', 'heart', 'star', 'alert-circle', 'check-circle', 'info', 'loader'].map((icon) => (
+                <Tooltip content={icon} position="top">
+                  <div class="flex items-center justify-center w-10 h-10 rounded-lg border border-border bg-background hover:bg-secondary hover:border-border-strong transition-all cursor-pointer group">
+                    <Icon name={icon} size="md" class="text-foreground-muted group-hover:text-foreground transition-colors" />
+                  </div>
+                </Tooltip>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading Section -->
+    <section id="loading" class="scroll-mt-32">
+      <div class="flex items-start gap-5 mb-10">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 shrink-0">
+          <Icon name="loader" size="lg" />
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-foreground">Loading</h2>
+          <p class="text-foreground-muted mt-1">Skeleton loaders for perceived performance while content is being fetched.</p>
+        </div>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        <!-- Skeleton Variants -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Skeleton Types</span>
+            <span class="showcase-hint">Text, circular, rectangular</span>
+          </div>
+          <div class="showcase-content space-y-6">
+            <div class="flex items-center gap-4">
+              <Skeleton variant="circular" width="48px" height="48px" />
+              <div class="flex-1 space-y-2">
+                <Skeleton variant="text" width="140px" />
+                <Skeleton variant="text" width="100px" />
+              </div>
+            </div>
+            <Skeleton variant="default" height="120px" />
+          </div>
+        </div>
+
+        <!-- Card Loading -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Card Skeleton</span>
+            <span class="showcase-hint">Composite loading state</span>
+          </div>
+          <div class="showcase-content">
+            <div class="p-5 rounded-lg border border-border bg-background">
+              <div class="flex items-center gap-4 mb-5">
+                <Skeleton variant="circular" width="40px" height="40px" />
+                <div class="flex-1 space-y-2">
+                  <Skeleton variant="text" width="50%" />
+                  <Skeleton variant="text" width="30%" />
+                </div>
+              </div>
+              <Skeleton variant="default" height="80px" class="mb-4" />
+              <div class="flex gap-3">
+                <Skeleton variant="default" width="80px" height="36px" />
+                <Skeleton variant="default" width="80px" height="36px" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- CTA Section -->
+  <section class="py-24 bg-surface-invert">
+    <div class="mx-auto max-w-6xl px-6">
+      <div class="max-w-2xl mx-auto text-center">
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-on-invert mb-4">
+          Ready to build?
+        </h2>
+        <p class="text-on-invert-secondary mb-8">
+          These components are just the beginning. Clone Velocity and start shipping faster.
+        </p>
+        <div class="flex items-center justify-center gap-4">
+          <Button href="https://github.com/southwellmedia-dev/velocity" target="_blank">
+            <Icon name="github" size="sm" />
+            Clone Repository
+          </Button>
+          <Button variant="outline" href="/blog" class="border-border-invert text-on-invert hover:bg-surface-invert-secondary">
+            Read Documentation
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</LandingLayout>
+
+<style>
+  /* Showcase card styling */
+  .component-showcase {
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    background-color: var(--card);
+    overflow: visible;
+  }
+
+  .showcase-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background-color: color-mix(in oklch, var(--background-secondary) 50%, transparent);
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+
+  .showcase-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--foreground-muted);
+  }
+
+  .showcase-hint {
+    font-size: 0.75rem;
+    color: var(--foreground-subtle);
+  }
+
+  .showcase-content {
+    padding: 1.25rem;
+    border-radius: 0 0 0.75rem 0.75rem;
+    background-color: var(--card);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Keyboard styling */
+  kbd {
+    font-family: var(--font-mono);
+  }
+</style>

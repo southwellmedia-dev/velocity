@@ -1,0 +1,66 @@
+---
+/**
+ * Tooltip Component
+ * Shows additional information on hover with CSS Anchor Positioning (with fallback)
+ */
+import { cn } from '@/lib/cn';
+
+interface Props {
+  content: string;
+  position?: 'top' | 'bottom' | 'left' | 'right';
+  delay?: number;
+  class?: string;
+}
+
+const { content, position = 'top', delay = 200, class: className } = Astro.props;
+
+// Generate unique anchor name for CSS anchor positioning
+const anchorId = `--tip-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<span
+  class={cn('tooltip-wrapper', className)}
+  data-tooltip
+  data-tooltip-delay={delay}
+  data-tooltip-position={position}
+  style={`anchor-name: ${anchorId};`}
+>
+  <slot />
+  <span
+    class="tooltip-bubble"
+    role="tooltip"
+    data-tooltip-content
+    style={`position-anchor: ${anchorId};`}
+  >
+    {content}
+  </span>
+</span>
+
+<script>
+  function initTooltips() {
+    document.querySelectorAll('[data-tooltip]').forEach((wrapper) => {
+      const tooltip = wrapper.querySelector<HTMLElement>('[data-tooltip-content]');
+      const delay = parseInt(wrapper.getAttribute('data-tooltip-delay') || '200', 10);
+      let timeout: ReturnType<typeof setTimeout>;
+
+      function show() {
+        timeout = setTimeout(() => {
+          tooltip?.classList.add('visible');
+        }, delay);
+      }
+
+      function hide() {
+        clearTimeout(timeout);
+        tooltip?.classList.remove('visible');
+      }
+
+      wrapper.addEventListener('mouseenter', show);
+      wrapper.addEventListener('mouseleave', hide);
+      wrapper.addEventListener('focusin', show);
+      wrapper.addEventListener('focusout', hide);
+    });
+  }
+
+  initTooltips();
+  document.addEventListener('astro:page-load', initTooltips);
+</script>

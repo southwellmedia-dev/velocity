@@ -1,0 +1,109 @@
+---
+import '@/styles/global.css';
+import SEO from '@/components/seo/SEO.astro';
+import JsonLd from '@/components/seo/JsonLd.astro';
+import { createWebsiteSchema, createOrganizationSchema } from '@/lib/schema';
+import type { WebSite, Organization, WithContext } from 'schema-dts';
+import siteConfig from '@/config/site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  article?: {
+    publishedTime?: Date;
+    modifiedTime?: Date;
+    authors?: string[];
+    tags?: string[];
+  };
+  noindex?: boolean;
+  nofollow?: boolean;
+  includeOrgSchema?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  imageAlt,
+  article,
+  noindex = false,
+  nofollow = false,
+  includeOrgSchema = false,
+} = Astro.props;
+
+// Build JSON-LD schemas
+const schemas: Array<WithContext<WebSite> | WithContext<Organization>> = [createWebsiteSchema()];
+if (includeOrgSchema) {
+  schemas.push(createOrganizationSchema());
+}
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Velocity Fonts: Outfit (display), Manrope (body), JetBrains Mono (code) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- SEO -->
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      imageAlt={imageAlt}
+      article={article}
+      noindex={noindex}
+      nofollow={nofollow}
+    />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={new URL(Astro.url.pathname, siteConfig.url).toString()} />
+
+    <!-- JSON-LD Structured Data -->
+    <JsonLd schema={schemas} />
+
+    <!-- Theme script (runs before render to prevent flash) -->
+    <script is:inline>
+      (function () {
+        const theme = localStorage.getItem('theme');
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (theme === 'dark' || (!theme && systemDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+  </head>
+
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <!-- Skip to content link -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+    >
+      Skip to content
+    </a>
+
+    <slot name="header" />
+
+    <main id="main-content" class="flex-1">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+  </body>
+</html>

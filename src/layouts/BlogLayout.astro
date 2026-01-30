@@ -1,0 +1,123 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Navbar from '@/components/landing/Navbar.astro';
+import LandingFooter from '@/components/landing/LandingFooter.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+import ArticleHero from '@/components/blog/ArticleHero.astro';
+import ShareButtons from '@/components/blog/ShareButtons.astro';
+import RelatedPosts from '@/components/blog/RelatedPosts.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  publishedAt: Date;
+  updatedAt?: Date;
+  author?: string;
+  image?: string;
+  imageAlt?: string;
+  tags?: string[];
+  slug?: string;
+}
+
+const {
+  title,
+  description,
+  publishedAt,
+  updatedAt,
+  author = 'Team',
+  image,
+  imageAlt,
+  tags = [],
+  slug = '',
+} = Astro.props;
+
+const ogImage = image || `/og${Astro.url.pathname}.png`;
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: title },
+];
+
+// Get full URL for sharing
+const fullUrl = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={ogImage}
+  imageAlt={imageAlt || title}
+  article={{
+    publishedTime: publishedAt,
+    modifiedTime: updatedAt,
+    authors: [author],
+    tags,
+  }}
+>
+  <Navbar slot="header" />
+
+  <!-- Article Hero -->
+  <ArticleHero
+    title={title}
+    description={description}
+    publishedAt={publishedAt}
+    updatedAt={updatedAt}
+    author={author}
+    tags={tags}
+    image={image}
+    imageAlt={imageAlt}
+  />
+
+  <article class={`py-12 ${image ? 'pt-24' : ''}`}>
+    <div class="mx-auto max-w-4xl px-6">
+      <!-- Breadcrumbs -->
+      <Breadcrumbs items={breadcrumbs} class="mb-8" />
+
+      <!-- Article Content -->
+      <div class="prose prose-lg max-w-none prose-headings:font-display prose-headings:font-bold prose-a:text-brand-600 hover:prose-a:text-brand-500 prose-code:text-brand-600 prose-code:bg-brand-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-background-secondary prose-pre:border prose-pre:border-border dark:prose-invert dark:prose-a:text-brand-400 dark:hover:prose-a:text-brand-300 dark:prose-code:text-brand-400 dark:prose-code:bg-brand-900/30">
+        <slot />
+      </div>
+
+      <!-- Article Footer -->
+      <footer class="mt-12 pt-8 border-t border-border">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <!-- Back link -->
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 text-sm font-medium text-brand-600 hover:text-brand-500 dark:text-brand-400 dark:hover:text-brand-300 transition-colors"
+          >
+            <svg
+              class="h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Blog
+          </a>
+
+          <!-- Share buttons -->
+          <ShareButtons title={title} url={fullUrl} />
+        </div>
+      </footer>
+    </div>
+  </article>
+
+  <!-- Related Posts -->
+  {tags.length > 0 && (
+    <div class="mx-auto max-w-6xl px-6 pb-16">
+      <RelatedPosts
+        currentSlug={slug}
+        tags={tags}
+        locale="en"
+        maxPosts={3}
+      />
+    </div>
+  )}
+
+  <LandingFooter slot="footer" />
+</BaseLayout>

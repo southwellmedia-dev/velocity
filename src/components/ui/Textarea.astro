@@ -1,0 +1,77 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/cn';
+import { generateId } from '@/lib/utils';
+
+interface Props extends HTMLAttributes<'textarea'> {
+  label?: string;
+  error?: string;
+  hint?: string;
+  size?: 'sm' | 'md' | 'lg';
+  rows?: number;
+}
+
+const {
+  label,
+  error,
+  hint,
+  size = 'md',
+  rows = 4,
+  class: className,
+  id,
+  ...attrs
+} = Astro.props;
+
+const textareaId = id || generateId('textarea');
+
+const sizes = {
+  sm: 'px-3 py-2 text-sm',
+  md: 'px-4 py-3 text-sm',
+  lg: 'px-4 py-3 text-base',
+};
+
+const textareaStyles = cn(
+  'w-full rounded-lg border bg-background resize-y min-h-[80px]',
+  'transition-colors duration-[--transition-fast]',
+  'placeholder:text-muted-foreground',
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+  'disabled:cursor-not-allowed disabled:opacity-50',
+  error ? 'border-destructive focus-visible:ring-destructive' : 'border-border',
+  sizes[size]
+);
+---
+
+<div class={cn('space-y-1.5', className)}>
+  {
+    label && (
+      <label for={textareaId} class="text-sm font-medium leading-none">
+        {label}
+      </label>
+    )
+  }
+
+  <textarea
+    id={textareaId}
+    class={textareaStyles}
+    rows={rows}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={error ? `${textareaId}-error` : hint ? `${textareaId}-hint` : undefined}
+    {...attrs}
+  />
+
+  {
+    error && (
+      <p id={`${textareaId}-error`} class="text-sm text-destructive">
+        {error}
+      </p>
+    )
+  }
+
+  {
+    hint && !error && (
+      <p id={`${textareaId}-hint`} class="text-sm text-muted-foreground">
+        {hint}
+      </p>
+    )
+  }
+</div>

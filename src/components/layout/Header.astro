@@ -1,0 +1,221 @@
+---
+import { cn } from '@/lib/cn';
+import { mainNav } from '@/config/navigation.config';
+import ThemeToggle from './ThemeToggle.astro';
+import siteConfig from '@/config/site.config';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const navItems = mainNav.map((item) => ({
+  ...item,
+  // Use label directly since it's now just a string key that maps to static text
+  label: item.label === 'nav.home' ? 'Home' :
+         item.label === 'nav.about' ? 'About' :
+         item.label === 'nav.blog' ? 'Blog' :
+         item.label === 'nav.contact' ? 'Contact' :
+         item.label,
+}));
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  class={cn(
+    'sticky top-0 z-50 w-full',
+    'border-b border-border/50',
+    'bg-background/80 backdrop-blur-lg backdrop-saturate-150',
+    className
+  )}
+>
+  <div class="container">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Logo -->
+      <a
+        href="/"
+        class="flex items-center gap-2 font-semibold text-foreground transition-opacity hover:opacity-80"
+      >
+        <svg
+          class="h-6 w-6"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M12 2L2 19.5h20L12 2zm0 4l7 12H5l7-12z" />
+        </svg>
+        <span class="hidden sm:inline">{siteConfig.name}</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-1" aria-label="Main navigation">
+        {
+          navItems.map((item) => (
+            <a
+              href={item.href}
+              class={cn(
+                'px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                currentPath === item.href || currentPath.startsWith(item.href + '/')
+                  ? 'text-foreground'
+                  : 'text-foreground-muted hover:text-foreground hover:bg-secondary'
+              )}
+              aria-current={currentPath === item.href ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2">
+        <ThemeToggle />
+
+        <!-- Mobile Menu Button -->
+        <button
+          type="button"
+          id="mobile-menu-button"
+          class={cn(
+            'md:hidden inline-flex items-center justify-center rounded-md p-2',
+            'text-foreground-muted hover:text-foreground hover:bg-secondary',
+            'transition-colors',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+          )}
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Toggle menu"
+        >
+          <svg
+            id="menu-icon-open"
+            class="h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+          </svg>
+          <svg
+            id="menu-icon-close"
+            class="hidden h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" x2="6" y1="6" y2="18" />
+            <line x1="6" x2="18" y1="6" y2="18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="md:hidden hidden border-t border-border bg-background"
+    role="navigation"
+    aria-label="Main navigation"
+  >
+    <div class="container py-4 space-y-1">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class={cn(
+              'block px-3 py-2 rounded-md text-sm font-medium transition-colors',
+              currentPath === item.href || currentPath.startsWith(item.href + '/')
+                ? 'bg-secondary text-foreground'
+                : 'text-foreground-muted hover:bg-secondary hover:text-foreground'
+            )}
+            aria-current={currentPath === item.href ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function initMobileMenu() {
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+
+    if (!button || !menu || !iconOpen || !iconClose) return;
+
+    let isOpen = false;
+
+    function toggle() {
+      isOpen = !isOpen;
+      button.setAttribute('aria-expanded', String(isOpen));
+
+      if (isOpen) {
+        menu.classList.remove('hidden');
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      } else {
+        menu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+    }
+
+    button.addEventListener('click', toggle);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isOpen) {
+        toggle();
+      }
+    });
+  })();
+  document.addEventListener('astro:after-swap', function() {
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+
+    if (!button || !menu || !iconOpen || !iconClose) return;
+
+    let isOpen = false;
+
+    function toggle() {
+      isOpen = !isOpen;
+      button.setAttribute('aria-expanded', String(isOpen));
+
+      if (isOpen) {
+        menu.classList.remove('hidden');
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      } else {
+        menu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+    }
+
+    button.addEventListener('click', toggle);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isOpen) {
+        toggle();
+      }
+    });
+  });
+</script>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background with rounded corners -->
+  <rect width="32" height="32" rx="8" fill="#0A0A0A"/>
+
+  <!-- Velocity V mark with motion effect -->
+  <defs>
+    <linearGradient id="vGradient" x1="8" y1="6" x2="24" y2="26" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF6B35"/>
+      <stop offset="100%" stop-color="#F94C10"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Main V shape - bold and dynamic -->
+  <path
+    d="M7 7L16 25L25 7"
+    stroke="url(#vGradient)"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Speed accent line -->
+  <path
+    d="M10 10L14 10"
+    stroke="#FF6B35"
+    stroke-width="2"
+    stroke-linecap="round"
+    opacity="0.7"
+  />
+</svg>

@@ -1,0 +1,63 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/cn';
+import { generateId } from '@/lib/utils';
+
+interface Props extends HTMLAttributes<'input'> {
+  label?: string;
+  description?: string;
+  error?: string;
+}
+
+const { label, description, error, class: className, id, ...attrs } = Astro.props;
+
+const checkboxId = id || generateId('checkbox');
+
+const checkboxStyles = cn(
+  'h-4 w-4 shrink-0 rounded border border-border',
+  'transition-colors duration-[--transition-fast]',
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+  'disabled:cursor-not-allowed disabled:opacity-50',
+  'checked:bg-primary checked:border-primary checked:text-primary-foreground',
+  error && 'border-destructive focus-visible:ring-destructive'
+);
+---
+
+<div class={cn('flex items-start gap-3', className)}>
+  <input
+    type="checkbox"
+    id={checkboxId}
+    class={checkboxStyles}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={description ? `${checkboxId}-description` : undefined}
+    {...attrs}
+  />
+
+  {
+    (label || description) && (
+      <div class="grid gap-1.5 leading-none">
+        {label && (
+          <label
+            for={checkboxId}
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            {label}
+          </label>
+        )}
+        {description && (
+          <p id={`${checkboxId}-description`} class="text-sm text-muted-foreground">
+            {description}
+          </p>
+        )}
+      </div>
+    )
+  }
+</div>
+
+{
+  error && (
+    <p class="mt-1.5 text-sm text-destructive">
+      {error}
+    </p>
+  )
+}

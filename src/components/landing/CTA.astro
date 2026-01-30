@@ -1,0 +1,77 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+---
+
+<section id="cta" class="py-32 bg-background text-center">
+  <div class="mx-auto max-w-3xl px-6">
+    <h2 class="font-display text-4xl font-bold text-foreground md:text-5xl mb-6">
+      Stop configuring. <span class="text-brand-500">Start shipping.</span>
+    </h2>
+    <p class="text-xl text-foreground-muted mb-10">
+      Join the developers building faster, better websites with Velocity. Open source and free forever.
+    </p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <button
+        type="button"
+        id="copy-npm-command"
+        class="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-md bg-foreground text-background hover:bg-foreground/90 active:scale-[0.98] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        data-command="npm create velocity@latest"
+        data-copied="Copied!"
+      >
+        <Icon name="terminal" size="md" />
+        <span id="npm-command-text">npm create velocity@latest</span>
+        <span id="copy-icon" class="ml-1 text-foreground-muted">
+          <Icon name="copy" size="sm" />
+        </span>
+        <span id="check-icon" class="hidden ml-1 text-success">
+          <Icon name="check" size="sm" />
+        </span>
+      </button>
+      <Button
+        variant="outline"
+        size="lg"
+        href="https://github.com/southwellmedia-dev/velocity"
+        target="_blank"
+      >
+        <Icon name="book" size="md" />
+        Read the Docs
+      </Button>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initCopyButton() {
+    const button = document.getElementById('copy-npm-command');
+    const copyIcon = document.getElementById('copy-icon');
+    const checkIcon = document.getElementById('check-icon');
+    const commandText = document.getElementById('npm-command-text');
+
+    if (!button || !copyIcon || !checkIcon || !commandText) return;
+
+    const command = button.dataset.command || 'npm create velocity@latest';
+    const copiedText = button.dataset.copied || 'Copied!';
+
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(command);
+
+        copyIcon.classList.add('hidden');
+        checkIcon.classList.remove('hidden');
+        commandText.textContent = copiedText;
+
+        setTimeout(() => {
+          copyIcon.classList.remove('hidden');
+          checkIcon.classList.add('hidden');
+          commandText.textContent = command;
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    });
+  }
+
+  initCopyButton();
+  document.addEventListener('astro:page-load', initCopyButton);
+</script>

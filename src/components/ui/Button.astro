@@ -1,0 +1,124 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/cn';
+
+interface Props extends HTMLAttributes<'button'> {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'link' | 'destructive';
+  size?: 'sm' | 'md' | 'lg';
+  loading?: boolean;
+  fullWidth?: boolean;
+  href?: string;
+  target?: string;
+  icon?: boolean;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  loading = false,
+  fullWidth = false,
+  href,
+  target,
+  icon = false,
+  class: className,
+  disabled,
+  ...attrs
+} = Astro.props;
+
+const Element = href ? 'a' : 'button';
+
+const baseStyles = `
+  inline-flex items-center justify-center gap-2
+  font-medium
+  transition-all duration-150 ease-out
+  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+  disabled:pointer-events-none disabled:opacity-50
+  [&_svg]:pointer-events-none [&_svg]:shrink-0
+`;
+
+const variants = {
+  primary: `
+    bg-foreground text-background
+    hover:bg-foreground/90
+    active:scale-[0.98]
+  `,
+  secondary: `
+    bg-secondary text-secondary-foreground
+    border border-border
+    hover:bg-secondary-hover hover:border-border-strong
+    active:scale-[0.98]
+  `,
+  outline: `
+    border border-border bg-transparent
+    text-foreground
+    hover:bg-secondary hover:border-border-strong
+    active:scale-[0.98]
+  `,
+  ghost: `
+    text-foreground-secondary
+    hover:text-foreground hover:bg-secondary
+    active:scale-[0.98]
+  `,
+  link: `
+    text-foreground-secondary
+    hover:text-foreground
+    underline-offset-4 hover:underline
+  `,
+  destructive: `
+    bg-[var(--destructive)] text-[var(--destructive-foreground)]
+    hover:bg-[var(--destructive)]/90
+    active:scale-[0.98]
+  `,
+};
+
+const sizes = {
+  sm: icon ? 'h-8 w-8' : 'h-8 px-3 text-xs rounded-md',
+  md: icon ? 'h-9 w-9' : 'h-9 px-4 text-xs rounded-md',
+  lg: icon ? 'h-10 w-10' : 'h-10 px-5 text-sm rounded-md',
+};
+
+const iconSizes = {
+  sm: '[&_svg]:h-4 [&_svg]:w-4',
+  md: '[&_svg]:h-5 [&_svg]:w-5',
+  lg: '[&_svg]:h-5 [&_svg]:w-5',
+};
+
+const classes = cn(
+  baseStyles,
+  variants[variant],
+  sizes[size],
+  iconSizes[size],
+  icon && 'rounded-md',
+  fullWidth && 'w-full',
+  className
+);
+---
+
+<Element
+  class={classes}
+  disabled={disabled || loading}
+  href={href}
+  target={target}
+  {...attrs}
+>
+  {
+    loading ? (
+      <svg
+        class="animate-spin"
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+      </svg>
+    ) : null
+  }
+  <slot />
+</Element>

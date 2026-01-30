@@ -1,0 +1,44 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+
+const stack = [
+  {
+    name: 'Astro 6',
+    desc: 'Server islands & content layer',
+    icon: 'zap' as const,
+  },
+  {
+    name: 'Tailwind v4',
+    desc: 'Zero-runtime CSS engine',
+    icon: 'layout' as const,
+  },
+  {
+    name: 'TypeScript',
+    desc: 'Strict type safety defaults',
+    icon: 'shield' as const,
+  },
+  {
+    name: 'Motion',
+    desc: 'Declarative animations',
+    icon: 'box' as const,
+  },
+];
+---
+
+<section class="border-y border-border bg-background-secondary py-12">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+      {stack.map((item) => (
+        <div class="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
+          <div class="flex items-center gap-2 text-foreground font-display font-bold text-lg">
+            <span class="text-brand-500">
+              <Icon name={item.icon} size="md" />
+            </span>
+            {item.name}
+          </div>
+          <p class="text-sm text-foreground-muted font-medium">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

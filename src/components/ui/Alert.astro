@@ -1,0 +1,125 @@
+---
+/**
+ * Alert Component
+ * Contextual feedback messages with refined design system integration
+ */
+import { cn } from '@/lib/cn';
+import Icon from './Icon.astro';
+
+interface Props {
+  variant?: 'info' | 'success' | 'warning' | 'error';
+  title?: string;
+  dismissible?: boolean;
+  class?: string;
+}
+
+const { variant = 'info', title, dismissible = false, class: className } = Astro.props;
+
+// Refined color system using design tokens with subtle backgrounds
+const variants = {
+  info: {
+    wrapper: 'bg-background border-border',
+    icon: 'text-foreground-muted',
+    title: 'text-foreground',
+    content: 'text-foreground-muted',
+    accent: 'bg-foreground-muted',
+  },
+  success: {
+    wrapper: 'bg-background border-[var(--success)]/30',
+    icon: 'text-[var(--success)]',
+    title: 'text-foreground',
+    content: 'text-foreground-muted',
+    accent: 'bg-[var(--success)]',
+  },
+  warning: {
+    wrapper: 'bg-background border-[var(--warning)]/30',
+    icon: 'text-[var(--warning)]',
+    title: 'text-foreground',
+    content: 'text-foreground-muted',
+    accent: 'bg-[var(--warning)]',
+  },
+  error: {
+    wrapper: 'bg-background border-[var(--error)]/30',
+    icon: 'text-[var(--error)]',
+    title: 'text-foreground',
+    content: 'text-foreground-muted',
+    accent: 'bg-[var(--error)]',
+  },
+};
+
+const icons: Record<string, 'info' | 'check-circle' | 'alert-triangle' | 'x-circle'> = {
+  info: 'info',
+  success: 'check-circle',
+  warning: 'alert-triangle',
+  error: 'x-circle',
+};
+
+const style = variants[variant];
+---
+
+<div
+  class={cn(
+    'relative flex gap-4 p-4 rounded-lg border overflow-hidden',
+    style.wrapper,
+    className
+  )}
+  role="alert"
+  data-alert
+>
+  {/* Accent bar */}
+  <div class={cn('absolute left-0 top-0 bottom-0 w-1', style.accent)} />
+
+  {/* Icon */}
+  <div class={cn('shrink-0 mt-0.5', style.icon)}>
+    <Icon name={icons[variant]} class="w-5 h-5" strokeWidth={2} />
+  </div>
+
+  {/* Content */}
+  <div class="flex-1 min-w-0 pl-1">
+    {title && (
+      <h5 class={cn('font-semibold text-sm mb-1', style.title)}>
+        {title}
+      </h5>
+    )}
+    <div class={cn('text-sm leading-relaxed', style.content)}>
+      <slot />
+    </div>
+  </div>
+
+  {/* Dismiss button */}
+  {dismissible && (
+    <button
+      type="button"
+      class="shrink-0 p-1 -mr-1 -mt-1 rounded-md text-foreground-muted hover:text-foreground hover:bg-secondary transition-colors"
+      aria-label="Dismiss"
+      data-dismiss-alert
+    >
+      <Icon name="x" class="w-4 h-4" />
+    </button>
+  )}
+</div>
+
+{dismissible && (
+  <script>
+    function initAlerts() {
+      document.querySelectorAll('[data-dismiss-alert]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const alert = button.closest('[data-alert]');
+          if (alert) {
+            alert.classList.add('opacity-0', 'scale-[0.98]');
+            setTimeout(() => alert.remove(), 150);
+          }
+        });
+      });
+    }
+
+    initAlerts();
+    document.addEventListener('astro:page-load', initAlerts);
+  </script>
+)}
+
+<style>
+  [data-alert] {
+    transition: opacity 150ms ease-out, transform 150ms ease-out;
+  }
+</style>

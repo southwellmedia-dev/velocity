@@ -1,0 +1,97 @@
+---
+import { SEO as AstroSEO } from 'astro-seo';
+import siteConfig from '@/config/site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  article?: {
+    publishedTime?: Date;
+    modifiedTime?: Date;
+    authors?: string[];
+    tags?: string[];
+  };
+  noindex?: boolean;
+  nofollow?: boolean;
+}
+
+const {
+  title,
+  description = siteConfig.description,
+  image,
+  imageAlt,
+  article,
+  noindex = false,
+  nofollow = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${siteConfig.name}` : siteConfig.name;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Process image - use dynamic OG image if no custom image provided
+let ogImage: string;
+if (image) {
+  ogImage = image.startsWith('http') ? image : new URL(image, Astro.site).toString();
+} else {
+  // Generate dynamic OG image path based on current URL
+  const pathname = Astro.url.pathname.replace(/^\/|\/$/g, '') || 'index';
+  ogImage = new URL(`/og/${pathname}.png`, Astro.site).toString();
+}
+
+const robotsContent = [noindex ? 'noindex' : 'index', nofollow ? 'nofollow' : 'follow'].join(', ');
+---
+
+<AstroSEO
+  title={pageTitle}
+  description={description}
+  canonical={canonicalURL.toString()}
+  openGraph={{
+    basic: {
+      title: pageTitle,
+      type: article ? 'article' : 'website',
+      image: ogImage,
+      url: canonicalURL.toString(),
+    },
+    optional: {
+      description,
+      siteName: siteConfig.name,
+      locale: Astro.currentLocale || 'en_US',
+    },
+    image: {
+      alt: imageAlt || pageTitle,
+      width: 1200,
+      height: 630,
+      type: 'image/png',
+    },
+    ...(article && {
+      article: {
+        publishedTime: article.publishedTime?.toISOString(),
+        modifiedTime: article.modifiedTime?.toISOString(),
+        authors: article.authors,
+        tags: article.tags,
+      },
+    }),
+  }}
+  twitter={{
+    card: 'summary_large_image',
+    site: siteConfig.twitter?.site,
+    creator: siteConfig.twitter?.creator,
+  }}
+/>
+
+<meta name="robots" content={robotsContent} />
+
+{
+  siteConfig.verification?.google && (
+    <meta name="google-site-verification" content={siteConfig.verification.google} />
+  )
+}
+
+{
+  siteConfig.verification?.bing && (
+    <meta name="msvalidate.01" content={siteConfig.verification.bing} />
+  )
+}

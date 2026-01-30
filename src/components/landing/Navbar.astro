@@ -1,0 +1,114 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import ThemeToggle from '@/components/layout/ThemeToggle.astro';
+
+// Check if we're on the landing page to determine link behavior
+const currentPath = Astro.url.pathname;
+const isLandingPage = currentPath === '/';
+const featuresLink = isLandingPage ? '#features' : '/#features';
+const ctaLink = isLandingPage ? '#cta' : '/#cta';
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2">
+      <div class="h-6 w-6 bg-brand-500 rounded-sm"></div>
+      <span class="font-display text-xl font-bold tracking-tight text-foreground">Velocity</span>
+    </a>
+
+    <!-- Desktop Menu -->
+    <div class="hidden items-center gap-8 md:flex">
+      <a href={featuresLink} class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors">Features</a>
+      <a href="/components" class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors">Components</a>
+      <a href="/blog" class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors">Blog</a>
+      <a href="/blog" class="text-sm font-medium text-foreground-muted hover:text-foreground transition-colors">Docs</a>
+      <div class="flex items-center gap-2">
+        <ThemeToggle />
+        <Button
+          variant="ghost"
+          size="sm"
+          icon
+          href="https://github.com/southwellmedia-dev/velocity"
+          target="_blank"
+          aria-label="View on GitHub"
+        >
+          <Icon name="github" size="sm" />
+        </Button>
+        <Button size="sm" href={ctaLink}>Get Started</Button>
+      </div>
+    </div>
+
+    <!-- Mobile Toggle -->
+    <button
+      type="button"
+      class="md:hidden p-2 text-foreground hover:bg-secondary rounded-md transition-colors"
+      id="mobile-menu-toggle"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+    >
+      <span class="menu-icon">
+        <Icon name="menu" size="lg" />
+      </span>
+      <span class="close-icon hidden">
+        <Icon name="x" size="lg" />
+      </span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-background border-b border-border p-6 md:hidden flex-col gap-4 shadow-lg">
+    <a href={featuresLink} class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors">Features</a>
+    <a href="/components" class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors">Components</a>
+    <a href="/blog" class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors">Blog</a>
+    <a href="/blog" class="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors">Docs</a>
+    <div class="flex items-center gap-3 pt-2 border-t border-border">
+      <ThemeToggle />
+    </div>
+    <Button fullWidth href={ctaLink}>Get Started</Button>
+  </div>
+</nav>
+
+<script>
+  function initMobileMenu() {
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const menuIcon = toggle?.querySelector('.menu-icon');
+    const closeIcon = toggle?.querySelector('.close-icon');
+
+    if (!toggle || !menu || !menuIcon || !closeIcon) return;
+
+    toggle.addEventListener('click', () => {
+      const isOpen = menu.classList.contains('hidden');
+
+      if (isOpen) {
+        menu.classList.remove('hidden');
+        menu.classList.add('flex');
+        menuIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+        toggle.setAttribute('aria-expanded', 'true');
+      } else {
+        menu.classList.add('hidden');
+        menu.classList.remove('flex');
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Close menu when clicking on links
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        menu.classList.add('hidden');
+        menu.classList.remove('flex');
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  initMobileMenu();
+  document.addEventListener('astro:page-load', initMobileMenu);
+</script>

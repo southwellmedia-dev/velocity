@@ -1,0 +1,37 @@
+---
+const links = [
+  { label: 'Documentation', href: '/blog' },
+  { label: 'GitHub', href: 'https://github.com/southwellmedia-dev/velocity' },
+  { label: 'Twitter', href: 'https://twitter.com/southwellmedia' },
+  { label: 'License', href: 'https://github.com/southwellmedia-dev/velocity/blob/main/LICENSE' },
+];
+---
+
+<footer class="border-t border-border bg-background-secondary py-12">
+  <div class="mx-auto max-w-6xl px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+    <!-- Logo & Attribution -->
+    <div class="flex flex-col gap-2">
+      <a href="/" class="flex items-center gap-2">
+        <div class="h-5 w-5 bg-brand-500 rounded-sm"></div>
+        <span class="font-display text-lg font-bold text-foreground">Velocity</span>
+      </a>
+      <p class="text-sm text-foreground-subtle">
+        Maintained by <a href="https://southwellmedia.com" class="underline hover:text-foreground transition-colors">Southwell Media</a>.
+      </p>
+    </div>
+
+    <!-- Links -->
+    <nav class="flex gap-8 text-sm text-foreground-muted font-medium">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class="hover:text-foreground transition-colors"
+          target={link.href.startsWith('http') ? '_blank' : undefined}
+          rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</footer>
