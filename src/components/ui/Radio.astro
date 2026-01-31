@@ -14,7 +14,6 @@ const { label, description, error, variant = 'default', class: className, id, ..
 
 const radioId = id || generateId('radio');
 const isCard = variant === 'card';
-const isChecked = attrs.checked;
 
 const radioStyles = cn(
   'h-4 w-4 shrink-0 rounded-full border border-border',
