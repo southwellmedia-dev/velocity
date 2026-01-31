@@ -1,4 +1,6 @@
 ---
+import Logo from '@/components/ui/Logo.astro';
+
 const links = [
   { label: 'Documentation', href: '/blog' },
   { label: 'GitHub', href: 'https://github.com/southwellmedia-dev/velocity' },
@@ -12,12 +14,9 @@ const links = [
     <!-- Logo & Attribution -->
     <div class="flex flex-col gap-2">
       <a href="/" class="flex items-center gap-2">
-        <img src="/velocity-logomark.svg" alt="" class="h-5 w-5" aria-hidden="true" />
+        <Logo size="sm" />
         <span class="font-display text-lg font-bold text-brand-500">Velocity</span>
       </a>
-      <p class="text-sm text-foreground-subtle">
-        Maintained by <a href="https://southwellmedia.com" class="underline hover:text-foreground transition-colors">Southwell Media</a>.
-      </p>
     </div>
 
     <!-- Links -->

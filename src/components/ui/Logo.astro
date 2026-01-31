@@ -1,0 +1,43 @@
+---
+/**
+ * Logo Component
+ * Handles light/dark mode logo switching automatically
+ * Uses Tailwind's dark: variant to swap between logomarks
+ */
+
+interface Props {
+  /** Size preset or custom class */
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  /** Additional CSS classes */
+  class?: string;
+}
+
+const { size = 'md', class: className } = Astro.props;
+
+const sizeClasses: Record<string, string> = {
+  sm: 'h-5 w-5',
+  md: 'h-6 w-6',
+  lg: 'h-8 w-8',
+  xl: 'h-12 w-12',
+  '2xl': 'h-24 w-24',
+};
+
+const sizeClass = sizeClasses[size] || sizeClasses.md;
+---
+
+<span class:list={['inline-block', className]}>
+  <!-- Light mode logo -->
+  <img
+    src="/velocity-logomark.svg"
+    alt=""
+    class:list={[sizeClass, 'dark:hidden']}
+    aria-hidden="true"
+  />
+  <!-- Dark mode logo -->
+  <img
+    src="/velocity-logomark-darkmode.svg"
+    alt=""
+    class:list={[sizeClass, 'hidden dark:block']}
+    aria-hidden="true"
+  />
+</span>

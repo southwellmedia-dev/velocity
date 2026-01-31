@@ -6,6 +6,7 @@
  */
 import { cn } from '@/lib/cn';
 import { getNavRoutes } from '@/config/routes';
+import Logo from '@/components/ui/Logo.astro';
 import siteConfig from '@/config/site.config';
 
 interface Props {
@@ -29,12 +30,9 @@ const externalLinks = [
     <!-- Logo & Attribution -->
     <div class="flex flex-col items-center md:items-start gap-2">
       <a href="/" class="flex items-center gap-2">
-        <img src="/velocity-logomark.svg" alt="" class="h-5 w-5" aria-hidden="true" />
+        <Logo size="sm" />
         <span class="font-display text-lg font-bold text-brand-500">{siteConfig.name}</span>
       </a>
-      <p class="text-sm text-foreground-muted">
-        Maintained by <a href="https://southwellmedia.com" class="underline hover:text-foreground transition-colors">Southwell Media</a>.
-      </p>
     </div>
 
     <!-- Links -->
