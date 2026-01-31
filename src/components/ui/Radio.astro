@@ -7,11 +7,14 @@ interface Props extends HTMLAttributes<'input'> {
   label?: string;
   description?: string;
   error?: string;
+  variant?: 'default' | 'card';
 }
 
-const { label, description, error, class: className, id, ...attrs } = Astro.props;
+const { label, description, error, variant = 'default', class: className, id, ...attrs } = Astro.props;
 
 const radioId = id || generateId('radio');
+const isCard = variant === 'card';
+const isChecked = attrs.checked;
 
 const radioStyles = cn(
   'h-4 w-4 shrink-0 rounded-full border border-border',
@@ -21,28 +24,36 @@ const radioStyles = cn(
   'checked:border-primary checked:bg-primary',
   error && 'border-destructive focus-visible:ring-destructive'
 );
+
+const cardStyles = cn(
+  'relative flex cursor-pointer rounded-lg border p-4 transition-all',
+  'hover:bg-secondary/50',
+  'has-[:checked]:border-primary has-[:checked]:bg-primary/5',
+  'has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50',
+  error && 'border-destructive'
+);
 ---
 
-<div class={cn('flex items-start gap-3', className)}>
-  <input
-    type="radio"
-    id={radioId}
-    class={radioStyles}
-    aria-invalid={error ? 'true' : undefined}
-    aria-describedby={description ? `${radioId}-description` : undefined}
-    {...attrs}
-  />
-
-  {
-    (label || description) && (
-      <div class="grid gap-1.5 leading-none">
+{isCard ? (
+  <label class={cn(cardStyles, className)}>
+    <input
+      type="radio"
+      id={radioId}
+      class="peer sr-only"
+      aria-invalid={error ? 'true' : undefined}
+      aria-describedby={description ? `${radioId}-description` : undefined}
+      {...attrs}
+    />
+    <div class="flex w-full items-start gap-3">
+      <div class={cn(
+        'mt-0.5 h-4 w-4 shrink-0 rounded-full border border-border transition-colors',
+        'peer-checked:border-primary peer-checked:bg-primary peer-checked:shadow-[inset_0_0_0_3px_var(--background)]'
+      )} />
+      <div class="grid gap-1">
         {label && (
-          <label
-            for={radioId}
-            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
+          <span class="text-sm font-medium leading-none">
             {label}
-          </label>
+          </span>
         )}
         {description && (
           <p id={`${radioId}-description`} class="text-sm text-muted-foreground">
@@ -50,9 +61,40 @@ const radioStyles = cn(
           </p>
         )}
       </div>
-    )
-  }
-</div>
+    </div>
+  </label>
+) : (
+  <div class={cn('flex items-start gap-3', className)}>
+    <input
+      type="radio"
+      id={radioId}
+      class={radioStyles}
+      aria-invalid={error ? 'true' : undefined}
+      aria-describedby={description ? `${radioId}-description` : undefined}
+      {...attrs}
+    />
+
+    {
+      (label || description) && (
+        <div class="grid gap-1.5 leading-none">
+          {label && (
+            <label
+              for={radioId}
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              {label}
+            </label>
+          )}
+          {description && (
+            <p id={`${radioId}-description`} class="text-sm text-muted-foreground">
+              {description}
+            </p>
+          )}
+        </div>
+      )
+    }
+  </div>
+)}
 
 {
   error && (
