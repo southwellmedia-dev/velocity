@@ -3,6 +3,7 @@ import LandingLayout from '@/layouts/LandingLayout.astro';
 import Hero from '@/components/landing/Hero.astro';
 import TechStack from '@/components/landing/TechStack.astro';
 import FeatureTabs from '@/components/landing/FeatureTabs.tsx';
+import LighthouseScores from '@/components/landing/LighthouseScores.astro';
 import Credibility from '@/components/landing/Credibility.astro';
 import CTA from '@/components/landing/CTA.astro';
 ---
@@ -14,6 +15,7 @@ import CTA from '@/components/landing/CTA.astro';
   <Hero />
   <TechStack />
   <FeatureTabs client:visible />
+  <LighthouseScores />
   <Credibility />
   <CTA />
 </LandingLayout>
