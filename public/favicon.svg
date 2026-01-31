@@ -1,31 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <!-- Background with rounded corners -->
-  <rect width="32" height="32" rx="8" fill="#0A0A0A"/>
-
-  <!-- Velocity V mark with motion effect -->
-  <defs>
-    <linearGradient id="vGradient" x1="8" y1="6" x2="24" y2="26" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#FF6B35"/>
-      <stop offset="100%" stop-color="#F94C10"/>
-    </linearGradient>
-  </defs>
-
-  <!-- Main V shape - bold and dynamic -->
-  <path
-    d="M7 7L16 25L25 7"
-    stroke="url(#vGradient)"
-    stroke-width="4"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    fill="none"
-  />
-
-  <!-- Speed accent line -->
-  <path
-    d="M10 10L14 10"
-    stroke="#FF6B35"
-    stroke-width="2"
-    stroke-linecap="round"
-    opacity="0.7"
-  />
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 5.91304C0 2.64736 2.64736 0 5.91304 0H42.087C45.3526 0 48 2.64736 48 5.91304V42.087C48 45.3526 45.3526 48 42.087 48H5.91304C2.64736 48 0 45.3526 0 42.087V5.91304Z" fill="white"/>
+<path d="M20.7023 14.553L24.2325 23.4487L28.1298 14.553H38.983C38.7918 14.3918 38.5854 14.2482 38.3687 14.1198L25.4458 6.50602C24.6582 6.23653 23.6208 6.10808 22.8612 6.55387L9.53051 14.3893C9.4515 14.4371 9.37758 14.4925 9.30621 14.5505H20.7023V14.553Z" fill="#EE4000"/>
+<path d="M8.3988 16.2984C8.37586 16.447 8.36312 16.5956 8.36312 16.7417L8.34783 31.3169C8.34783 32.7575 9.03603 33.5282 10.1983 34.2133L22.2368 41.288L8.3988 16.2984Z" fill="#212121"/>
+<path d="M39.972 16.2455L25.953 41.3913L38.8275 33.7927C39.5438 33.3695 40 32.357 40 31.5284L39.9924 16.5578C39.9924 16.4495 39.9822 16.3462 39.9694 16.243L39.972 16.2455Z" fill="#212121"/>
 </svg>
