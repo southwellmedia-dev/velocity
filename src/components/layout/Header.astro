@@ -35,6 +35,7 @@ const currentPath = Astro.url.pathname;
       <a
         href="/"
         class="flex items-center gap-2 font-semibold text-foreground transition-opacity hover:opacity-80"
+        aria-label={`${siteConfig.name} - Go to homepage`}
       >
         <svg
           class="h-6 w-6"
