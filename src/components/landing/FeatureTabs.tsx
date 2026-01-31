@@ -304,7 +304,7 @@ function highlightCode(code: string, lang: string): React.ReactNode[] {
       // Boolean/null
       const boolMatch = remaining.match(/^(true|false|null|undefined)\b/);
       if (boolMatch) {
-        addToken(boolMatch[0], 'text-orange-600 dark:text-orange-400');
+        addToken(boolMatch[0], 'text-orange-700 dark:text-orange-300');
         remaining = remaining.slice(boolMatch[0].length);
         matched = true;
         continue;
@@ -313,7 +313,7 @@ function highlightCode(code: string, lang: string): React.ReactNode[] {
       // Numbers
       const numberMatch = remaining.match(/^(\d+\.?\d*)/);
       if (numberMatch) {
-        addToken(numberMatch[0], 'text-orange-600 dark:text-orange-400');
+        addToken(numberMatch[0], 'text-orange-700 dark:text-orange-300');
         remaining = remaining.slice(numberMatch[0].length);
         matched = true;
         continue;
@@ -334,7 +334,7 @@ function highlightCode(code: string, lang: string): React.ReactNode[] {
         /^(var|oklch|rgb|rgba|hsl|hsla|calc|url|clamp|min|max)(\()/
       );
       if (cssFuncMatch) {
-        addToken(cssFuncMatch[1], 'text-yellow-600 dark:text-yellow-400');
+        addToken(cssFuncMatch[1], 'text-amber-700 dark:text-amber-300');
         addToken(cssFuncMatch[2], 'text-foreground-secondary');
         remaining = remaining.slice(cssFuncMatch[0].length);
         matched = true;
@@ -344,7 +344,7 @@ function highlightCode(code: string, lang: string): React.ReactNode[] {
       // Function calls
       const funcMatch = remaining.match(/^([\w]+)(\()/);
       if (funcMatch) {
-        addToken(funcMatch[1], 'text-yellow-600 dark:text-yellow-400');
+        addToken(funcMatch[1], 'text-amber-700 dark:text-amber-300');
         addToken(funcMatch[2], 'text-foreground-secondary');
         remaining = remaining.slice(funcMatch[0].length);
         matched = true;
@@ -355,7 +355,7 @@ function highlightCode(code: string, lang: string): React.ReactNode[] {
       const typeMatch = remaining.match(/^(:\s*)([\w<>[\]|&]+)/);
       if (typeMatch) {
         addToken(typeMatch[1], 'text-foreground-secondary');
-        addToken(typeMatch[2], 'text-cyan-600 dark:text-cyan-400');
+        addToken(typeMatch[2], 'text-cyan-700 dark:text-cyan-300');
         remaining = remaining.slice(typeMatch[0].length);
         matched = true;
         continue;

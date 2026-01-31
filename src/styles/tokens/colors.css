@@ -105,8 +105,8 @@
   --surface-invert-secondary: var(--gray-900);
   --surface-invert-tertiary: var(--gray-800);
   --on-invert: var(--gray-50);
-  --on-invert-secondary: var(--gray-400);
-  --on-invert-muted: var(--gray-500);
+  --on-invert-secondary: var(--gray-200);
+  --on-invert-muted: var(--gray-300);
   --border-invert: var(--gray-800);
   --border-invert-strong: var(--gray-700);
 }
