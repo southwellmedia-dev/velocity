@@ -30,7 +30,7 @@ Velocity accelerates Astro project delivery with a comprehensive foundation that
 
 ### Internationalization (i18n)
 
-i18n support is available through the **[create-velocity-astro](https://github.com/southwellmedia-dev/create-velocity-astro)** CLI. The base boilerplate is i18n-ready with locale-aware content collection schemas — run the CLI with the i18n option to add full translation support, language routing, and the LanguageSwitcher component.
+i18n support is available through the **[create-velocity-astro](https://github.com/southwellmedia/create-velocity-astro)** CLI. The base boilerplate is i18n-ready with locale-aware content collection schemas — run the CLI with the i18n option to add full translation support, language routing, and the LanguageSwitcher component.
 
 ---
 
@@ -45,7 +45,7 @@ i18n support is available through the **[create-velocity-astro](https://github.c
 
 ```bash
 # Clone the repository
-git clone https://github.com/southwellmedia-dev/velocity.git my-project
+git clone https://github.com/southwellmedia/velocity.git my-project
 cd my-project
 
 # Install dependencies
@@ -430,7 +430,7 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [CLI Tool](https://github.com/southwellmedia-dev/create-velocity-astro)
+- [CLI Tool](https://github.com/southwellmedia/create-velocity-astro)
 - [Astro Documentation](https://docs.astro.build)
 - [Tailwind CSS v4](https://tailwindcss.com/docs)
 
