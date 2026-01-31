@@ -6,43 +6,38 @@
 import PageLayout from '@/layouts/PageLayout.astro';
 import Icon from '@/components/ui/Icon.astro';
 import Card from '@/components/ui/Card.astro';
+import { Hero } from '@/components/hero';
 ---
 
 <PageLayout
   title="About Us"
   description="Learn about Velocity and the team behind it."
 >
-  <!-- Hero Section -->
-  <section class="relative pt-16 pb-20 overflow-hidden">
-    <!-- Background Effects -->
-    <div class="absolute inset-0 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white,transparent)] pointer-events-none opacity-30"></div>
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-500/8 rounded-full blur-[120px] pointer-events-none"></div>
-
-    <div class="relative mx-auto max-w-4xl px-6 text-center">
-      <!-- Badge -->
-      <div class="mb-6 inline-flex items-center rounded-full border border-border bg-background px-3 py-1 shadow-sm">
-        <span class="flex h-2 w-2 rounded-full bg-brand-500 mr-2 animate-pulse"></span>
-        <span class="text-xs font-medium text-foreground-secondary">Our Story</span>
-      </div>
-
-      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
-        Built by developers, <span class="text-brand-500">for developers.</span>
-      </h1>
-
-      <p class="text-lg text-foreground-muted max-w-2xl mx-auto mb-8 leading-relaxed">
-        Velocity was born from the frustration of setting up the same tooling over and over.
-        We decided to create the starter we always wished existed.
-      </p>
-    </div>
-  </section>
+  <Hero
+    layout="single"
+    align="center"
+    size="sm"
+    showGrid
+    badge="Our Story"
+    badgeIcon
+    titleElement="h1"
+  >
+    <Fragment slot="title">
+      Built by developers, <span class="text-brand-500">for developers.</span>
+    </Fragment>
+    <Fragment slot="description">
+      Velocity was born from the frustration of setting up the same tooling over and over.
+      We decided to create the starter we always wished existed.
+    </Fragment>
+  </Hero>
 
   <!-- Mission Section -->
-  <section class="py-20 bg-surface-secondary">
+  <section class="py-20 bg-surface-invert">
     <div class="mx-auto max-w-4xl px-6 text-center">
-      <h2 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-6">
+      <h2 class="font-display text-3xl md:text-4xl font-bold text-on-invert mb-6">
         Our Mission
       </h2>
-      <p class="text-lg text-foreground-muted max-w-2xl mx-auto leading-relaxed">
+      <p class="text-lg text-on-invert-secondary max-w-2xl mx-auto leading-relaxed">
         To help developers ship beautiful, performant websites faster by eliminating
         boilerplate and providing sensible defaults.
       </p>

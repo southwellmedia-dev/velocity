@@ -1,0 +1,86 @@
+---
+/**
+ * SocialProof Component
+ * Displays avatar circles with supporting trust text
+ */
+import { cn } from '@/lib/cn';
+
+interface Props {
+  /** Array of avatar image URLs (if not provided, shows placeholder circles) */
+  avatars?: string[];
+  /** Number of placeholder circles to display (only used when avatars not provided) */
+  avatarCount?: number;
+  /** Trust indicator text */
+  text: string;
+  /** Visual variant for different backgrounds */
+  variant?: 'default' | 'invert';
+  /** Size of avatars */
+  size?: 'sm' | 'md';
+  /** Additional CSS classes */
+  class?: string;
+}
+
+const {
+  avatars,
+  avatarCount = 3,
+  text,
+  variant = 'default',
+  size = 'sm',
+  class: className,
+} = Astro.props;
+
+const variants = {
+  default: {
+    container: 'text-foreground-subtle',
+    avatar: 'border-background bg-border dark:bg-background-tertiary text-foreground-muted',
+    ring: 'ring-background',
+  },
+  invert: {
+    container: 'text-on-invert/60',
+    avatar: 'border-surface-invert bg-surface-invert-secondary text-on-invert/70',
+    ring: 'ring-surface-invert',
+  },
+};
+
+const sizes = {
+  sm: 'h-8 w-8 text-[10px]',
+  md: 'h-10 w-10 text-xs',
+};
+
+// Use provided avatars or generate placeholder array
+const displayAvatars = avatars || Array.from({ length: avatarCount }, (_, i) => null);
+const hasImages = avatars && avatars.length > 0;
+---
+
+<div class={cn('flex items-center gap-4 text-sm', variants[variant].container, className)}>
+  <div class="flex -space-x-2" role="img" aria-label={`${displayAvatars.length} contributors`}>
+    {displayAvatars.map((src, i) => (
+      src ? (
+        <img
+          src={src}
+          alt=""
+          class={cn(
+            'rounded-full border-2 object-cover',
+            sizes[size],
+            variants[variant].ring,
+            'ring-2'
+          )}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <div
+          class={cn(
+            'flex items-center justify-center rounded-full border-2 font-bold',
+            sizes[size],
+            variants[variant].avatar
+          )}
+          aria-hidden="true"
+        >
+          {i === displayAvatars.length - 1 ? '+' : ''}
+        </div>
+      )
+    ))}
+  </div>
+  <p>{text}</p>
+</div>

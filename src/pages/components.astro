@@ -16,9 +16,12 @@ import Select from '@/components/ui/Select.astro';
 import Checkbox from '@/components/ui/Checkbox.astro';
 import Radio from '@/components/ui/Radio.astro';
 import Card from '@/components/ui/Card.astro';
+import { Hero } from '@/components/hero';
+import SocialProof from '@/components/ui/SocialProof.astro';
 
 // Component categories for navigation
 const categories = [
+  { id: 'hero', label: 'Hero', icon: 'star' },
   { id: 'buttons', label: 'Buttons', icon: 'box' },
   { id: 'inputs', label: 'Form Inputs', icon: 'terminal' },
   { id: 'feedback', label: 'Feedback', icon: 'alert-circle' },
@@ -34,41 +37,35 @@ const categories = [
 >
 
   <!-- Hero Section -->
-  <section class="relative pt-32 pb-20 overflow-hidden">
-    <!-- Background Effects -->
-    <div class="absolute inset-0 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white,transparent)] pointer-events-none opacity-30"></div>
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-500/8 rounded-full blur-[120px] pointer-events-none"></div>
-
-    <div class="relative mx-auto max-w-6xl px-6">
-      <div class="max-w-2xl">
-        <!-- Badge -->
-        <div class="mb-6 inline-flex items-center rounded-full border border-border bg-background px-3 py-1 shadow-sm">
-          <span class="flex h-2 w-2 rounded-full bg-brand-500 mr-2 animate-pulse"></span>
-          <span class="text-xs font-medium text-foreground-secondary">{categories.length * 3}+ Production Components</span>
-        </div>
-
-        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
-          Component <span class="text-brand-500">Library</span>
-        </h1>
-
-        <p class="text-lg text-foreground-muted max-w-xl mb-8 leading-relaxed">
-          Production-ready UI primitives built with accessibility and performance in mind.
-          Copy, paste, and customize to match your brand.
-        </p>
-
-        <div class="flex items-center gap-4">
-          <Button href="#buttons">
-            Browse Components
-            <Icon name="arrow-right" size="sm" />
-          </Button>
-          <Button variant="outline" href="https://github.com/southwellmedia/velocity" target="_blank">
-            <Icon name="github" size="sm" />
-            View Source
-          </Button>
-        </div>
-      </div>
-    </div>
-  </section>
+  <Hero
+    layout="single"
+    align="left"
+    size="lg"
+    showGrid
+    showBlob
+    blobPosition="center"
+    badge={`${categories.length * 3}+ Production Components`}
+    badgeIcon
+    titleElement="h1"
+  >
+    <Fragment slot="title">
+      Component <span class="text-brand-500">Library</span>
+    </Fragment>
+    <Fragment slot="description">
+      Production-ready UI primitives built with accessibility and performance in mind.
+      Copy, paste, and customize to match your brand.
+    </Fragment>
+    <Fragment slot="actions">
+      <Button href="#hero">
+        Browse Components
+        <Icon name="arrow-right" size="sm" />
+      </Button>
+      <Button variant="outline" href="https://github.com/southwellmedia/velocity" target="_blank">
+        <Icon name="github" size="sm" />
+        View Source
+      </Button>
+    </Fragment>
+  </Hero>
 
   <!-- Category Navigation -->
   <nav class="sticky top-16 z-40 bg-background/95 backdrop-blur-md border-y border-border">
@@ -89,6 +86,238 @@ const categories = [
 
   <!-- Components Showcase -->
   <div class="mx-auto max-w-6xl px-6 py-20 space-y-32">
+
+    <!-- Hero Section -->
+    <section id="hero" class="scroll-mt-32">
+      <div class="flex items-start gap-5 mb-10">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 shrink-0">
+          <Icon name="star" size="lg" />
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-foreground">Hero</h2>
+          <p class="text-foreground-muted mt-1">Flexible hero sections with multiple layouts, backgrounds, and slot-based content injection.</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Hero - Split Layout (Default) -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Split Layout</span>
+            <span class="showcase-hint">Two-column with aside slot</span>
+          </div>
+          <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+            <Hero
+              layout="split"
+              align="left"
+              size="md"
+              showGrid
+              badge="New Release"
+              badgeIcon
+              class="!pt-12 !pb-12"
+            >
+              <Fragment slot="title">
+                Build faster with <span class="text-brand-500">Velocity</span>
+              </Fragment>
+              <Fragment slot="description">
+                A modern starter kit for production websites.
+              </Fragment>
+              <Fragment slot="actions">
+                <Button size="sm">Get Started</Button>
+                <Button size="sm" variant="outline">Learn More</Button>
+              </Fragment>
+              <div slot="aside" class="bg-background-secondary border border-border rounded-lg p-6 text-center">
+                <Icon name="code" size="lg" class="text-brand-500 mx-auto mb-2" />
+                <p class="text-sm text-foreground-muted">Aside content slot</p>
+              </div>
+              <SocialProof
+                slot="social-proof"
+                text="Trusted by developers"
+                avatars={[
+                  'https://i.pravatar.cc/150?img=12',
+                  'https://i.pravatar.cc/150?img=33',
+                  'https://i.pravatar.cc/150?img=47',
+                ]}
+              />
+            </Hero>
+          </div>
+        </div>
+
+        <!-- Hero - Centered Layout -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Centered Layout</span>
+            <span class="showcase-hint">Single column, center-aligned</span>
+          </div>
+          <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+            <Hero
+              layout="single"
+              align="center"
+              size="md"
+              badge="About Us"
+              class="!pt-12 !pb-12"
+            >
+              <Fragment slot="title">
+                We're on a <span class="text-brand-500">mission</span>
+              </Fragment>
+              <Fragment slot="description">
+                Building the tools developers love to use. Our team is dedicated to creating exceptional experiences.
+              </Fragment>
+              <Fragment slot="actions">
+                <Button size="sm">Meet the Team</Button>
+                <Button size="sm" variant="ghost">Our Story</Button>
+              </Fragment>
+            </Hero>
+          </div>
+        </div>
+
+        <!-- Hero Backgrounds Grid -->
+        <div class="grid gap-6 lg:grid-cols-2">
+          <!-- Secondary Background -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Secondary Background</span>
+            </div>
+            <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+              <Hero
+                layout="single"
+                align="left"
+                size="sm"
+                background="secondary"
+                title="Secondary Background"
+                description="Subtle elevation from the default background."
+                class="!pt-8 !pb-8"
+              />
+            </div>
+          </div>
+
+          <!-- Gradient Background -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Gradient Background</span>
+            </div>
+            <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+              <Hero
+                layout="single"
+                align="left"
+                size="sm"
+                background="gradient"
+                title="Gradient Background"
+                description="Smooth gradient transition effect."
+                class="!pt-8 !pb-8"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Inverted Background (Full Width) -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Inverted Background</span>
+            <span class="showcase-hint">Always dark, regardless of theme</span>
+          </div>
+          <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+            <Hero
+              layout="single"
+              align="center"
+              size="sm"
+              background="invert"
+              class="!pt-10 !pb-10"
+            >
+              <Fragment slot="title">
+                <span class="text-on-invert">Dark mode </span><span class="text-brand-400">always</span>
+              </Fragment>
+              <Fragment slot="description">
+                Perfect for CTAs and sections that need to stand out.
+              </Fragment>
+              <Fragment slot="actions">
+                <Button size="sm">Primary Action</Button>
+                <Button size="sm" variant="outline" class="border-border-invert text-on-invert hover:bg-surface-invert-secondary">
+                  Secondary
+                </Button>
+              </Fragment>
+              <SocialProof
+                slot="social-proof"
+                text="Join thousands of users"
+                variant="invert"
+                avatars={[
+                  'https://i.pravatar.cc/150?img=5',
+                  'https://i.pravatar.cc/150?img=8',
+                  'https://i.pravatar.cc/150?img=11',
+                ]}
+              />
+            </Hero>
+          </div>
+        </div>
+
+        <!-- Size Variations -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Size Variations</span>
+            <span class="showcase-hint">sm, md, lg, xl padding options</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
+                <div class="border border-border rounded-lg overflow-hidden">
+                  <div class="bg-background-secondary px-3 py-1.5 border-b border-border">
+                    <span class="text-xs font-mono text-foreground-muted">size="{size}"</span>
+                  </div>
+                  <div class="bg-background text-center py-2">
+                    <span class="text-xs text-foreground-subtle">
+                      {size === 'sm' && 'pt-20 pb-12'}
+                      {size === 'md' && 'pt-24 pb-16'}
+                      {size === 'lg' && 'pt-32 pb-20'}
+                      {size === 'xl' && 'pt-40 pb-28'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Props Reference -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Available Props</span>
+            <span class="showcase-hint">Full API reference</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-sm">
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Layout</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">align</code> center | left | right</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">layout</code> single | split</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">splitRatio</code> 1:1 | 1:2 | 2:1</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Appearance</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">background</code> default | secondary | invert | gradient | image</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">size</code> sm | md | lg | xl</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">showGrid</code> boolean</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">showBlob</code> boolean</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Slots</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">badge</code> Top label</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">title</code> Main heading</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">description</code> Supporting text</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">actions</code> CTA buttons</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">aside</code> Side content</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">social-proof</code> Trust indicators</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Buttons Section -->
     <section id="buttons" class="scroll-mt-32">

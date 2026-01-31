@@ -1,0 +1,248 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { cn } from '@/lib/cn';
+
+interface Props extends HTMLAttributes<'section'> {
+  /** Text alignment */
+  align?: 'center' | 'left' | 'right';
+  /** Layout mode */
+  layout?: 'single' | 'split';
+  /** Split column ratio (only applies when layout="split") */
+  splitRatio?: '1:1' | '1:2' | '2:1';
+  /** Background style */
+  background?: 'default' | 'secondary' | 'invert' | 'gradient' | 'image';
+  /** Background image URL (only applies when background="image") */
+  backgroundImage?: string;
+  /** Vertical padding size */
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  /** Show background grid pattern */
+  showGrid?: boolean;
+  /** Show decorative gradient blob */
+  showBlob?: boolean;
+  /** Blob position (only applies when showBlob is true) */
+  blobPosition?: 'left' | 'right' | 'center';
+  /** Convenience prop for badge text */
+  badge?: string;
+  /** Show pulsing dot on badge */
+  badgeIcon?: boolean;
+  /** Convenience prop for title text */
+  title?: string;
+  /** Text within title to highlight with brand color */
+  titleHighlight?: string;
+  /** Convenience prop for description text */
+  description?: string;
+  /** Heading element for title */
+  titleElement?: 'h1' | 'h2';
+}
+
+const {
+  align = 'left',
+  layout = 'single',
+  splitRatio = '1:1',
+  background = 'default',
+  backgroundImage,
+  size = 'lg',
+  showGrid = false,
+  showBlob = false,
+  blobPosition = 'right',
+  badge,
+  badgeIcon = false,
+  title,
+  titleHighlight,
+  description,
+  titleElement = 'h1',
+  class: className,
+  ...attrs
+} = Astro.props;
+
+// Check which slots are provided
+const hasBadgeSlot = Astro.slots.has('badge');
+const hasTitleSlot = Astro.slots.has('title');
+const hasDescriptionSlot = Astro.slots.has('description');
+const hasActionsSlot = Astro.slots.has('actions');
+const hasAsideSlot = Astro.slots.has('aside');
+const hasSocialProofSlot = Astro.slots.has('social-proof');
+
+// Background variants
+const backgrounds: Record<NonNullable<Props['background']>, string> = {
+  default: 'bg-background',
+  secondary: 'bg-background-secondary',
+  invert: 'bg-surface-invert text-on-invert',
+  gradient: 'bg-gradient-to-br from-background via-background to-background-secondary',
+  image: 'bg-cover bg-center bg-no-repeat',
+};
+
+// Size (padding) variants
+const sizes: Record<NonNullable<Props['size']>, string> = {
+  sm: 'pt-20 pb-12 md:pt-24 md:pb-16',
+  md: 'pt-24 pb-16 md:pt-32 md:pb-24',
+  lg: 'pt-32 pb-20 md:pt-40 md:pb-32',
+  xl: 'pt-40 pb-28 md:pt-48 md:pb-40',
+};
+
+// Alignment variants
+const alignments: Record<NonNullable<Props['align']>, string> = {
+  left: 'text-left items-start',
+  center: 'text-center items-center',
+  right: 'text-right items-end',
+};
+
+// Split ratio grid classes
+const splitRatios: Record<NonNullable<Props['splitRatio']>, string> = {
+  '1:1': 'lg:grid-cols-2',
+  '1:2': 'lg:grid-cols-[1fr_2fr]',
+  '2:1': 'lg:grid-cols-[2fr_1fr]',
+};
+
+// Blob position variants
+const blobPositions: Record<NonNullable<Props['blobPosition']>, string> = {
+  left: '-left-20 -top-20',
+  right: '-right-20 -top-20',
+  center: 'left-1/2 -translate-x-1/2 -top-20',
+};
+
+// Title element
+const TitleElement = titleElement;
+
+// Compute classes
+const sectionClasses = cn(
+  'relative overflow-hidden',
+  sizes[size],
+  backgrounds[background],
+  className
+);
+
+const contentClasses = cn(
+  'z-10 flex flex-col',
+  alignments[align]
+);
+
+const gridClasses = cn(
+  'mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6',
+  layout === 'split' && splitRatios[splitRatio],
+  layout === 'split' && 'lg:gap-20'
+);
+
+// Title text processing
+function processTitle(text: string, highlight?: string): string {
+  if (!highlight) return text;
+  return text.replace(highlight, `<span class="text-brand-500">${highlight}</span>`);
+}
+---
+
+<section class={sectionClasses} style={background === 'image' && backgroundImage ? `background-image: url('${backgroundImage}')` : undefined} {...attrs}>
+  {/* Background grid pattern */}
+  {showGrid && (
+    <div
+      class="bg-grid-pattern pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,white,transparent)] opacity-40"
+      aria-hidden="true"
+    />
+  )}
+
+  {/* Background overlay for image background */}
+  {background === 'image' && (
+    <div class="absolute inset-0 bg-background/80" aria-hidden="true" />
+  )}
+
+  <div class={gridClasses}>
+    {/* Content Column */}
+    <div class={contentClasses}>
+      {/* Badge */}
+      {(hasBadgeSlot || badge) && (
+        <div class="border-border bg-background mb-6 inline-flex items-center rounded-full border px-3 py-1 shadow-sm">
+          {badgeIcon && (
+            <span class="bg-brand-500 mr-2 flex h-2 w-2 animate-pulse rounded-full" aria-hidden="true" />
+          )}
+          {hasBadgeSlot ? (
+            <slot name="badge" />
+          ) : (
+            <span class={cn(
+              'text-xs font-medium',
+              background === 'invert' ? 'text-foreground' : 'text-foreground-secondary'
+            )}>{badge}</span>
+          )}
+        </div>
+      )}
+
+      {/* Title */}
+      {(hasTitleSlot || title) && (
+        <TitleElement class={cn(
+          'font-display mb-6 text-5xl leading-[1.1] font-bold tracking-tight text-balance md:text-6xl lg:text-7xl',
+          background === 'invert' ? 'text-on-invert' : 'text-foreground'
+        )}>
+          {hasTitleSlot ? (
+            <slot name="title" />
+          ) : (
+            <Fragment set:html={processTitle(title!, titleHighlight)} />
+          )}
+        </TitleElement>
+      )}
+
+      {/* Description */}
+      {(hasDescriptionSlot || description) && (
+        <p class={cn(
+          'mb-8 max-w-xl text-lg leading-relaxed',
+          background === 'invert' ? 'text-on-invert/70' : 'text-foreground-muted',
+          align === 'center' && 'mx-auto'
+        )}>
+          {hasDescriptionSlot ? (
+            <slot name="description" />
+          ) : (
+            description
+          )}
+        </p>
+      )}
+
+      {/* Actions */}
+      {hasActionsSlot && (
+        <div class={cn(
+          'flex w-full flex-col gap-4 sm:w-auto sm:flex-row',
+          align === 'center' && 'justify-center'
+        )}>
+          <slot name="actions" />
+        </div>
+      )}
+
+      {/* Social Proof */}
+      {hasSocialProofSlot && (
+        <div class={cn(
+          'mt-8 flex items-center gap-4 text-sm',
+          background === 'invert' ? 'text-on-invert/60' : 'text-foreground-subtle'
+        )}>
+          <slot name="social-proof" />
+        </div>
+      )}
+    </div>
+
+    {/* Aside Column (for split layout) */}
+    {layout === 'split' && hasAsideSlot && (
+      <div class="relative z-10 w-full">
+        <slot name="aside" />
+        {/* Decorative blob */}
+        {showBlob && (
+          <div
+            class={cn(
+              'bg-brand-200/20 pointer-events-none absolute h-64 w-64 rounded-full blur-3xl',
+              blobPositions[blobPosition]
+            )}
+            aria-hidden="true"
+          />
+        )}
+      </div>
+    )}
+
+    {/* Decorative blob for single layout */}
+    {layout === 'single' && showBlob && (
+      <div
+        class={cn(
+          'bg-brand-200/20 pointer-events-none absolute h-64 w-64 rounded-full blur-3xl',
+          blobPositions[blobPosition]
+        )}
+        aria-hidden="true"
+      />
+    )}
+  </div>
+
+  {/* Default slot for additional content */}
+  <slot />
+</section>

@@ -5,6 +5,8 @@ import LandingFooter from '@/components/landing/LandingFooter.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
+import Input from '@/components/ui/Input.astro';
+import { Hero } from '@/components/hero';
 import { getCollection } from 'astro:content';
 
 // Get all published posts
@@ -37,31 +39,26 @@ const getPostUrl = (postId: string) => {
 >
   <Navbar slot="header" />
 
-  <!-- Hero Section with decorative background -->
-  <section class="relative overflow-hidden bg-background-secondary border-b border-border">
-    <!-- Decorative grid pattern -->
-    <div class="absolute inset-0 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white_50%,transparent)] pointer-events-none opacity-30"></div>
-
-    <!-- Decorative blur blob -->
-    <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-200/20 dark:bg-brand-800/10 rounded-full blur-3xl pointer-events-none"></div>
-
-    <div class="relative mx-auto max-w-6xl px-6 py-20 md:py-28">
-      <div class="max-w-3xl">
-        <div class="mb-4 inline-flex items-center rounded-full border border-border bg-background px-3 py-1 shadow-sm">
-          <Icon name="book" size="sm" class="text-brand-500 mr-2" />
-          <span class="text-xs font-medium text-foreground-secondary">All posts</span>
-        </div>
-
-        <h1 class="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl mb-6">
-          Blog
-        </h1>
-
-        <p class="text-xl text-foreground-muted leading-relaxed">
-          Latest articles and updates
-        </p>
-      </div>
-    </div>
-  </section>
+  <Hero
+    layout="single"
+    align="left"
+    size="sm"
+    background="secondary"
+    showGrid
+    showBlob
+    blobPosition="left"
+    titleElement="h1"
+    class="border-b border-border"
+  >
+    <Fragment slot="badge">
+      <Icon name="book" size="sm" class="text-brand-500 mr-2" />
+      <span class="text-xs font-medium text-foreground-secondary">All posts</span>
+    </Fragment>
+    <Fragment slot="title">Blog</Fragment>
+    <Fragment slot="description">
+      Latest articles and updates
+    </Fragment>
+  </Hero>
 
   <!-- Featured Posts Section -->
   {featuredPosts.length > 0 && (
@@ -136,12 +133,14 @@ const getPostUrl = (postId: string) => {
         Get the latest articles and updates delivered to your inbox.
       </p>
 
-      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-        <input
+      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto items-end">
+        <Input
           type="email"
           placeholder="Enter your email"
-          class="flex-1 h-12 px-4 rounded-md bg-surface-invert-secondary border border-border-invert text-on-invert placeholder:text-on-invert-muted focus:outline-none focus:ring-2 focus:ring-brand-500"
+          variant="invert"
+          size="lg"
           required
+          class="flex-1"
         />
         <Button variant="primary" size="lg" type="submit">
           Subscribe

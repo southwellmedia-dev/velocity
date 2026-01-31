@@ -1,6 +1,10 @@
 ---
 import LandingLayout from '@/layouts/LandingLayout.astro';
-import Hero from '@/components/landing/Hero.astro';
+import { Hero } from '@/components/hero';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import SocialProof from '@/components/ui/SocialProof.astro';
+import TerminalDemo from '@/components/ui/TerminalDemo.tsx';
 import TechStack from '@/components/landing/TechStack.astro';
 import FeatureTabs from '@/components/landing/FeatureTabs.tsx';
 import LighthouseScores from '@/components/landing/LighthouseScores.astro';
@@ -12,7 +16,54 @@ import CTA from '@/components/landing/CTA.astro';
   title="The boilerplate we actually use"
   description="Stop configuring and start shipping. Velocity is the opinionated Astro 6 & Tailwind v4 starter kit used by Southwell Media to deliver production client sites in 14 days."
 >
-  <Hero />
+  <Hero
+    layout="split"
+    align="left"
+    size="lg"
+    showGrid
+    showBlob
+    blobPosition="right"
+    badge="v1.0 Public Beta is Live"
+    badgeIcon
+  >
+    <Fragment slot="title">
+      Your next site <span class="text-brand-500">starts here.</span>
+    </Fragment>
+
+    <Fragment slot="description">
+      Clone the repo. Customize the tokens. Deploy by Friday. Velocity handles the tedious parts
+      so you can focus on the work that matters.
+    </Fragment>
+
+    <Fragment slot="actions">
+      <Button size="lg" href="#cta">
+        Get Started
+        <Icon name="arrow-right" size="sm" />
+      </Button>
+      <Button
+        size="lg"
+        variant="outline"
+        href="https://github.com/southwellmedia/velocity"
+        target="_blank"
+      >
+        <Icon name="github" size="sm" />
+        View on GitHub
+      </Button>
+    </Fragment>
+
+    <TerminalDemo slot="aside" client:load />
+
+    <SocialProof
+      slot="social-proof"
+      text="Built by developers. For developers."
+      avatars={[
+        'https://i.pravatar.cc/150?img=12',
+        'https://i.pravatar.cc/150?img=33',
+        'https://i.pravatar.cc/150?img=47',
+      ]}
+    />
+  </Hero>
+
   <TechStack />
   <FeatureTabs client:visible />
   <LighthouseScores />
