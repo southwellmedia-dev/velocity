@@ -1,5 +1,9 @@
 # Velocity
 
+<p align="center">
+  <img src="public/velocity-lightmode.svg" alt="Velocity" width="370" />
+</p>
+
 **Astro 6 Boilerplate** — A production-ready starter template built on Astro 6 and Tailwind CSS v4.
 
 [![Astro](https://img.shields.io/badge/Astro-6.0-bc52ee?logo=astro&logoColor=white)](https://astro.build)
