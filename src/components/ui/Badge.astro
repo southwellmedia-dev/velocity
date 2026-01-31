@@ -15,10 +15,10 @@ const { variant = 'default', size = 'md', class: className } = Astro.props;
 
 const variants = {
   default: 'bg-secondary text-secondary-foreground border-border',
-  success: 'bg-[var(--success-light)] text-[var(--success)] border-[var(--success)]/20',
-  warning: 'bg-[var(--warning-light)] text-[var(--warning)] border-[var(--warning)]/20',
-  error: 'bg-[var(--error-light)] text-[var(--error)] border-[var(--error)]/20',
-  info: 'bg-[var(--blue-500)]/10 text-[var(--blue-500)] border-[var(--blue-500)]/20',
+  success: 'bg-[var(--success-light)] text-[var(--success-foreground)] border-[var(--success)]/20',
+  warning: 'bg-[var(--warning-light)] text-[var(--warning-foreground)] border-[var(--warning)]/20',
+  error: 'bg-[var(--error-light)] text-[var(--error-foreground)] border-[var(--error)]/20',
+  info: 'bg-[var(--info-light)] text-[var(--info-foreground)] border-[var(--info)]/20',
 };
 
 const sizes = {
