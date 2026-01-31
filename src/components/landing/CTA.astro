@@ -68,8 +68,8 @@ import Logo from '@/components/ui/Logo.astro';
           checkIcon.classList.add('hidden');
           commandText.textContent = command;
         }, 2000);
-      } catch (err) {
-        console.error('Failed to copy:', err);
+      } catch {
+        // Clipboard API failed - user will need to copy manually
       }
     });
   }

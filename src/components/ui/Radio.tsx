@@ -27,7 +27,7 @@ export function Radio({ ref, label, description, error, variant = 'default', cla
             'hover:border-foreground-subtle hover:bg-secondary/30',
             'has-[:checked]:border-foreground has-[:checked]:bg-secondary/50',
             'has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2',
-            props.disabled && 'cursor-not-allowed opacity-60',
+            props.disabled && 'cursor-not-allowed opacity-50',
             error && 'border-destructive'
           )}
         >
@@ -107,7 +107,7 @@ export function Radio({ ref, label, description, error, variant = 'default', cla
         className={cn(
           'relative flex items-start gap-3 cursor-pointer',
           'select-none',
-          props.disabled && 'cursor-not-allowed opacity-60'
+          props.disabled && 'cursor-not-allowed opacity-50'
         )}
       >
         {/* Custom radio visual */}

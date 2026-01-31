@@ -97,8 +97,8 @@ const codeId = `code-${Math.random().toString(36).slice(2, 9)}`;
               copyText.textContent = 'Copy';
             }, 2000);
           }
-        } catch (err) {
-          console.error('Failed to copy:', err);
+        } catch {
+          // Clipboard API failed - user will need to copy manually
         }
       });
     });

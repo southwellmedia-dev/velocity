@@ -14,8 +14,8 @@ interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ref'> {
 const paddings: Record<CardPadding, string> = {
   none: '',
   sm: 'p-4',
-  md: 'p-5',
-  lg: 'p-6',
+  md: 'p-6',
+  lg: 'p-8',
 };
 
 const shadows: Record<CardShadow, string> = {

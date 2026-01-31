@@ -5,6 +5,26 @@
   "type": "module",
   "author": "Southwell Media",
   "license": "MIT",
+  "keywords": [
+    "astro",
+    "astro-theme",
+    "theme",
+    "tailwind",
+    "tailwindcss",
+    "typescript",
+    "blog",
+    "starter",
+    "boilerplate",
+    "seo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/southwellmedia/velocity"
+  },
+  "homepage": "https://github.com/southwellmedia/velocity#readme",
+  "bugs": {
+    "url": "https://github.com/southwellmedia/velocity/issues"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

@@ -19,7 +19,7 @@ export function Checkbox({ ref, label, description, error, className, id, ...pro
         className={cn(
           'relative flex items-start gap-3 cursor-pointer',
           'select-none',
-          props.disabled && 'cursor-not-allowed opacity-60'
+          props.disabled && 'cursor-not-allowed opacity-50'
         )}
       >
         {/* Custom checkbox visual */}

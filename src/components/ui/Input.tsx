@@ -3,12 +3,14 @@ import { cn } from '@/lib/cn';
 
 type InputSize = 'sm' | 'md' | 'lg';
 
-interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'ref'> {
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'ref' | 'size'> {
   ref?: Ref<HTMLInputElement>;
   label?: string;
   error?: string;
   hint?: string;
+  /** @deprecated Use `size` instead */
   inputSize?: InputSize;
+  size?: InputSize;
 }
 
 const sizes: Record<InputSize, string> = {
@@ -17,7 +19,8 @@ const sizes: Record<InputSize, string> = {
   lg: 'h-12 px-4 text-base',
 };
 
-export function Input({ ref, label, error, hint, inputSize = 'md', className, id, ...props }: InputProps) {
+export function Input({ ref, label, error, hint, inputSize, size = 'md', className, id, ...props }: InputProps) {
+  const resolvedSize = inputSize ?? size;
   const generatedId = useId();
   const inputId = id || generatedId;
 
@@ -28,7 +31,7 @@ export function Input({ ref, label, error, hint, inputSize = 'md', className, id
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
     'disabled:cursor-not-allowed disabled:opacity-50',
     error ? 'border-destructive focus-visible:ring-destructive' : 'border-border',
-    sizes[inputSize]
+    sizes[resolvedSize]
   );
 
   return (

@@ -68,8 +68,6 @@ const shareLinks = {
     document.querySelectorAll('.copy-link-btn').forEach((button) => {
       button.addEventListener('click', async () => {
         const url = button.getAttribute('data-url');
-        const _copiedText = button.getAttribute('data-copied-text') || 'Copied!';
-
         if (!url) return;
 
         try {
@@ -87,8 +85,8 @@ const shareLinks = {
               checkIcon.classList.add('hidden');
             }, 2000);
           }
-        } catch (err) {
-          console.error('Failed to copy:', err);
+        } catch {
+          // Clipboard API failed - user will need to copy manually
         }
       });
     });

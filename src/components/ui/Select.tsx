@@ -9,12 +9,14 @@ interface Option {
   disabled?: boolean;
 }
 
-interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'ref'> {
+interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'ref' | 'size'> {
   ref?: Ref<HTMLSelectElement>;
   label?: string;
   error?: string;
   hint?: string;
+  /** @deprecated Use `size` instead */
   selectSize?: SelectSize;
+  size?: SelectSize;
   options: Option[];
   placeholder?: string;
 }
@@ -25,7 +27,8 @@ const sizes: Record<SelectSize, string> = {
   lg: 'h-12 px-4 text-base',
 };
 
-export function Select({ ref, label, error, hint, selectSize = 'md', options, placeholder, className, id, ...props }: SelectProps) {
+export function Select({ ref, label, error, hint, selectSize, size = 'md', options, placeholder, className, id, ...props }: SelectProps) {
+  const resolvedSize = selectSize ?? size;
   const generatedId = useId();
   const selectId = id || generatedId;
 
@@ -35,7 +38,7 @@ export function Select({ ref, label, error, hint, selectSize = 'md', options, pl
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
     'disabled:cursor-not-allowed disabled:opacity-50',
     error ? 'border-destructive focus-visible:ring-destructive' : 'border-border',
-    sizes[selectSize]
+    sizes[resolvedSize]
   );
 
   return (

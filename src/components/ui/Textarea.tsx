@@ -8,7 +8,9 @@ interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
   label?: string;
   error?: string;
   hint?: string;
+  /** @deprecated Use `size` instead */
   textareaSize?: TextareaSize;
+  size?: TextareaSize;
 }
 
 const sizes: Record<TextareaSize, string> = {
@@ -17,7 +19,8 @@ const sizes: Record<TextareaSize, string> = {
   lg: 'px-4 py-3 text-base',
 };
 
-export function Textarea({ ref, label, error, hint, textareaSize = 'md', className, id, rows = 4, ...props }: TextareaProps) {
+export function Textarea({ ref, label, error, hint, textareaSize, size = 'md', className, id, rows = 4, ...props }: TextareaProps) {
+  const resolvedSize = textareaSize ?? size;
   const generatedId = useId();
   const textareaId = id || generatedId;
 
@@ -28,7 +31,7 @@ export function Textarea({ ref, label, error, hint, textareaSize = 'md', classNa
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
     'disabled:cursor-not-allowed disabled:opacity-50',
     error ? 'border-destructive focus-visible:ring-destructive' : 'border-border',
-    sizes[textareaSize]
+    sizes[resolvedSize]
   );
 
   return (

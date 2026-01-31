@@ -30,6 +30,7 @@ const siteConfig: SiteConfig = {
   url: import.meta.env.SITE_URL || 'https://example.com',
   ogImage: '/og-default.png',
   author: 'Southwell Media',
+  // Demo contact info - replace with your actual business details
   email: 'hello@example.com',
   phone: '+1 (555) 123-4567',
   address: {
@@ -40,14 +41,13 @@ const siteConfig: SiteConfig = {
     country: 'US',
   },
   socialLinks: [
-    'https://twitter.com/yourhandle',
-    'https://linkedin.com/company/yourcompany',
-    'https://github.com/yourorg',
+    'https://github.com/southwellmedia',
   ],
-  twitter: {
-    site: '@yourhandle',
-    creator: '@yourhandle',
-  },
+  // Twitter metadata - update with your actual handles or remove
+  // twitter: {
+  //   site: '@yourhandle',
+  //   creator: '@yourhandle',
+  // },
   verification: {
     google: import.meta.env.GOOGLE_SITE_VERIFICATION,
     bing: import.meta.env.BING_SITE_VERIFICATION,
