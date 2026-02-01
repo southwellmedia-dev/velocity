@@ -1,81 +1,251 @@
 ---
 /**
  * Header Component
- * Dynamic navigation that reads routes from routes.ts
- * Used by PageLayout for standard content pages
+ * Flexible navigation header with variant-based configuration
+ *
+ * Variants:
+ * - layout: 'default' | 'centered' | 'minimal'
+ * - position: 'fixed' | 'sticky' | 'static'
+ * - size: 'sm' | 'md' | 'lg'
+ * - variant: 'default' | 'solid' | 'transparent'
+ *
+ * Features:
+ * - Dynamic navigation from routes.ts (default) or custom nav prop
+ * - Optional CTA button with customization
+ * - Mobile menu with Escape key support
+ * - Theme toggle
+ * - GitHub/action buttons
+ * - Full slot support for customization
  */
+import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@/lib/cn';
-import { getNavRoutes } from '@/config/routes';
-import ThemeToggle from './ThemeToggle.astro';
+import { getNavRoutes, type NavRoute } from '@/config/routes';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Logo from '@/components/ui/Logo.astro';
+import ThemeToggle from '@/components/layout/ThemeToggle.astro';
 import siteConfig from '@/config/site.config';
 
-interface Props {
-  class?: string;
+export interface NavItem {
+  label: string;
+  href: string;
 }
 
-const { class: className } = Astro.props;
+export interface HeaderAction {
+  icon: string;
+  href: string;
+  label: string;
+  iconOnly?: boolean;
+  target?: string;
+}
 
-// Get navigation routes dynamically from routes.ts
-const navRoutes = getNavRoutes();
+interface Props extends HTMLAttributes<'header'> {
+  /** Layout style: default (logo left, nav right), centered (logo center), minimal (logo + cta only) */
+  layout?: 'default' | 'centered' | 'minimal';
+  /** Position behavior */
+  position?: 'fixed' | 'sticky' | 'static';
+  /** Header height */
+  size?: 'sm' | 'md' | 'lg';
+  /** Background variant */
+  variant?: 'default' | 'solid' | 'transparent';
+  /** Override default navigation (replaces getNavRoutes()) */
+  nav?: NavItem[];
+  /** Additional navigation items (e.g., #features for landing pages) */
+  extraNav?: NavItem[];
+  /** Show CTA button */
+  showCta?: boolean;
+  /** CTA button configuration */
+  cta?: { label?: string; href?: string };
+  /** Action buttons (GitHub, etc.) */
+  actions?: HeaderAction[];
+  /** Show theme toggle (default: true) */
+  showThemeToggle?: boolean;
+  /** Show mobile menu (default: true) */
+  showMobileMenu?: boolean;
+  /** Show active state for current page (default: true) */
+  showActiveState?: boolean;
+  /** Logo text override */
+  logoText?: string;
+  /** Hide logo entirely */
+  hideLogo?: boolean;
+}
 
+const {
+  layout = 'default',
+  position = 'sticky',
+  size = 'md',
+  variant = 'default',
+  nav,
+  extraNav = [],
+  showCta = false,
+  cta = { label: 'Get Started', href: '#cta' },
+  actions = [],
+  showThemeToggle = true,
+  showMobileMenu = true,
+  showActiveState = true,
+  logoText,
+  hideLogo = false,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+// Get navigation items
+const defaultNav = getNavRoutes().map((route: NavRoute) => ({
+  label: route.label,
+  href: route.path,
+}));
+const navItems: NavItem[] = nav || [...extraNav, ...defaultNav];
+
+// Current path for active state
 const currentPath = Astro.url.pathname;
+
+// Check if we're on the landing page
+const isLandingPage = currentPath === '/';
+
+// Process CTA href for landing page anchor links
+const ctaHref = cta.href?.startsWith('#') && !isLandingPage
+  ? `/${cta.href}`
+  : cta.href;
+
+// Check slots
+const hasLogoSlot = Astro.slots.has('logo');
+const hasNavSlot = Astro.slots.has('nav');
+const hasActionsSlot = Astro.slots.has('actions');
+const hasMobileMenuSlot = Astro.slots.has('mobile-menu');
+
+// Position variants
+const positions: Record<NonNullable<Props['position']>, string> = {
+  fixed: 'fixed top-0 left-0 right-0',
+  sticky: 'sticky top-0',
+  static: 'relative',
+};
+
+// Size variants (height)
+const sizes: Record<NonNullable<Props['size']>, string> = {
+  sm: 'h-12',    // 48px - compact
+  md: 'h-14',    // 56px - balanced
+  lg: 'h-16',    // 64px - spacious
+};
+
+// Background variants
+const variants: Record<NonNullable<Props['variant']>, string> = {
+  default: 'bg-background/80 backdrop-blur-lg border-b border-border/50',
+  solid: 'bg-background border-b border-border',
+  transparent: 'bg-transparent',
+};
+
+// Layout-specific container classes
+const containerClasses: Record<NonNullable<Props['layout']>, string> = {
+  default: 'flex items-center justify-between',
+  centered: 'flex items-center justify-between',
+  minimal: 'flex items-center justify-between',
+};
+
+// Compute header classes
+const headerClasses = cn(
+  'z-50 w-full',
+  positions[position],
+  variants[variant],
+  className
+);
+
+// Compute inner container classes
+const innerClasses = cn(
+  'mx-auto max-w-6xl px-6',
+  sizes[size],
+  containerClasses[layout]
+);
+
+// Check if a nav item is active
+function isActive(href: string): boolean {
+  if (!showActiveState) return false;
+  if (href.startsWith('#')) return false;
+  return currentPath === href || currentPath.startsWith(href + '/');
+}
+
+// Generate unique ID for this header instance
+const menuId = `mobile-menu-${Math.random().toString(36).slice(2, 9)}`;
+const buttonId = `${menuId}-button`;
 ---
 
-<header
-  class={cn(
-    'sticky top-0 z-50 w-full',
-    'border-b border-border/50',
-    'bg-background/80 backdrop-blur-lg backdrop-saturate-150',
-    className
-  )}
->
-  <div class="container">
-    <div class="flex h-16 items-center justify-between">
-      <!-- Logo -->
-      <a
-        href="/"
-        class="flex items-center gap-2 font-semibold text-foreground transition-opacity hover:opacity-80"
-        aria-label={`${siteConfig.name} - Go to homepage`}
-      >
-        <svg
-          class="h-6 w-6"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path d="M12 2L2 19.5h20L12 2zm0 4l7 12H5l7-12z" />
-        </svg>
-        <span class="hidden sm:inline">{siteConfig.name}</span>
-      </a>
+<header class={headerClasses} {...attrs}>
+  <div class={innerClasses}>
+    {/* Logo */}
+    {!hideLogo && (
+      hasLogoSlot ? (
+        <slot name="logo" />
+      ) : (
+        <a href="/" class="flex items-center gap-2">
+          <Logo size={size === 'lg' ? 'md' : 'sm'} />
+          <span class="font-display text-xl font-bold tracking-tight text-brand-500">
+            {logoText || siteConfig.name}
+          </span>
+        </a>
+      )
+    )}
 
-      <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center gap-1" aria-label="Main navigation">
-        {
-          navRoutes.map(({ path, label }) => (
+    {/* Desktop Navigation */}
+    {layout !== 'minimal' && (
+      hasNavSlot ? (
+        <nav class="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+          <slot name="nav" />
+        </nav>
+      ) : (
+        <nav class="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+          {navItems.map(({ label, href }) => (
             <a
-              href={path}
+              href={href.startsWith('#') && !isLandingPage ? `/${href}` : href}
               class={cn(
-                'px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                currentPath === path || currentPath.startsWith(path + '/')
-                  ? 'text-foreground'
-                  : 'text-foreground-muted hover:text-foreground hover:bg-secondary'
+                'nav-link px-3 py-2 text-sm rounded-md',
+                'transition-all duration-[--transition-fast]',
+                isActive(href)
+                  ? 'nav-link-active font-semibold text-foreground bg-secondary'
+                  : 'nav-link-inactive font-medium text-foreground-muted hover:text-foreground hover:bg-secondary/70'
               )}
-              aria-current={currentPath === path ? 'page' : undefined}
+              aria-current={isActive(href) ? 'page' : undefined}
             >
               {label}
             </a>
-          ))
-        }
-      </nav>
+          ))}
+        </nav>
+      )
+    )}
 
-      <!-- Actions -->
-      <div class="flex items-center gap-2">
-        <ThemeToggle />
+    {/* Actions Area */}
+    <div class="flex items-center gap-2">
+      {hasActionsSlot ? (
+        <slot name="actions" />
+      ) : (
+        <>
+          {showThemeToggle && <ThemeToggle />}
 
-        <!-- Mobile Menu Button -->
+          {actions.map((action) => (
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={action.iconOnly}
+              href={action.href}
+              target={action.target}
+              aria-label={action.label}
+            >
+              <Icon name={action.icon} size="sm" />
+              {!action.iconOnly && action.label}
+            </Button>
+          ))}
+
+          {showCta && (
+            <Button size="sm" href={ctaHref}>
+              {cta.label}
+            </Button>
+          )}
+        </>
+      )}
+
+      {/* Mobile Menu Toggle */}
+      {showMobileMenu && layout !== 'minimal' && (
         <button
           type="button"
-          id="mobile-menu-button"
+          id={buttonId}
           class={cn(
             'md:hidden inline-flex items-center justify-center rounded-md p-2',
             'text-foreground-muted hover:text-foreground hover:bg-secondary',
@@ -83,114 +253,80 @@ const currentPath = Astro.url.pathname;
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           )}
           aria-expanded="false"
-          aria-controls="mobile-menu"
+          aria-controls={menuId}
           aria-label="Toggle menu"
         >
-          <svg
-            id="menu-icon-open"
-            class="h-5 w-5"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <line x1="4" x2="20" y1="6" y2="6" />
-            <line x1="4" x2="20" y1="12" y2="12" />
-            <line x1="4" x2="20" y1="18" y2="18" />
-          </svg>
-          <svg
-            id="menu-icon-close"
-            class="hidden h-5 w-5"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <line x1="18" x2="6" y1="6" y2="18" />
-            <line x1="6" x2="18" y1="6" y2="18" />
-          </svg>
+          <span class="menu-icon">
+            <Icon name="menu" size="md" />
+          </span>
+          <span class="close-icon hidden">
+            <Icon name="x" size="md" />
+          </span>
         </button>
-      </div>
+      )}
     </div>
   </div>
 
-  <!-- Mobile Menu -->
-  <div
-    id="mobile-menu"
-    class="md:hidden hidden border-t border-border bg-background"
-    role="navigation"
-    aria-label="Main navigation"
-  >
-    <div class="container py-4 space-y-1">
-      {
-        navRoutes.map(({ path, label }) => (
-          <a
-            href={path}
-            class={cn(
-              'block px-3 py-2 rounded-md text-sm font-medium transition-colors',
-              currentPath === path || currentPath.startsWith(path + '/')
-                ? 'bg-secondary text-foreground'
-                : 'text-foreground-muted hover:bg-secondary hover:text-foreground'
-            )}
-            aria-current={currentPath === path ? 'page' : undefined}
-          >
-            {label}
-          </a>
-        ))
-      }
-    </div>
-  </div>
+  {/* Mobile Menu */}
+  {showMobileMenu && layout !== 'minimal' && (
+    hasMobileMenuSlot ? (
+      <div
+        id={menuId}
+        class="md:hidden hidden border-t border-border bg-background"
+        role="navigation"
+        aria-label="Mobile navigation"
+      >
+        <slot name="mobile-menu" />
+      </div>
+    ) : (
+      <div
+        id={menuId}
+        class="md:hidden hidden border-t border-border bg-background"
+        role="navigation"
+        aria-label="Mobile navigation"
+      >
+        <div class="mx-auto max-w-6xl px-6 py-4 space-y-1">
+          {navItems.map(({ label, href }) => (
+            <a
+              href={href.startsWith('#') && !isLandingPage ? `/${href}` : href}
+              class={cn(
+                'mobile-nav-link block px-3 py-2 rounded-md text-sm',
+                'transition-all duration-[--transition-fast]',
+                isActive(href)
+                  ? 'mobile-nav-link-active font-semibold bg-secondary text-foreground'
+                  : 'mobile-nav-link-inactive font-medium text-foreground-muted hover:bg-secondary/70 hover:text-foreground'
+              )}
+              aria-current={isActive(href) ? 'page' : undefined}
+            >
+              {label}
+            </a>
+          ))}
+
+          {(showThemeToggle || showCta) && (
+            <div class="flex items-center gap-3 pt-3 border-t border-border mt-3">
+              {showThemeToggle && <ThemeToggle />}
+            </div>
+          )}
+
+          {showCta && (
+            <Button fullWidth href={ctaHref} class="mt-3">
+              {cta.label}
+            </Button>
+          )}
+        </div>
+      </div>
+    )
+  )}
 </header>
 
-<script is:inline>
-  (function initMobileMenu() {
-    const button = document.getElementById('mobile-menu-button');
-    const menu = document.getElementById('mobile-menu');
-    const iconOpen = document.getElementById('menu-icon-open');
-    const iconClose = document.getElementById('menu-icon-close');
+<script define:vars={{ menuId, buttonId }}>
+  function initMobileMenu() {
+    const button = document.getElementById(buttonId);
+    const menu = document.getElementById(menuId);
+    const menuIcon = button?.querySelector('.menu-icon');
+    const closeIcon = button?.querySelector('.close-icon');
 
-    if (!button || !menu || !iconOpen || !iconClose) return;
-
-    let isOpen = false;
-
-    function toggle() {
-      isOpen = !isOpen;
-      button.setAttribute('aria-expanded', String(isOpen));
-
-      if (isOpen) {
-        menu.classList.remove('hidden');
-        iconOpen.classList.add('hidden');
-        iconClose.classList.remove('hidden');
-      } else {
-        menu.classList.add('hidden');
-        iconOpen.classList.remove('hidden');
-        iconClose.classList.add('hidden');
-      }
-    }
-
-    button.addEventListener('click', toggle);
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && isOpen) {
-        toggle();
-      }
-    });
-  })();
-  document.addEventListener('astro:after-swap', function() {
-    const button = document.getElementById('mobile-menu-button');
-    const menu = document.getElementById('mobile-menu');
-    const iconOpen = document.getElementById('menu-icon-open');
-    const iconClose = document.getElementById('menu-icon-close');
-
-    if (!button || !menu || !iconOpen || !iconClose) return;
+    if (!button || !menu || !menuIcon || !closeIcon) return;
 
     let isOpen = false;
 
@@ -200,21 +336,41 @@ const currentPath = Astro.url.pathname;
 
       if (isOpen) {
         menu.classList.remove('hidden');
-        iconOpen.classList.add('hidden');
-        iconClose.classList.remove('hidden');
+        menuIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
       } else {
         menu.classList.add('hidden');
-        iconOpen.classList.remove('hidden');
-        iconClose.classList.add('hidden');
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      }
+    }
+
+    function close() {
+      if (isOpen) {
+        isOpen = false;
+        button.setAttribute('aria-expanded', 'false');
+        menu.classList.add('hidden');
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
       }
     }
 
     button.addEventListener('click', toggle);
 
-    document.addEventListener('keydown', function(e) {
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && isOpen) {
-        toggle();
+        close();
       }
     });
-  });
+
+    // Close when clicking on mobile menu links
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', close);
+    });
+  }
+
+  initMobileMenu();
+  document.addEventListener('astro:page-load', initMobileMenu);
+  document.addEventListener('astro:after-swap', initMobileMenu);
 </script>

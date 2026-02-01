@@ -2,11 +2,10 @@
 /**
  * PageLayout
  * Layout wrapper for standard content pages (non-landing)
- * Uses Navbar for consistent navigation across all pages
- * Differs from LandingLayout only in using simpler Footer (no CTA sections)
+ * Uses Header + Footer with content page configuration
  */
 import BaseLayout from './BaseLayout.astro';
-import Navbar from '@/components/landing/Navbar.astro';
+import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 
 interface Props {
@@ -29,11 +28,27 @@ const { title, description, image, imageAlt, noindex, nofollow } = Astro.props;
   noindex={noindex}
   nofollow={nofollow}
 >
-  <Navbar slot="header" />
+  <Header
+    slot="header"
+    position="fixed"
+    size="lg"
+    showActiveState
+    showCta
+    cta={{ label: 'Get Started', href: '/#cta' }}
+    actions={[
+      {
+        icon: 'github',
+        href: 'https://github.com/southwellmedia/velocity',
+        label: 'View on GitHub',
+        iconOnly: true,
+        target: '_blank',
+      },
+    ]}
+  />
 
   <main class="min-h-screen pt-16">
     <slot />
   </main>
 
-  <Footer slot="footer" />
+  <Footer slot="footer" layout="simple" />
 </BaseLayout>

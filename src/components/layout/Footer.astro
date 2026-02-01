@@ -1,63 +1,477 @@
 ---
 /**
  * Footer Component
- * Matches the LandingFooter aesthetic - clean, simple, single-row layout
- * Uses dynamic navigation from routes.ts
+ * Flexible footer with variant-based configuration
+ *
+ * Layouts:
+ * - simple: Single row with logo, nav links, and social
+ * - columns: Multi-column layout with link groups
+ * - minimal: Just copyright
+ * - stacked: Vertically stacked logo, nav, copyright
+ *
+ * Features:
+ * - Dynamic navigation from routes.ts (default) or custom nav prop
+ * - Social links with icon support
+ * - Copyright with {year} placeholder
+ * - Legal links section
+ * - Full slot support for customization
  */
+import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@/lib/cn';
-import { getNavRoutes } from '@/config/routes';
+import { getNavRoutes, type NavRoute } from '@/config/routes';
 import Logo from '@/components/ui/Logo.astro';
+import Icon from '@/components/ui/Icon.astro';
 import siteConfig from '@/config/site.config';
 
-interface Props {
-  class?: string;
+export interface NavItem {
+  label: string;
+  href: string;
+  external?: boolean;
 }
 
-const { class: className } = Astro.props;
+export interface FooterLinkGroup {
+  title: string;
+  links: NavItem[];
+}
 
-// Get navigation routes for footer links
-const navRoutes = getNavRoutes();
+export interface SocialLink {
+  platform: 'github' | 'twitter' | 'linkedin' | string;
+  href: string;
+  label?: string;
+}
 
-// External links
-const externalLinks = [
-  { label: 'GitHub', href: 'https://github.com/southwellmedia/velocity' },
-  { label: 'License', href: 'https://github.com/southwellmedia/velocity/blob/main/LICENSE' },
+export interface LegalLink {
+  label: string;
+  href: string;
+}
+
+interface Props extends HTMLAttributes<'footer'> {
+  /** Layout style */
+  layout?: 'simple' | 'columns' | 'minimal' | 'stacked';
+  /** Number of columns (only for columns layout) */
+  columns?: 2 | 3 | 4;
+  /** Background variant */
+  background?: 'default' | 'secondary' | 'invert';
+  /** Override default navigation */
+  nav?: NavItem[];
+  /** Link groups for columns layout */
+  linkGroups?: FooterLinkGroup[];
+  /** Social media links */
+  socialLinks?: SocialLink[];
+  /** Show social links */
+  showSocial?: boolean;
+  /** Show copyright */
+  showCopyright?: boolean;
+  /** Custom copyright text (supports {year} and {siteName} placeholders) */
+  copyright?: string;
+  /** Legal links (Privacy, Terms, etc.) */
+  legalLinks?: LegalLink[];
+  /** Hide logo */
+  hideLogo?: boolean;
+  /** Tagline text under logo */
+  tagline?: string;
+}
+
+const {
+  layout = 'simple',
+  columns = 3,
+  background = 'default',
+  nav,
+  linkGroups = [],
+  socialLinks = [],
+  showSocial = true,
+  showCopyright = true,
+  copyright = '© {year} {siteName}. All rights reserved.',
+  legalLinks = [],
+  hideLogo = false,
+  tagline,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+// Get navigation items
+const defaultNav: NavItem[] = getNavRoutes().map((route: NavRoute) => ({
+  label: route.label,
+  href: route.path,
+}));
+const navItems: NavItem[] = nav || defaultNav;
+
+// Default external links if none provided via nav
+const defaultExternalLinks: NavItem[] = [
+  { label: 'GitHub', href: 'https://github.com/southwellmedia/velocity', external: true },
+  { label: 'License', href: 'https://github.com/southwellmedia/velocity/blob/main/LICENSE', external: true },
 ];
+
+// Add external links to nav if using default nav
+const allNavItems: NavItem[] = nav ? navItems : [...navItems, ...defaultExternalLinks];
+
+// Process copyright text
+const currentYear = new Date().getFullYear();
+const processedCopyright = copyright
+  .replace('{year}', String(currentYear))
+  .replace('{siteName}', siteConfig.name);
+
+// Check slots
+const hasLogoSlot = Astro.slots.has('logo');
+const hasTaglineSlot = Astro.slots.has('tagline');
+const hasColumnsSlot = Astro.slots.has('columns');
+const hasSocialSlot = Astro.slots.has('social');
+const hasBottomSlot = Astro.slots.has('bottom');
+
+// Background variants
+const backgrounds: Record<NonNullable<Props['background']>, string> = {
+  default: 'bg-background border-t border-border',
+  secondary: 'bg-surface-secondary border-t border-border',
+  invert: 'bg-surface-invert text-on-invert border-t border-border',
+};
+
+// Column grid classes
+const columnGrids: Record<NonNullable<Props['columns']>, string> = {
+  2: 'md:grid-cols-2',
+  3: 'md:grid-cols-3',
+  4: 'md:grid-cols-4',
+};
+
+// Compute footer classes
+const footerClasses = cn(
+  'py-12',
+  backgrounds[background],
+  className
+);
+
+// Social platform to icon mapping
+const socialIcons: Record<string, string> = {
+  github: 'github',
+  twitter: 'twitter',
+  linkedin: 'linkedin',
+};
+
+// Get icon for social platform
+function getSocialIcon(platform: string): string {
+  return socialIcons[platform] || platform;
+}
 ---
 
-<footer class={cn('border-t border-border bg-surface-secondary py-12', className)}>
-  <div class="mx-auto max-w-6xl px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-    <!-- Logo & Attribution -->
-    <div class="flex flex-col items-center md:items-start gap-2">
-      <a href="/" class="flex items-center gap-2">
-        <Logo size="sm" />
-        <span class="font-display text-lg font-bold text-brand-500">{siteConfig.name}</span>
-      </a>
-    </div>
+<footer class={footerClasses} {...attrs}>
+  <div class="mx-auto max-w-6xl px-6">
+    {layout === 'simple' && (
+      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+        {/* Logo & Tagline */}
+        {!hideLogo && (
+          <div class="flex flex-col items-center md:items-start gap-2">
+            {hasLogoSlot ? (
+              <slot name="logo" />
+            ) : (
+              <a href="/" class="flex items-center gap-2">
+                <Logo size="sm" />
+                <span class="font-display text-lg font-bold text-brand-500">
+                  {siteConfig.name}
+                </span>
+              </a>
+            )}
+            {(hasTaglineSlot || tagline) && (
+              <p class={cn(
+                'text-sm',
+                background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+              )}>
+                {hasTaglineSlot ? <slot name="tagline" /> : tagline}
+              </p>
+            )}
+          </div>
+        )}
 
-    <!-- Links -->
-    <nav class="flex flex-wrap justify-center gap-6 md:gap-8 text-sm text-foreground-muted font-medium">
-      <!-- Dynamic routes -->
-      {navRoutes.map(({ path, label }) => (
-        <a
-          href={path}
-          class="hover:text-foreground transition-colors"
-        >
-          {label}
-        </a>
-      ))}
+        {/* Navigation Links */}
+        <nav class={cn(
+          'flex flex-wrap justify-center gap-6 md:gap-8 text-sm font-medium',
+          background === 'invert' ? 'text-on-invert/70' : 'text-foreground-muted'
+        )}>
+          {allNavItems.map((item) => (
+            <a
+              href={item.href}
+              class={cn(
+                'transition-colors',
+                background === 'invert' ? 'hover:text-on-invert' : 'hover:text-foreground'
+              )}
+              target={item.external || item.href.startsWith('http') ? '_blank' : undefined}
+              rel={item.external || item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
 
-      <!-- External links -->
-      {externalLinks.map((link) => (
-        <a
-          href={link.href}
-          class="hover:text-foreground transition-colors"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {link.label}
-        </a>
-      ))}
-    </nav>
+        {/* Social Links */}
+        {showSocial && socialLinks.length > 0 && (
+          hasSocialSlot ? (
+            <slot name="social" />
+          ) : (
+            <div class="flex items-center gap-4">
+              {socialLinks.map((social) => (
+                <a
+                  href={social.href}
+                  class={cn(
+                    'transition-colors',
+                    background === 'invert'
+                      ? 'text-on-invert/60 hover:text-on-invert'
+                      : 'text-foreground-muted hover:text-foreground'
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label || `Follow us on ${social.platform}`}
+                >
+                  <Icon name={getSocialIcon(social.platform)} size="md" />
+                </a>
+              ))}
+            </div>
+          )
+        )}
+      </div>
+    )}
+
+    {layout === 'columns' && (
+      <>
+        <div class={cn('grid grid-cols-1 gap-8', columnGrids[columns])}>
+          {/* Logo Column */}
+          {!hideLogo && (
+            <div class="space-y-4">
+              {hasLogoSlot ? (
+                <slot name="logo" />
+              ) : (
+                <a href="/" class="flex items-center gap-2">
+                  <Logo size="sm" />
+                  <span class="font-display text-lg font-bold text-brand-500">
+                    {siteConfig.name}
+                  </span>
+                </a>
+              )}
+              {(hasTaglineSlot || tagline) && (
+                <p class={cn(
+                  'text-sm max-w-xs',
+                  background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+                )}>
+                  {hasTaglineSlot ? <slot name="tagline" /> : tagline}
+                </p>
+              )}
+              {/* Social Links in columns layout */}
+              {showSocial && socialLinks.length > 0 && (
+                <div class="flex items-center gap-4 pt-2">
+                  {socialLinks.map((social) => (
+                    <a
+                      href={social.href}
+                      class={cn(
+                        'transition-colors',
+                        background === 'invert'
+                          ? 'text-on-invert/60 hover:text-on-invert'
+                          : 'text-foreground-muted hover:text-foreground'
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label || `Follow us on ${social.platform}`}
+                    >
+                      <Icon name={getSocialIcon(social.platform)} size="md" />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Link Groups */}
+          {hasColumnsSlot ? (
+            <slot name="columns" />
+          ) : (
+            linkGroups.map((group) => (
+              <div class="space-y-4">
+                <h3 class={cn(
+                  'font-semibold text-sm',
+                  background === 'invert' ? 'text-on-invert' : 'text-foreground'
+                )}>
+                  {group.title}
+                </h3>
+                <ul class="space-y-2">
+                  {group.links.map((link) => (
+                    <li>
+                      <a
+                        href={link.href}
+                        class={cn(
+                          'text-sm transition-colors',
+                          background === 'invert'
+                            ? 'text-on-invert/70 hover:text-on-invert'
+                            : 'text-foreground-muted hover:text-foreground'
+                        )}
+                        target={link.external || link.href.startsWith('http') ? '_blank' : undefined}
+                        rel={link.external || link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Bottom section */}
+        {(showCopyright || legalLinks.length > 0) && (
+          <div class={cn(
+            'mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4',
+            background === 'invert' ? 'border-on-invert/10' : 'border-border'
+          )}>
+            {hasBottomSlot ? (
+              <slot name="bottom" />
+            ) : (
+              <>
+                {showCopyright && (
+                  <p class={cn(
+                    'text-sm',
+                    background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+                  )}>
+                    {processedCopyright}
+                  </p>
+                )}
+                {legalLinks.length > 0 && (
+                  <div class="flex items-center gap-6">
+                    {legalLinks.map((link) => (
+                      <a
+                        href={link.href}
+                        class={cn(
+                          'text-sm transition-colors',
+                          background === 'invert'
+                            ? 'text-on-invert/60 hover:text-on-invert'
+                            : 'text-foreground-muted hover:text-foreground'
+                        )}
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </>
+    )}
+
+    {layout === 'minimal' && (
+      <div class="text-center">
+        {showCopyright && (
+          <p class={cn(
+            'text-sm',
+            background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+          )}>
+            {processedCopyright}
+          </p>
+        )}
+      </div>
+    )}
+
+    {layout === 'stacked' && (
+      <div class="flex flex-col items-center gap-8 text-center">
+        {/* Logo */}
+        {!hideLogo && (
+          hasLogoSlot ? (
+            <slot name="logo" />
+          ) : (
+            <a href="/" class="flex items-center gap-2">
+              <Logo size="md" />
+              <span class="font-display text-xl font-bold text-brand-500">
+                {siteConfig.name}
+              </span>
+            </a>
+          )
+        )}
+
+        {/* Tagline */}
+        {(hasTaglineSlot || tagline) && (
+          <p class={cn(
+            'text-sm max-w-md',
+            background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+          )}>
+            {hasTaglineSlot ? <slot name="tagline" /> : tagline}
+          </p>
+        )}
+
+        {/* Navigation Links */}
+        <nav class={cn(
+          'flex flex-wrap justify-center gap-6 text-sm font-medium',
+          background === 'invert' ? 'text-on-invert/70' : 'text-foreground-muted'
+        )}>
+          {allNavItems.map((item) => (
+            <a
+              href={item.href}
+              class={cn(
+                'transition-colors',
+                background === 'invert' ? 'hover:text-on-invert' : 'hover:text-foreground'
+              )}
+              target={item.external || item.href.startsWith('http') ? '_blank' : undefined}
+              rel={item.external || item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* Social Links */}
+        {showSocial && socialLinks.length > 0 && (
+          <div class="flex items-center gap-4">
+            {socialLinks.map((social) => (
+              <a
+                href={social.href}
+                class={cn(
+                  'transition-colors',
+                  background === 'invert'
+                    ? 'text-on-invert/60 hover:text-on-invert'
+                    : 'text-foreground-muted hover:text-foreground'
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.label || `Follow us on ${social.platform}`}
+              >
+                <Icon name={getSocialIcon(social.platform)} size="md" />
+              </a>
+            ))}
+          </div>
+        )}
+
+        {/* Copyright & Legal */}
+        {(showCopyright || legalLinks.length > 0) && (
+          <div class={cn(
+            'pt-8 border-t w-full flex flex-col items-center gap-4',
+            background === 'invert' ? 'border-on-invert/10' : 'border-border'
+          )}>
+            {showCopyright && (
+              <p class={cn(
+                'text-sm',
+                background === 'invert' ? 'text-on-invert/60' : 'text-foreground-muted'
+              )}>
+                {processedCopyright}
+              </p>
+            )}
+            {legalLinks.length > 0 && (
+              <div class="flex items-center gap-6">
+                {legalLinks.map((link) => (
+                  <a
+                    href={link.href}
+                    class={cn(
+                      'text-sm transition-colors',
+                      background === 'invert'
+                        ? 'text-on-invert/60 hover:text-on-invert'
+                        : 'text-foreground-muted hover:text-foreground'
+                    )}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    )}
   </div>
+
+  {/* Default slot for additional content */}
+  <slot />
 </footer>

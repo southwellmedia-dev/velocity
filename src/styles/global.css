@@ -411,6 +411,75 @@
    Components
    ------------------------------------------------------------------------- */
 @layer components {
+  /* -------------------------------------------------------------------------
+     Navigation Component Tokens
+     Customize header navigation via these CSS custom properties
+     ------------------------------------------------------------------------- */
+  :root {
+    /* Nav link - inactive state */
+    --nav-link-color: var(--foreground-muted);
+    --nav-link-bg: transparent;
+    --nav-link-font-weight: 500;
+
+    /* Nav link - hover state */
+    --nav-link-hover-color: var(--foreground);
+    --nav-link-hover-bg: var(--secondary);
+
+    /* Nav link - active state (current page) */
+    --nav-link-active-color: var(--foreground);
+    --nav-link-active-bg: var(--secondary);
+    --nav-link-active-font-weight: 600;
+
+    /* Nav link - focus state */
+    --nav-link-focus-ring: var(--ring);
+  }
+
+  .nav-link {
+    color: var(--nav-link-color);
+    background-color: var(--nav-link-bg);
+  }
+
+  .nav-link-inactive {
+    font-weight: var(--nav-link-font-weight);
+  }
+
+  .nav-link-inactive:hover {
+    color: var(--nav-link-hover-color);
+    background-color: var(--nav-link-hover-bg);
+  }
+
+  .nav-link-active {
+    color: var(--nav-link-active-color);
+    background-color: var(--nav-link-active-bg);
+    font-weight: var(--nav-link-active-font-weight);
+  }
+
+  .nav-link:focus-visible {
+    outline: 2px solid var(--nav-link-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Mobile nav links */
+  .mobile-nav-link {
+    color: var(--nav-link-color);
+    background-color: var(--nav-link-bg);
+  }
+
+  .mobile-nav-link-inactive {
+    font-weight: var(--nav-link-font-weight);
+  }
+
+  .mobile-nav-link-inactive:hover {
+    color: var(--nav-link-hover-color);
+    background-color: var(--nav-link-hover-bg);
+  }
+
+  .mobile-nav-link-active {
+    color: var(--nav-link-active-color);
+    background-color: var(--nav-link-active-bg);
+    font-weight: var(--nav-link-active-font-weight);
+  }
+
   /* Prose */
   .prose {
     max-width: 65ch;

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Navbar from '@/components/landing/Navbar.astro';
-import LandingFooter from '@/components/landing/LandingFooter.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
 import BlogCard from '@/components/blog/BlogCard.astro';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
@@ -37,7 +37,23 @@ const getPostUrl = (postId: string) => {
   title="Blog"
   description="Latest articles and updates"
 >
-  <Navbar slot="header" />
+  <Header
+    slot="header"
+    position="fixed"
+    size="lg"
+    showActiveState
+    showCta
+    cta={{ label: 'Get Started', href: '/#cta' }}
+    actions={[
+      {
+        icon: 'github',
+        href: 'https://github.com/southwellmedia/velocity',
+        label: 'View on GitHub',
+        iconOnly: true,
+        target: '_blank',
+      },
+    ]}
+  />
 
   <Hero
     layout="single"
@@ -150,5 +166,5 @@ const getPostUrl = (postId: string) => {
     </div>
   </section>
 
-  <LandingFooter slot="footer" />
+  <Footer slot="footer" layout="simple" background="secondary" showCopyright={false} />
 </BaseLayout>

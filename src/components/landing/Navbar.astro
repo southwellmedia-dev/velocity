@@ -1,6 +1,22 @@
 ---
 /**
- * Navbar Component
+ * @deprecated This component is deprecated. Use Header.astro from @/components/layout/Header.astro instead.
+ *
+ * Migration example:
+ * ```astro
+ * import Header from '@/components/layout/Header.astro';
+ *
+ * <Header
+ *   position="fixed"
+ *   size="lg"
+ *   showCta
+ *   cta={{ label: "Get Started", href: "#cta" }}
+ *   extraNav={[{ label: "Features", href: "#features" }]}
+ *   actions={[{ icon: "github", href: "...", iconOnly: true }]}
+ * />
+ * ```
+ *
+ * Navbar Component (DEPRECATED)
  * Dynamic navigation that reads routes from routes.ts
  * Routes with nav.show: true appear in the navigation
  */

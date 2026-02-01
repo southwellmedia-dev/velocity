@@ -2,14 +2,14 @@
 /**
  * LandingLayout
  * Layout wrapper for landing-style pages (marketing, demo, showcase)
- * Uses Navbar + LandingFooter for consistent landing page navigation
+ * Uses Header + Footer with landing-specific configuration
  *
  * This layout is part of the "demo" layer - it can be optionally installed
  * via CLI for users who want the full landing page experience.
  */
 import BaseLayout from './BaseLayout.astro';
-import Navbar from '@/components/landing/Navbar.astro';
-import LandingFooter from '@/components/landing/LandingFooter.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
 
 interface Props {
   title?: string;
@@ -41,9 +41,30 @@ const {
   nofollow={nofollow}
   includeOrgSchema={includeOrgSchema}
 >
-  <Navbar slot="header" />
+  <Header
+    slot="header"
+    position="fixed"
+    size="lg"
+    showCta
+    cta={{ label: 'Get Started', href: '#cta' }}
+    extraNav={[{ label: 'Features', href: '#features' }]}
+    actions={[
+      {
+        icon: 'github',
+        href: 'https://github.com/southwellmedia/velocity',
+        label: 'View on GitHub',
+        iconOnly: true,
+        target: '_blank',
+      },
+    ]}
+  />
 
   <slot />
 
-  <LandingFooter slot="footer" />
+  <Footer
+    slot="footer"
+    layout="simple"
+    background="secondary"
+    showCopyright={false}
+  />
 </BaseLayout>

@@ -31,7 +31,8 @@ interface Props {
   class?: string;
 }
 
-const { tabs, defaultValue = tabs[0]?.id, class: className } = Astro.props;
+const props = Astro.props as Props;
+const { tabs, defaultValue = props.tabs[0]?.id, class: className } = props;
 const componentId = Math.random().toString(36).substring(2, 9);
 ---
 
@@ -57,7 +58,7 @@ const componentId = Math.random().toString(36).substring(2, 9);
         )}
         data-vtab-select
       >
-        {tabs.map((tab) => (
+        {tabs.map((tab: Tab) => (
           <option value={tab.id} selected={tab.id === defaultValue}>
             {tab.label}{tab.description ? ` — ${tab.description}` : ''}
           </option>
@@ -95,7 +96,7 @@ const componentId = Math.random().toString(36).substring(2, 9);
       aria-orientation="vertical"
       aria-label="Vertical tabs"
     >
-      {tabs.map((tab, index) => {
+      {tabs.map((tab: Tab) => {
         const isActive = tab.id === defaultValue;
         return (
           <button

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Navbar from '@/components/landing/Navbar.astro';
-import LandingFooter from '@/components/landing/LandingFooter.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
 import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
 import ArticleHero from '@/components/blog/ArticleHero.astro';
 import ShareButtons from '@/components/blog/ShareButtons.astro';
@@ -55,7 +55,23 @@ const fullUrl = new URL(Astro.url.pathname, Astro.site).toString();
     tags,
   }}
 >
-  <Navbar slot="header" />
+  <Header
+    slot="header"
+    position="fixed"
+    size="lg"
+    showActiveState
+    showCta
+    cta={{ label: 'Get Started', href: '/#cta' }}
+    actions={[
+      {
+        icon: 'github',
+        href: 'https://github.com/southwellmedia/velocity',
+        label: 'View on GitHub',
+        iconOnly: true,
+        target: '_blank',
+      },
+    ]}
+  />
 
   <!-- Article Hero -->
   <ArticleHero
@@ -119,5 +135,5 @@ const fullUrl = new URL(Astro.url.pathname, Astro.site).toString();
     </div>
   )}
 
-  <LandingFooter slot="footer" />
+  <Footer slot="footer" layout="simple" background="secondary" showCopyright={false} />
 </BaseLayout>

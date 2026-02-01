@@ -6,6 +6,10 @@
       "name": "UI Components",
       "description": "Core building blocks - buttons, forms, cards, dialogs"
     },
+    "layout": {
+      "name": "Layout Components",
+      "description": "Page structure components - header, footer, navigation"
+    },
     "patterns": {
       "name": "Patterns",
       "description": "Reusable form patterns"
@@ -292,6 +296,26 @@
       "dependencies": {
         "utilities": ["cn"],
         "components": []
+      },
+      "premium": false
+    },
+    "header": {
+      "name": "Header",
+      "category": "layout",
+      "files": ["src/components/layout/Header.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": ["button", "icon", "logo"]
+      },
+      "premium": false
+    },
+    "footer": {
+      "name": "Footer",
+      "category": "layout",
+      "files": ["src/components/layout/Footer.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": ["icon", "logo"]
       },
       "premium": false
     }

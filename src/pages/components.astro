@@ -19,16 +19,19 @@ import Radio from '@/components/ui/Radio.astro';
 import Card from '@/components/ui/Card.astro';
 import { Hero } from '@/components/hero';
 import SocialProof from '@/components/ui/SocialProof.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
 
 // Component categories for navigation
 const categories = [
   { id: 'hero', label: 'Hero', icon: 'star' },
+  { id: 'layout', label: 'Layout', icon: 'layout' },
   { id: 'buttons', label: 'Buttons', icon: 'box' },
   { id: 'inputs', label: 'Form Inputs', icon: 'terminal' },
   { id: 'feedback', label: 'Feedback', icon: 'alert-circle' },
   { id: 'overlays', label: 'Overlays', icon: 'layers' },
   { id: 'navigation', label: 'Navigation', icon: 'menu' },
-  { id: 'data', label: 'Data Display', icon: 'layout' },
+  { id: 'data', label: 'Data Display', icon: 'layers' },
   { id: 'loading', label: 'Loading', icon: 'loader' },
 ];
 ---
@@ -315,6 +318,298 @@ const categories = [
                   <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">social-proof</code> Trust indicators</li>
                 </ul>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Layout Section (Header & Footer) -->
+    <section id="layout" class="scroll-mt-32">
+      <div class="flex items-start gap-5 mb-10">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 shrink-0">
+          <Icon name="layout" size="lg" />
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-foreground">Layout</h2>
+          <p class="text-foreground-muted mt-1">Header and Footer components for consistent page structure. Variant-based with full customization via design tokens.</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Header Component -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Header Component</span>
+            <span class="showcase-hint">Fixed/Sticky with nav, CTA, mobile menu</span>
+          </div>
+          <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+            <div class="relative border-b border-border">
+              <Header
+                position="static"
+                size="lg"
+                showCta
+                cta={{ label: 'Get Started', href: '#' }}
+                actions={[
+                  { icon: 'github', href: '#', label: 'GitHub', iconOnly: true },
+                ]}
+                extraNav={[{ label: 'Features', href: '#features' }]}
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Header Variants Grid -->
+        <div class="grid gap-6 lg:grid-cols-2">
+          <!-- Size Variants -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Size Variants</span>
+              <span class="showcase-hint">sm (48px), md (56px), lg (64px)</span>
+            </div>
+            <div class="showcase-content space-y-3">
+              {(['sm', 'md', 'lg'] as const).map((size) => (
+                <div class="border border-border rounded-lg overflow-hidden">
+                  <div class="bg-background-secondary px-3 py-1.5 border-b border-border">
+                    <span class="text-xs font-mono text-foreground-muted">size="{size}"</span>
+                  </div>
+                  <Header
+                    position="static"
+                    size={size}
+                    showMobileMenu={false}
+                    nav={[{ label: 'Components', href: '/components' }]}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Background Variants -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Background Variants</span>
+              <span class="showcase-hint">default, solid, transparent</span>
+            </div>
+            <div class="showcase-content space-y-3">
+              <div class="border border-border rounded-lg overflow-hidden">
+                <div class="bg-background-secondary px-3 py-1.5 border-b border-border">
+                  <span class="text-xs font-mono text-foreground-muted">variant="default"</span>
+                </div>
+                <Header position="static" size="sm" variant="default" showMobileMenu={false} nav={[]} />
+              </div>
+              <div class="border border-border rounded-lg overflow-hidden">
+                <div class="bg-background-secondary px-3 py-1.5 border-b border-border">
+                  <span class="text-xs font-mono text-foreground-muted">variant="solid"</span>
+                </div>
+                <Header position="static" size="sm" variant="solid" showMobileMenu={false} nav={[]} />
+              </div>
+              <div class="border border-border rounded-lg overflow-hidden bg-gradient-to-r from-brand-500 to-brand-600">
+                <div class="bg-black/20 px-3 py-1.5 border-b border-white/10">
+                  <span class="text-xs font-mono text-white/80">variant="transparent"</span>
+                </div>
+                <Header position="static" size="sm" variant="transparent" showMobileMenu={false} nav={[]} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header Props Reference -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Header Props</span>
+            <span class="showcase-hint">Full API reference</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-sm">
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Layout & Position</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">layout</code> default | centered | minimal</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">position</code> fixed | sticky | static</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">size</code> sm | md | lg</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">variant</code> default | solid | transparent</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Navigation</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">nav</code> NavItem[] (overrides routes)</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">extraNav</code> NavItem[] (adds to routes)</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">showActiveState</code> boolean</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">showMobileMenu</code> boolean</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Actions</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">showCta</code> boolean</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">cta</code> {'{ label, href }'}</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">actions</code> HeaderAction[]</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">showThemeToggle</code> boolean</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Component -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Footer - Simple Layout</span>
+            <span class="showcase-hint">Single row with logo, nav, optional social</span>
+          </div>
+          <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+            <Footer
+              layout="simple"
+              background="secondary"
+              showCopyright={false}
+              socialLinks={[
+                { platform: 'github', href: '#' },
+                { platform: 'twitter', href: '#' },
+              ]}
+            />
+          </div>
+        </div>
+
+        <!-- Footer Layouts Grid -->
+        <div class="grid gap-6 lg:grid-cols-2">
+          <!-- Minimal Layout -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Minimal Layout</span>
+              <span class="showcase-hint">Copyright only</span>
+            </div>
+            <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+              <Footer
+                layout="minimal"
+                copyright="© {year} {siteName}"
+              />
+            </div>
+          </div>
+
+          <!-- Stacked Layout -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Stacked Layout</span>
+              <span class="showcase-hint">Vertically stacked, centered</span>
+            </div>
+            <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+              <Footer
+                layout="stacked"
+                tagline="Build faster, ship with confidence"
+                socialLinks={[
+                  { platform: 'github', href: '#' },
+                  { platform: 'twitter', href: '#' },
+                ]}
+                legalLinks={[
+                  { label: 'Privacy', href: '#' },
+                  { label: 'Terms', href: '#' },
+                ]}
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Columns Layout -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Columns Layout</span>
+            <span class="showcase-hint">Multi-column with link groups</span>
+          </div>
+          <div class="showcase-content !p-0 overflow-hidden rounded-b-xl">
+            <Footer
+              layout="columns"
+              columns={4}
+              tagline="Modern starter kit for production websites"
+              socialLinks={[
+                { platform: 'github', href: '#' },
+                { platform: 'twitter', href: '#' },
+              ]}
+              linkGroups={[
+                {
+                  title: 'Product',
+                  links: [
+                    { label: 'Features', href: '#' },
+                    { label: 'Pricing', href: '#' },
+                    { label: 'Docs', href: '#' },
+                  ],
+                },
+                {
+                  title: 'Company',
+                  links: [
+                    { label: 'About', href: '#' },
+                    { label: 'Blog', href: '#' },
+                    { label: 'Careers', href: '#' },
+                  ],
+                },
+                {
+                  title: 'Legal',
+                  links: [
+                    { label: 'Privacy', href: '#' },
+                    { label: 'Terms', href: '#' },
+                  ],
+                },
+              ]}
+              legalLinks={[
+                { label: 'Privacy Policy', href: '#' },
+                { label: 'Terms of Service', href: '#' },
+              ]}
+            />
+          </div>
+        </div>
+
+        <!-- Footer Props Reference -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Footer Props</span>
+            <span class="showcase-hint">Full API reference</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-sm">
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Layout</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">layout</code> simple | columns | minimal | stacked</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">columns</code> 2 | 3 | 4</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">background</code> default | secondary | invert</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Content</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">nav</code> NavItem[]</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">linkGroups</code> FooterLinkGroup[]</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">socialLinks</code> SocialLink[]</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">tagline</code> string</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Copyright & Legal</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">showCopyright</code> boolean</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">copyright</code> string (supports {'{year}'}, {'{siteName}'})</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">legalLinks</code> LegalLink[]</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design Tokens -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Navigation Design Tokens</span>
+            <span class="showcase-hint">Customize via CSS custom properties</span>
+          </div>
+          <div class="showcase-content">
+            <div class="bg-background-secondary rounded-lg p-4 font-mono text-xs space-y-1 text-foreground-muted overflow-x-auto">
+              <p class="text-foreground-subtle">/* Customize nav link states in global.css */</p>
+              <p>--nav-link-color: var(--foreground-muted);</p>
+              <p>--nav-link-hover-color: var(--foreground);</p>
+              <p>--nav-link-hover-bg: var(--secondary);</p>
+              <p>--nav-link-active-color: var(--foreground);</p>
+              <p>--nav-link-active-bg: var(--secondary);</p>
+              <p>--nav-link-active-font-weight: 600;</p>
             </div>
           </div>
         </div>
