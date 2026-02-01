@@ -245,6 +245,16 @@
       },
       "premium": false
     },
+    "vertical-tabs": {
+      "name": "VerticalTabs",
+      "category": "ui",
+      "files": ["src/components/ui/VerticalTabs.tsx"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
     "contact-form": {
       "name": "ContactForm",
       "category": "patterns",

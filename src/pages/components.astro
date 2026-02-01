@@ -5,6 +5,7 @@ import Button from '@/components/ui/Button.astro';
 import Badge from '@/components/ui/Badge.astro';
 import Alert from '@/components/ui/Alert.astro';
 import Tabs from '@/components/ui/Tabs.astro';
+import VerticalTabs from '@/components/ui/VerticalTabs.astro';
 import Dropdown from '@/components/ui/Dropdown.astro';
 import Dialog from '@/components/ui/Dialog.astro';
 import Tooltip from '@/components/ui/Tooltip.astro';
@@ -26,6 +27,7 @@ const categories = [
   { id: 'inputs', label: 'Form Inputs', icon: 'terminal' },
   { id: 'feedback', label: 'Feedback', icon: 'alert-circle' },
   { id: 'overlays', label: 'Overlays', icon: 'layers' },
+  { id: 'navigation', label: 'Navigation', icon: 'menu' },
   { id: 'data', label: 'Data Display', icon: 'layout' },
   { id: 'loading', label: 'Loading', icon: 'loader' },
 ];
@@ -690,6 +692,127 @@ const categories = [
                 <p>Configure your project settings. Use Home/End to jump to first/last tab.</p>
               </div>
             </Tabs>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Section -->
+    <section id="navigation" class="scroll-mt-32">
+      <div class="flex items-start gap-5 mb-10">
+        <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-500 shrink-0">
+          <Icon name="menu" size="lg" />
+        </div>
+        <div>
+          <h2 class="font-display text-2xl font-bold text-foreground">Navigation</h2>
+          <p class="text-foreground-muted mt-1">Vertical tabs and navigation patterns with responsive mobile behavior.</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Vertical Tabs - Basic -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Vertical Tabs</span>
+            <span class="showcase-hint">Responsive: dropdown on mobile, sidebar on desktop</span>
+          </div>
+          <div class="showcase-content">
+            <VerticalTabs
+              tabs={[
+                { id: 'account', label: 'Account', description: 'Manage your profile' },
+                { id: 'security', label: 'Security', description: 'Password & 2FA settings' },
+                { id: 'notifications', label: 'Notifications', description: 'Email & push preferences' },
+              ]}
+            >
+              <div data-tab-content="account" class="text-sm text-foreground-muted">
+                <p class="mb-2"><strong class="text-foreground">Account Settings</strong></p>
+                <p>Update your profile information, email address, and personal details. Changes are saved automatically.</p>
+              </div>
+              <div data-tab-content="security" class="text-sm text-foreground-muted">
+                <p class="mb-2"><strong class="text-foreground">Security Settings</strong></p>
+                <p>Configure password requirements, enable two-factor authentication, and manage active sessions.</p>
+              </div>
+              <div data-tab-content="notifications" class="text-sm text-foreground-muted">
+                <p class="mb-2"><strong class="text-foreground">Notification Preferences</strong></p>
+                <p>Choose which notifications you receive via email, push, or in-app. You can also set quiet hours.</p>
+              </div>
+            </VerticalTabs>
+          </div>
+        </div>
+
+        <!-- Vertical Tabs - With Icons -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">With Icons</span>
+            <span class="showcase-hint">Enhanced visual hierarchy</span>
+          </div>
+          <div class="showcase-content">
+            <VerticalTabs
+              tabs={[
+                { id: 'overview', label: 'Overview', description: 'Project summary', icon: 'layout' },
+                { id: 'analytics', label: 'Analytics', description: 'Traffic & insights', icon: 'zap' },
+                { id: 'settings', label: 'Settings', description: 'Configuration', icon: 'settings' },
+              ]}
+            >
+              <div data-tab-content="overview" class="text-sm text-foreground-muted">
+                <div class="grid gap-4 sm:grid-cols-3">
+                  <Card variant="solid" padding="sm">
+                    <p class="text-xs text-foreground-subtle uppercase tracking-wider">Total Views</p>
+                    <p class="text-2xl font-bold text-foreground mt-1">24,521</p>
+                  </Card>
+                  <Card variant="solid" padding="sm">
+                    <p class="text-xs text-foreground-subtle uppercase tracking-wider">Avg. Time</p>
+                    <p class="text-2xl font-bold text-foreground mt-1">3m 42s</p>
+                  </Card>
+                  <Card variant="solid" padding="sm">
+                    <p class="text-xs text-foreground-subtle uppercase tracking-wider">Bounce Rate</p>
+                    <p class="text-2xl font-bold text-foreground mt-1">32.4%</p>
+                  </Card>
+                </div>
+              </div>
+              <div data-tab-content="analytics" class="text-sm text-foreground-muted">
+                <p>Detailed analytics with charts, traffic sources, and user behavior insights. Real-time data updates every minute.</p>
+              </div>
+              <div data-tab-content="settings" class="text-sm text-foreground-muted">
+                <p>Configure project settings including domain, team permissions, and deployment preferences.</p>
+              </div>
+            </VerticalTabs>
+          </div>
+        </div>
+
+        <!-- Props Reference -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Available Props</span>
+            <span class="showcase-hint">VerticalTabs API</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-sm">
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Core Props</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">tabs</code> Tab[] (required)</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">defaultValue</code> string</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">class</code> string</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Tab Interface</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">id</code> string (required)</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">label</code> string (required)</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">description</code> string</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">icon</code> string (Icon name)</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground mb-2">Content Panels</h4>
+                <ul class="space-y-1 text-foreground-muted">
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">data-tab-content</code></li>
+                  <li class="text-xs">Match tab id for each panel</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

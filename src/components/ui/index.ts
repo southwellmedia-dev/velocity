@@ -25,3 +25,4 @@ export { Select } from './Select';
 export { Checkbox } from './Checkbox';
 export { Radio } from './Radio';
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card';
+export { VerticalTabs, type VerticalTab } from './VerticalTabs';

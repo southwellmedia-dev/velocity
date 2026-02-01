@@ -8,15 +8,8 @@ import {
   Copy,
   Check,
   Newspaper,
-  type LucideIcon,
 } from 'lucide-react';
-
-interface Tab {
-  id: string;
-  label: string;
-  desc: string;
-  icon: LucideIcon;
-}
+import { VerticalTabs, type VerticalTab } from '@/components/ui/VerticalTabs';
 
 interface TabContent {
   title: string;
@@ -431,17 +424,18 @@ function CodeBlock({ code, filename, lang }: { code: string; filename: string; l
   );
 }
 
+// Tab definitions with icons for VerticalTabs
+const tabs: VerticalTab[] = [
+  { id: 'theming', label: 'Theming', description: 'Design tokens & dark mode', icon: Palette },
+  { id: 'seo', label: 'SEO & Meta', description: 'OG images & structured data', icon: Search },
+  { id: 'perf', label: 'Performance', description: 'Zero JS by default', icon: Zap },
+  { id: 'components', label: 'Components', description: 'Type-safe UI primitives', icon: LayoutGrid },
+  { id: 'i18n', label: 'i18n Ready', description: 'Optional multi-language', icon: Globe },
+  { id: 'content', label: 'Content', description: 'Blog, MDX & search', icon: Newspaper },
+];
+
 export function FeatureTabs() {
   const [activeTab, setActiveTab] = useState('theming');
-
-  const tabs: Tab[] = [
-    { id: 'theming', label: 'Theming', desc: 'Design tokens & dark mode', icon: Palette },
-    { id: 'seo', label: 'SEO & Meta', desc: 'OG images & structured data', icon: Search },
-    { id: 'perf', label: 'Performance', desc: 'Zero JS by default', icon: Zap },
-    { id: 'components', label: 'Components', desc: 'Type-safe UI primitives', icon: LayoutGrid },
-    { id: 'i18n', label: 'i18n Ready', desc: 'Optional multi-language', icon: Globe },
-    { id: 'content', label: 'Content', desc: 'Blog, MDX & search', icon: Newspaper },
-  ];
 
   const activeTabContent = tabContent[activeTab];
   const activeCodeExample = codeExamples[activeTab];
@@ -474,51 +468,26 @@ export function FeatureTabs() {
           </p>
         </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-          {/* Sidebar */}
-          <div className="flex flex-col gap-2 lg:col-span-4">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`group flex flex-col items-start rounded-md p-4 text-left transition-all ${
-                  activeTab === tab.id
-                    ? 'bg-secondary ring-border shadow-sm ring-1'
-                    : 'hover:bg-background-secondary hover:pl-5'
-                }`}
-              >
-                <span
-                  className={`font-display flex items-center gap-2 text-base font-bold ${
-                    activeTab === tab.id
-                      ? 'text-brand-600 dark:text-brand-400'
-                      : 'text-foreground group-hover:text-brand-600 dark:group-hover:text-brand-400'
-                  }`}
-                >
-                  <tab.icon
-                    className={`h-5 w-5 ${activeTab === tab.id ? 'text-brand-500' : 'text-foreground-subtle group-hover:text-brand-500'}`}
-                    strokeWidth={2}
-                  />
-                  {tab.label}
-                </span>
-                <span className="text-foreground-muted mt-1 pl-7 text-sm">{tab.desc}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Content Preview */}
-          <div className="lg:col-span-8">
-            <div className="mb-6">
-              <h3 className="text-foreground text-xl font-bold">{activeTabContent.title}</h3>
-              <p className="text-foreground-muted mt-2">{activeTabContent.content}</p>
+        {/* Vertical Tabs */}
+        <VerticalTabs
+          tabs={tabs}
+          value={activeTab}
+          onChange={setActiveTab}
+        >
+          {tabs.map((tab) => (
+            <div key={tab.id} data-tab-content={tab.id}>
+              <div className="mb-6">
+                <h3 className="text-foreground text-xl font-bold">{tabContent[tab.id].title}</h3>
+                <p className="text-foreground-muted mt-2">{tabContent[tab.id].content}</p>
+              </div>
+              <CodeBlock
+                code={codeExamples[tab.id].code}
+                filename={codeExamples[tab.id].filename}
+                lang={codeExamples[tab.id].lang}
+              />
             </div>
-            <CodeBlock
-              code={activeCodeExample.code}
-              filename={activeCodeExample.filename}
-              lang={activeCodeExample.lang}
-            />
-          </div>
-        </div>
+          ))}
+        </VerticalTabs>
       </div>
     </section>
   );
