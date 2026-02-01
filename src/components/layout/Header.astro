@@ -272,7 +272,7 @@ const buttonId = `${menuId}-button`;
     hasMobileMenuSlot ? (
       <div
         id={menuId}
-        class="md:hidden hidden border-t border-border bg-background"
+        class="md:hidden hidden border-t border-border bg-background shadow-lg shadow-black/20"
         role="navigation"
         aria-label="Mobile navigation"
       >
@@ -281,7 +281,7 @@ const buttonId = `${menuId}-button`;
     ) : (
       <div
         id={menuId}
-        class="md:hidden hidden border-t border-border bg-background"
+        class="md:hidden hidden border-t border-border bg-background shadow-lg shadow-black/20"
         role="navigation"
         aria-label="Mobile navigation"
       >
@@ -302,16 +302,12 @@ const buttonId = `${menuId}-button`;
             </a>
           ))}
 
-          {(showThemeToggle || showCta) && (
-            <div class="flex items-center gap-3 pt-3 border-t border-border mt-3">
-              {showThemeToggle && <ThemeToggle />}
-            </div>
-          )}
-
           {showCta && (
-            <Button fullWidth href={ctaHref} class="mt-3">
-              {cta.label}
-            </Button>
+            <div class="mt-3 pt-3 border-t border-border">
+              <Button fullWidth href={ctaHref}>
+                {cta.label}
+              </Button>
+            </div>
           )}
         </div>
       </div>
@@ -319,43 +315,125 @@ const buttonId = `${menuId}-button`;
   )}
 </header>
 
+{/* Mobile Menu Backdrop - positioned outside header to blur page content */}
+{showMobileMenu && layout !== 'minimal' && (
+  <div
+    id={`${menuId}-backdrop`}
+    class="md:hidden fixed inset-0 opacity-0 pointer-events-none transition-opacity duration-200 z-40"
+    aria-hidden="true"
+  />
+)}
+
 <script define:vars={{ menuId, buttonId }}>
   function initMobileMenu() {
     const button = document.getElementById(buttonId);
     const menu = document.getElementById(menuId);
+    const backdrop = document.getElementById(`${menuId}-backdrop`);
+    const header = button?.closest('header');
     const menuIcon = button?.querySelector('.menu-icon');
     const closeIcon = button?.querySelector('.close-icon');
 
     if (!button || !menu || !menuIcon || !closeIcon) return;
 
     let isOpen = false;
+    let isAnimating = false;
 
-    function toggle() {
-      isOpen = !isOpen;
-      button.setAttribute('aria-expanded', String(isOpen));
+    function open() {
+      if (isOpen || isAnimating) return;
+      isAnimating = true;
+      isOpen = true;
 
-      if (isOpen) {
-        menu.classList.remove('hidden');
-        menuIcon.classList.add('hidden');
-        closeIcon.classList.remove('hidden');
-      } else {
-        menu.classList.add('hidden');
-        menuIcon.classList.remove('hidden');
-        closeIcon.classList.add('hidden');
+      button.setAttribute('aria-expanded', 'true');
+      menuIcon.classList.add('hidden');
+      closeIcon.classList.remove('hidden');
+
+      // Add solid background to header
+      if (header) {
+        header.classList.add('!bg-background');
       }
+
+      // Fade out and blur the page content
+      const mainContent = document.querySelector('main');
+      const footer = document.querySelector('footer');
+      if (mainContent) {
+        mainContent.style.transition = 'opacity 200ms, filter 200ms';
+        mainContent.style.opacity = '0.3';
+        mainContent.style.filter = 'blur(4px)';
+      }
+      if (footer) {
+        footer.style.transition = 'opacity 200ms, filter 200ms';
+        footer.style.opacity = '0.3';
+        footer.style.filter = 'blur(4px)';
+      }
+
+      // Show menu and backdrop with animations
+      menu.classList.remove('hidden', 'animate-menu-up');
+      menu.classList.add('animate-menu-down');
+      if (backdrop) {
+        backdrop.classList.remove('pointer-events-none', 'animate-backdrop-out');
+        backdrop.classList.add('animate-backdrop');
+      }
+
+      isAnimating = false;
     }
 
     function close() {
-      if (isOpen) {
-        isOpen = false;
-        button.setAttribute('aria-expanded', 'false');
+      if (!isOpen || isAnimating) return;
+      isAnimating = true;
+
+      button.setAttribute('aria-expanded', 'false');
+      menuIcon.classList.remove('hidden');
+      closeIcon.classList.add('hidden');
+
+      // Start closing animation
+      menu.classList.remove('animate-menu-down');
+      menu.classList.add('animate-menu-up');
+      if (backdrop) {
+        backdrop.classList.remove('animate-backdrop');
+        backdrop.classList.add('animate-backdrop-out');
+      }
+
+      // Restore page content
+      const mainContent = document.querySelector('main');
+      const footer = document.querySelector('footer');
+      if (mainContent) {
+        mainContent.style.opacity = '1';
+        mainContent.style.filter = 'none';
+      }
+      if (footer) {
+        footer.style.opacity = '1';
+        footer.style.filter = 'none';
+      }
+
+      // Wait for animation to complete before hiding
+      setTimeout(() => {
         menu.classList.add('hidden');
-        menuIcon.classList.remove('hidden');
-        closeIcon.classList.add('hidden');
+        if (backdrop) {
+          backdrop.classList.add('pointer-events-none');
+        }
+        // Remove solid background from header
+        if (header) {
+          header.classList.remove('!bg-background');
+        }
+        isOpen = false;
+        isAnimating = false;
+      }, 200); // Match transition duration
+    }
+
+    function toggle() {
+      if (isOpen) {
+        close();
+      } else {
+        open();
       }
     }
 
     button.addEventListener('click', toggle);
+
+    // Close on backdrop click
+    if (backdrop) {
+      backdrop.addEventListener('click', close);
+    }
 
     // Close on Escape key
     document.addEventListener('keydown', function (e) {

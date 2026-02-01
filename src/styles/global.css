@@ -357,6 +357,89 @@
     }
   }
 
+  /* Sheet slide up from bottom */
+  .animate-sheet-up {
+    animation: sheet-up 0.25s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  }
+
+  @keyframes sheet-up {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Backdrop fade */
+  .animate-backdrop {
+    animation: backdrop-fade 0.2s ease-out forwards;
+  }
+
+  @keyframes backdrop-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Mobile menu slide down */
+  .animate-menu-down {
+    animation: menu-down 0.25s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  }
+
+  .animate-menu-up {
+    animation: menu-up 0.2s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  }
+
+  @keyframes menu-down {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes menu-up {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+
+  /* Sheet exit animation */
+  .animate-sheet-down {
+    animation: sheet-down 0.2s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  }
+
+  @keyframes sheet-down {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+  }
+
+  /* Backdrop fade out */
+  .animate-backdrop-out {
+    animation: backdrop-fade-out 0.2s ease-out forwards;
+  }
+
+  @keyframes backdrop-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
   /* Stagger delays */
   .delay-0 { animation-delay: 0ms; }
   .delay-1 { animation-delay: 50ms; }

@@ -1075,6 +1075,37 @@ const categories = [
           </div>
         </div>
 
+        <!-- Vertical Tabs - Bottom Sheet Variant -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Bottom Sheet (Mobile)</span>
+            <span class="showcase-hint">Alternative mobile UX with mobileVariant="sheet"</span>
+          </div>
+          <div class="showcase-content">
+            <VerticalTabs
+              mobileVariant="sheet"
+              tabs={[
+                { id: 'general', label: 'General', description: 'Basic preferences', icon: 'settings' },
+                { id: 'privacy', label: 'Privacy', description: 'Data & permissions', icon: 'shield' },
+                { id: 'billing', label: 'Billing', description: 'Payment methods', icon: 'wallet' },
+              ]}
+            >
+              <div data-tab-content="general" class="text-sm text-foreground-muted">
+                <p class="mb-2"><strong class="text-foreground">General Settings</strong></p>
+                <p>Configure your basic preferences including language, timezone, and display options. Changes are saved automatically.</p>
+              </div>
+              <div data-tab-content="privacy" class="text-sm text-foreground-muted">
+                <p class="mb-2"><strong class="text-foreground">Privacy Controls</strong></p>
+                <p>Manage data sharing, third-party access, and communication preferences. Your privacy matters to us.</p>
+              </div>
+              <div data-tab-content="billing" class="text-sm text-foreground-muted">
+                <p class="mb-2"><strong class="text-foreground">Billing Information</strong></p>
+                <p>View invoices, update payment methods, and manage your subscription plan. All payments are securely processed.</p>
+              </div>
+            </VerticalTabs>
+          </div>
+        </div>
+
         <!-- Props Reference -->
         <div class="component-showcase">
           <div class="showcase-header">
@@ -1088,6 +1119,7 @@ const categories = [
                 <ul class="space-y-1 text-foreground-muted">
                   <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">tabs</code> Tab[] (required)</li>
                   <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">defaultValue</code> string</li>
+                  <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">mobileVariant</code> 'dropdown' | 'sheet'</li>
                   <li><code class="text-xs bg-secondary px-1.5 py-0.5 rounded">class</code> string</li>
                 </ul>
               </div>

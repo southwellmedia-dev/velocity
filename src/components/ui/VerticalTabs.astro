@@ -29,11 +29,14 @@ interface Props {
   tabs: Tab[];
   defaultValue?: string;
   class?: string;
+  /** Mobile dropdown variant: 'dropdown' (default) or 'sheet' (bottom sheet) */
+  mobileVariant?: 'dropdown' | 'sheet';
 }
 
 const props = Astro.props as Props;
-const { tabs, defaultValue = props.tabs[0]?.id, class: className } = props;
+const { tabs, defaultValue = props.tabs[0]?.id, class: className, mobileVariant = 'dropdown' } = props;
 const componentId = Math.random().toString(36).substring(2, 9);
+const defaultTab = tabs.find(t => t.id === defaultValue);
 ---
 
 <div
@@ -41,43 +44,279 @@ const componentId = Math.random().toString(36).substring(2, 9);
   data-vtabs
   data-default={defaultValue}
   data-component-id={componentId}
+  data-mobile-variant={mobileVariant}
 >
-  <!-- Mobile: Select Dropdown -->
-  <div class="lg:hidden mb-6">
-    <label for={`vtab-select-${componentId}`} class="sr-only">
-      Select tab
-    </label>
+  <!-- Mobile: Custom Dropdown -->
+  <div class="lg:hidden mb-6" data-vtab-dropdown-container>
     <div class="relative">
-      <select
-        id={`vtab-select-${componentId}`}
+      <!-- Trigger Button -->
+      <button
+        type="button"
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        aria-controls={`vtab-dropdown-${componentId}`}
         class={cn(
-          'w-full rounded-lg border border-border bg-background appearance-none cursor-pointer',
-          'px-4 py-3 pr-10 text-sm font-medium',
-          'transition-colors duration-[--transition-fast]',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+          'w-full flex items-center gap-3 p-4 rounded-xl',
+          'border-2 border-border bg-gradient-to-b from-background to-background-secondary',
+          'shadow-sm hover:shadow-md hover:border-brand-300/50 dark:hover:border-brand-700/50',
+          'transition-all duration-200',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2'
         )}
-        data-vtab-select
+        data-vtab-trigger-mobile
       >
-        {tabs.map((tab: Tab) => (
-          <option value={tab.id} selected={tab.id === defaultValue}>
-            {tab.label}{tab.description ? ` — ${tab.description}` : ''}
-          </option>
-        ))}
-      </select>
-      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-        <svg
-          class="h-4 w-4 text-foreground-muted"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-            clip-rule="evenodd"
+        {defaultTab?.icon && (
+          <Icon
+            name={defaultTab.icon}
+            size="md"
+            class="text-brand-500 shrink-0"
+            data-vtab-trigger-icon
           />
+        )}
+        <div class="flex-1 min-w-0 text-left">
+          <span class="font-semibold text-foreground block" data-vtab-trigger-label>
+            {defaultTab?.label}
+          </span>
+          {defaultTab?.description && (
+            <span class="text-foreground-muted text-xs truncate block" data-vtab-trigger-desc>
+              {defaultTab.description}
+            </span>
+          )}
+        </div>
+        <svg
+          class="h-5 w-5 text-foreground-muted transition-transform duration-200"
+          data-vtab-chevron
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m6 9 6 6 6-6" />
         </svg>
+      </button>
+
+      <!-- Backdrop for dropdown - click to close -->
+      <div
+        class="hidden fixed inset-0 z-40"
+        data-vtab-dropdown-backdrop
+        aria-hidden="true"
+      ></div>
+      <!-- Dropdown Panel (for dropdown variant) -->
+      <div
+        id={`vtab-dropdown-${componentId}`}
+        role="listbox"
+        class="hidden absolute z-50 w-full mt-2 p-1.5 rounded-xl border border-border bg-background/95 backdrop-blur-sm shadow-xl flex flex-col gap-0.5"
+        data-vtab-panel-dropdown
+      >
+        {tabs.map((tab: Tab) => {
+          const isActive = tab.id === defaultValue;
+          return (
+            <button
+              type="button"
+              role="option"
+              aria-selected={isActive ? 'true' : 'false'}
+              data-vtab-option={tab.id}
+              data-vtab-option-icon={tab.icon || ''}
+              data-vtab-option-label={tab.label}
+              data-vtab-option-desc={tab.description || ''}
+              class={cn(
+                'vtab-option group relative w-full flex items-center gap-3 p-4 text-left',
+                'transition-all duration-200',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-1',
+                'rounded-lg',
+                isActive
+                  ? 'vtab-option-active bg-secondary/80 shadow-[inset_0_1px_3px_rgba(0,0,0,0.08)] dark:shadow-[inset_0_1px_3px_rgba(0,0,0,0.25)]'
+                  : 'hover:bg-background-secondary hover:translate-x-0.5'
+              )}
+            >
+              {tab.icon ? (
+                <div
+                  class={cn(
+                    'vtab-icon-container relative flex items-center justify-center',
+                    'w-10 h-10 rounded-xl shrink-0',
+                    'transition-all duration-200',
+                    isActive
+                      ? 'bg-brand-100 dark:bg-brand-900/40 ring-1 ring-brand-200 dark:ring-brand-800'
+                      : 'bg-secondary group-hover:bg-secondary-hover scale-[0.97] group-hover:scale-105'
+                  )}
+                >
+                  <Icon
+                    name={tab.icon}
+                    size="md"
+                    class={cn(
+                      'vtab-icon transition-all duration-200',
+                      isActive ? 'text-brand-600 dark:text-brand-400 scale-105' : 'text-foreground-muted group-hover:text-foreground-secondary'
+                    )}
+                  />
+                </div>
+              ) : (
+                <div
+                  class={cn(
+                    'w-10 h-10 rounded-xl shrink-0 flex items-center justify-center',
+                    'transition-all duration-200',
+                    isActive ? 'bg-brand-100 dark:bg-brand-900/40' : 'bg-secondary'
+                  )}
+                >
+                  <div
+                    class={cn(
+                      'vtab-dot rounded-full transition-all duration-200',
+                      isActive
+                        ? 'w-2.5 h-2.5 bg-brand-500'
+                        : 'w-1.5 h-1.5 bg-foreground-subtle group-hover:w-2 group-hover:h-2'
+                    )}
+                  />
+                </div>
+              )}
+              <div class="flex-1 min-w-0 py-0.5">
+                <span
+                  class={cn(
+                    'vtab-label block font-medium transition-colors duration-150',
+                    isActive ? 'text-foreground' : 'text-foreground-secondary group-hover:text-foreground'
+                  )}
+                >
+                  {tab.label}
+                </span>
+                {tab.description && (
+                  <span
+                    class={cn(
+                      'vtab-desc block text-sm mt-0.5 transition-colors duration-150',
+                      isActive ? 'text-foreground-muted' : 'text-foreground-subtle group-hover:text-foreground-muted'
+                    )}
+                  >
+                    {tab.description}
+                  </span>
+                )}
+              </div>
+              <div
+                class={cn(
+                  'vtab-indicator w-1 rounded-full transition-all duration-200 shrink-0',
+                  isActive
+                    ? 'h-8 bg-brand-500'
+                    : 'h-0 group-hover:h-4 group-hover:bg-brand-500/25'
+                )}
+              />
+            </button>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- Sheet Panel (for sheet variant) - hidden by default -->
+    <div
+      class="hidden fixed inset-0 z-40 bg-background/60 backdrop-blur-sm animate-backdrop"
+      data-vtab-sheet-backdrop
+      aria-hidden="true"
+    ></div>
+    <div
+      id={`vtab-sheet-${componentId}`}
+      role="listbox"
+      class="hidden fixed inset-x-0 bottom-0 z-50 max-h-[70vh] overflow-auto rounded-t-2xl border-t border-border bg-background shadow-2xl pb-safe animate-sheet-up"
+      data-vtab-panel-sheet
+    >
+      <!-- Drag Handle -->
+      <div class="sticky top-0 flex justify-center py-3 bg-background z-10">
+        <div class="w-10 h-1 rounded-full bg-border"></div>
+      </div>
+      <!-- Header -->
+      <div class="px-4 pb-2">
+        <h3 class="text-sm font-medium text-foreground-muted">Select Tab</h3>
+      </div>
+      <!-- Options -->
+      <div class="px-2 pb-4 flex flex-col gap-1">
+        {tabs.map((tab: Tab) => {
+          const isActive = tab.id === defaultValue;
+          return (
+            <button
+              type="button"
+              role="option"
+              aria-selected={isActive ? 'true' : 'false'}
+              data-vtab-sheet-option={tab.id}
+              data-vtab-option-icon={tab.icon || ''}
+              data-vtab-option-label={tab.label}
+              data-vtab-option-desc={tab.description || ''}
+              class={cn(
+                'vtab-option group relative w-full flex items-center gap-3 p-4 text-left',
+                'transition-all duration-200',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-1',
+                'rounded-xl',
+                isActive
+                  ? 'vtab-option-active bg-secondary/80 shadow-[inset_0_1px_3px_rgba(0,0,0,0.08)] dark:shadow-[inset_0_1px_3px_rgba(0,0,0,0.25)]'
+                  : 'hover:bg-background-secondary hover:translate-x-0.5'
+              )}
+            >
+              {tab.icon ? (
+                <div
+                  class={cn(
+                    'vtab-icon-container relative flex items-center justify-center',
+                    'w-10 h-10 rounded-xl shrink-0',
+                    'transition-all duration-200',
+                    isActive
+                      ? 'bg-brand-100 dark:bg-brand-900/40 ring-1 ring-brand-200 dark:ring-brand-800'
+                      : 'bg-secondary group-hover:bg-secondary-hover scale-[0.97] group-hover:scale-105'
+                  )}
+                  data-vtab-icon-container
+                >
+                  <Icon
+                    name={tab.icon}
+                    size="md"
+                    class={cn(
+                      'vtab-icon transition-all duration-200',
+                      isActive ? 'text-brand-600 dark:text-brand-400 scale-105' : 'text-foreground-muted group-hover:text-foreground-secondary'
+                    )}
+                  />
+                </div>
+              ) : (
+                <div
+                  class={cn(
+                    'w-10 h-10 rounded-xl shrink-0 flex items-center justify-center',
+                    'transition-all duration-200',
+                    isActive ? 'bg-brand-100 dark:bg-brand-900/40' : 'bg-secondary'
+                  )}
+                  data-vtab-icon-container
+                >
+                  <div
+                    class={cn(
+                      'vtab-dot rounded-full transition-all duration-200',
+                      isActive
+                        ? 'w-2.5 h-2.5 bg-brand-500'
+                        : 'w-1.5 h-1.5 bg-foreground-subtle group-hover:w-2 group-hover:h-2'
+                    )}
+                  />
+                </div>
+              )}
+              <div class="flex-1 min-w-0 py-0.5">
+                <span
+                  class={cn(
+                    'vtab-label block font-medium transition-colors duration-150',
+                    isActive ? 'text-foreground' : 'text-foreground-secondary group-hover:text-foreground'
+                  )}
+                >
+                  {tab.label}
+                </span>
+                {tab.description && (
+                  <span
+                    class={cn(
+                      'vtab-desc block text-sm mt-0.5 transition-colors duration-150',
+                      isActive ? 'text-foreground-muted' : 'text-foreground-subtle group-hover:text-foreground-muted'
+                    )}
+                  >
+                    {tab.description}
+                  </span>
+                )}
+              </div>
+              <div
+                class={cn(
+                  'vtab-indicator w-1 rounded-full transition-all duration-200 shrink-0',
+                  isActive
+                    ? 'h-8 bg-brand-500'
+                    : 'h-0 group-hover:h-4 group-hover:bg-brand-500/25'
+                )}
+              />
+            </button>
+          );
+        })}
       </div>
     </div>
   </div>
@@ -163,9 +402,22 @@ const componentId = Math.random().toString(36).substring(2, 9);
     document.querySelectorAll('[data-vtabs]').forEach((container) => {
       const componentId = container.getAttribute('data-component-id');
       const defaultTab = container.getAttribute('data-default');
+      const mobileVariant = container.getAttribute('data-mobile-variant') || 'dropdown';
       const triggers = container.querySelectorAll<HTMLButtonElement>('[data-vtab-trigger]');
-      const select = container.querySelector<HTMLSelectElement>('[data-vtab-select]');
       const contentElements = container.querySelectorAll<HTMLElement>('[data-tab-content]');
+
+      // Mobile dropdown elements
+      const mobileTrigger = container.querySelector<HTMLButtonElement>('[data-vtab-trigger-mobile]');
+      const dropdownPanel = container.querySelector<HTMLElement>('[data-vtab-panel-dropdown]');
+      const dropdownBackdrop = container.querySelector<HTMLElement>('[data-vtab-dropdown-backdrop]');
+      const sheetPanel = container.querySelector<HTMLElement>('[data-vtab-panel-sheet]');
+      const sheetBackdrop = container.querySelector<HTMLElement>('[data-vtab-sheet-backdrop]');
+      const chevron = container.querySelector<SVGElement>('[data-vtab-chevron]');
+      const dropdownOptions = container.querySelectorAll<HTMLButtonElement>('[data-vtab-option]');
+      const sheetOptions = container.querySelectorAll<HTMLButtonElement>('[data-vtab-sheet-option]');
+
+      let isOpen = false;
+      let currentActiveTab = defaultTab;
 
       // Initialize content panels
       contentElements.forEach((el) => {
@@ -179,7 +431,156 @@ const componentId = Math.random().toString(36).substring(2, 9);
         el.setAttribute('tabindex', '0');
       });
 
+      function toggleMobileDropdown(open?: boolean) {
+        isOpen = open !== undefined ? open : !isOpen;
+
+        if (mobileTrigger) {
+          mobileTrigger.setAttribute('aria-expanded', String(isOpen));
+          if (isOpen) {
+            mobileTrigger.classList.add('shadow-md', 'border-brand-300/50', 'dark:border-brand-700/50');
+          } else {
+            mobileTrigger.classList.remove('shadow-md', 'border-brand-300/50', 'dark:border-brand-700/50');
+          }
+        }
+
+        if (chevron) {
+          chevron.style.transform = isOpen ? 'rotate(180deg)' : '';
+        }
+
+        if (mobileVariant === 'dropdown') {
+          if (dropdownBackdrop) {
+            dropdownBackdrop.classList.toggle('hidden', !isOpen);
+          }
+          if (dropdownPanel) {
+            dropdownPanel.classList.toggle('hidden', !isOpen);
+            if (isOpen) {
+              dropdownPanel.classList.add('animate-in', 'fade-in', 'slide-in-from-top-2', 'duration-200');
+            }
+          }
+        } else if (mobileVariant === 'sheet') {
+          if (sheetBackdrop) {
+            sheetBackdrop.classList.toggle('hidden', !isOpen);
+            if (isOpen) {
+              sheetBackdrop.classList.add('animate-in', 'fade-in', 'duration-200');
+            }
+          }
+          if (sheetPanel) {
+            sheetPanel.classList.toggle('hidden', !isOpen);
+            if (isOpen) {
+              sheetPanel.classList.add('animate-in', 'slide-in-from-bottom', 'duration-300');
+            }
+          }
+        }
+      }
+
+      function updateMobileTrigger(tab: { id: string; icon?: string; label: string; description?: string }) {
+        const triggerLabel = container.querySelector('[data-vtab-trigger-label]');
+        const triggerDesc = container.querySelector('[data-vtab-trigger-desc]');
+
+        if (triggerLabel) {
+          triggerLabel.textContent = tab.label;
+        }
+        if (triggerDesc) {
+          triggerDesc.textContent = tab.description || '';
+        }
+      }
+
+      function updateMobileOptions(activeId: string) {
+        // Update all options (both dropdown and sheet use same structure now)
+        const allOptions = [...dropdownOptions, ...sheetOptions];
+
+        allOptions.forEach((option) => {
+          const optionId = option.getAttribute('data-vtab-option') || option.getAttribute('data-vtab-sheet-option');
+          const isActive = optionId === activeId;
+          const iconContainer = option.querySelector('[data-vtab-icon-container]') || option.querySelector('.vtab-icon-container');
+          const icon = option.querySelector('.vtab-icon');
+          const dot = option.querySelector('.vtab-dot');
+          const label = option.querySelector('.vtab-label');
+          const desc = option.querySelector('.vtab-desc');
+          const indicator = option.querySelector('.vtab-indicator');
+
+          option.setAttribute('aria-selected', String(isActive));
+
+          // Update option container
+          if (isActive) {
+            option.classList.add('vtab-option-active', 'bg-secondary/80');
+            option.classList.remove('hover:bg-background-secondary', 'hover:translate-x-0.5');
+          } else {
+            option.classList.remove('vtab-option-active', 'bg-secondary/80');
+            option.classList.add('hover:bg-background-secondary', 'hover:translate-x-0.5');
+          }
+
+          // Update icon container
+          if (iconContainer) {
+            if (isActive) {
+              iconContainer.classList.add('bg-brand-100', 'dark:bg-brand-900/40', 'ring-1', 'ring-brand-200', 'dark:ring-brand-800');
+              iconContainer.classList.remove('bg-secondary', 'scale-[0.97]');
+            } else {
+              iconContainer.classList.remove('bg-brand-100', 'dark:bg-brand-900/40', 'ring-1', 'ring-brand-200', 'dark:ring-brand-800');
+              iconContainer.classList.add('bg-secondary', 'scale-[0.97]');
+            }
+          }
+
+          // Update icon
+          if (icon) {
+            if (isActive) {
+              icon.classList.add('text-brand-600', 'dark:text-brand-400', 'scale-105');
+              icon.classList.remove('text-foreground-muted');
+            } else {
+              icon.classList.remove('text-brand-600', 'dark:text-brand-400', 'scale-105');
+              icon.classList.add('text-foreground-muted');
+            }
+          }
+
+          // Update dot (for options without icons)
+          if (dot) {
+            if (isActive) {
+              dot.classList.add('w-2.5', 'h-2.5', 'bg-brand-500');
+              dot.classList.remove('w-1.5', 'h-1.5', 'bg-foreground-subtle');
+            } else {
+              dot.classList.remove('w-2.5', 'h-2.5', 'bg-brand-500');
+              dot.classList.add('w-1.5', 'h-1.5', 'bg-foreground-subtle');
+            }
+          }
+
+          // Update label
+          if (label) {
+            if (isActive) {
+              label.classList.add('text-foreground');
+              label.classList.remove('text-foreground-secondary');
+            } else {
+              label.classList.remove('text-foreground');
+              label.classList.add('text-foreground-secondary');
+            }
+          }
+
+          // Update description
+          if (desc) {
+            if (isActive) {
+              desc.classList.add('text-foreground-muted');
+              desc.classList.remove('text-foreground-subtle');
+            } else {
+              desc.classList.remove('text-foreground-muted');
+              desc.classList.add('text-foreground-subtle');
+            }
+          }
+
+          // Update indicator bar
+          if (indicator) {
+            if (isActive) {
+              indicator.classList.add('h-8', 'opacity-100');
+              indicator.classList.remove('h-0', 'opacity-0');
+            } else {
+              indicator.classList.remove('h-8', 'opacity-100');
+              indicator.classList.add('h-0', 'opacity-0');
+            }
+          }
+        });
+      }
+
       function activateTab(id: string) {
+        currentActiveTab = id;
+
         // Update desktop triggers
         triggers.forEach((trigger) => {
           const triggerId = trigger.getAttribute('data-vtab-trigger');
@@ -222,17 +623,88 @@ const componentId = Math.random().toString(36).substring(2, 9);
           }
         });
 
-        // Update mobile select
-        if (select) {
-          select.value = id;
+        // Update mobile trigger and options
+        const activeOption = container.querySelector(`[data-vtab-option="${id}"]`) || container.querySelector(`[data-vtab-sheet-option="${id}"]`);
+        if (activeOption) {
+          const label = activeOption.getAttribute('data-vtab-option-label') || '';
+          const desc = activeOption.getAttribute('data-vtab-option-desc') || '';
+          const icon = activeOption.getAttribute('data-vtab-option-icon') || '';
+          updateMobileTrigger({ id, icon, label, description: desc });
         }
+        updateMobileOptions(id);
 
         // Update content panels
         contentElements.forEach((el) => {
           const isActive = el.getAttribute('data-tab-content') === id;
           el.classList.toggle('hidden', !isActive);
         });
+
+        // Close dropdown
+        toggleMobileDropdown(false);
       }
+
+      // Mobile trigger click handler
+      if (mobileTrigger) {
+        mobileTrigger.addEventListener('click', () => {
+          toggleMobileDropdown();
+        });
+
+        // Keyboard navigation for mobile trigger
+        mobileTrigger.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            toggleMobileDropdown(true);
+          } else if (e.key === 'Escape') {
+            toggleMobileDropdown(false);
+          }
+        });
+      }
+
+      // Click outside to close dropdown
+      document.addEventListener('click', (e) => {
+        const dropdownContainer = container.querySelector('[data-vtab-dropdown-container]');
+        if (isOpen && dropdownContainer && !dropdownContainer.contains(e.target as Node)) {
+          toggleMobileDropdown(false);
+        }
+      });
+
+      // Dropdown backdrop click to close
+      if (dropdownBackdrop) {
+        dropdownBackdrop.addEventListener('click', () => {
+          toggleMobileDropdown(false);
+        });
+      }
+
+      // Sheet backdrop click to close
+      if (sheetBackdrop) {
+        sheetBackdrop.addEventListener('click', () => {
+          toggleMobileDropdown(false);
+        });
+      }
+
+      // Escape key to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isOpen) {
+          toggleMobileDropdown(false);
+          mobileTrigger?.focus();
+        }
+      });
+
+      // Dropdown option click handlers
+      dropdownOptions.forEach((option) => {
+        option.addEventListener('click', () => {
+          const id = option.getAttribute('data-vtab-option');
+          if (id) activateTab(id);
+        });
+      });
+
+      // Sheet option click handlers
+      sheetOptions.forEach((option) => {
+        option.addEventListener('click', () => {
+          const id = option.getAttribute('data-vtab-sheet-option');
+          if (id) activateTab(id);
+        });
+      });
 
       // Click handlers for desktop triggers
       triggers.forEach((trigger) => {
@@ -273,13 +745,6 @@ const componentId = Math.random().toString(36).substring(2, 9);
           }
         });
       });
-
-      // Change handler for mobile select
-      if (select) {
-        select.addEventListener('change', () => {
-          activateTab(select.value);
-        });
-      }
     });
   }
 

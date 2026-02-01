@@ -1,14 +1,5 @@
 import { useState } from 'react';
-import {
-  Palette,
-  Search,
-  Zap,
-  LayoutGrid,
-  Globe,
-  Copy,
-  Check,
-  Newspaper,
-} from 'lucide-react';
+import { Palette, Search, Zap, LayoutGrid, Globe, Copy, Check, Newspaper } from 'lucide-react';
 import { VerticalTabs, type VerticalTab } from '@/components/ui/VerticalTabs';
 
 interface TabContent {
@@ -25,7 +16,7 @@ const tabContent: Record<string, TabContent> = {
   seo: {
     title: 'Automated SEO Handling',
     content:
-      "Strictly typed metadata injection for every page with automatic OG image generation. Includes sitemap, robots.txt, and JSON-LD structured data.",
+      'Strictly typed metadata injection for every page with automatic OG image generation. Includes sitemap, robots.txt, and JSON-LD structured data.',
   },
   perf: {
     title: 'Zero JS by Default',
@@ -429,7 +420,12 @@ const tabs: VerticalTab[] = [
   { id: 'theming', label: 'Theming', description: 'Design tokens & dark mode', icon: Palette },
   { id: 'seo', label: 'SEO & Meta', description: 'OG images & structured data', icon: Search },
   { id: 'perf', label: 'Performance', description: 'Zero JS by default', icon: Zap },
-  { id: 'components', label: 'Components', description: 'Type-safe UI primitives', icon: LayoutGrid },
+  {
+    id: 'components',
+    label: 'Components',
+    description: 'Type-safe UI primitives',
+    icon: LayoutGrid,
+  },
   { id: 'i18n', label: 'i18n Ready', description: 'Optional multi-language', icon: Globe },
   { id: 'content', label: 'Content', description: 'Blog, MDX & search', icon: Newspaper },
 ];
@@ -444,13 +440,22 @@ export function FeatureTabs() {
     <section id="features" className="bg-background relative overflow-hidden py-24">
       {/* Decorative logomark watermark */}
       <div
-        className="pointer-events-none absolute -top-8 right-8 hidden h-[28rem] w-[28rem] opacity-[0.04] grayscale md:block lg:-top-12 lg:right-24 lg:h-[44rem] lg:w-[44rem] dark:opacity-[0.06]"
+        className="pointer-events-none absolute -top-8 right-8 hidden h-[28rem] w-[28rem] opacity-[0.04] grayscale md:block lg:top-10 lg:right-24 lg:h-[44rem] lg:w-[44rem] dark:opacity-[0.06]"
         aria-hidden="true"
       >
         <svg viewBox="0 0 90 101" fill="none" className="h-full w-full">
-          <path d="M35.1288 23.8398L45.1667 49.4151L56.2482 23.8398H87.1082C86.5647 23.3764 85.9776 22.9637 85.3616 22.5944L48.6165 0.704798C46.377 -0.0699896 43.4273 -0.439281 41.2675 0.842377L3.36286 23.3692C3.13819 23.5067 2.92801 23.666 2.72508 23.8326H35.1288V23.8398Z" fill="currentColor"/>
-          <path d="M0.144951 28.8578C0.079723 29.2851 0.0434853 29.7123 0.0434853 30.1323L0 72.036C0 76.1778 1.95684 78.3936 5.26172 80.3631L39.4919 100.703L0.144951 28.8578Z" fill="currentColor"/>
-          <path d="M89.9203 28.7058L50.0588 101L86.6661 79.1539C88.7027 77.9374 90 75.0265 90 72.6442L89.9783 29.6037C89.9783 29.2923 89.9493 28.9954 89.913 28.6985L89.9203 28.7058Z" fill="currentColor"/>
+          <path
+            d="M35.1288 23.8398L45.1667 49.4151L56.2482 23.8398H87.1082C86.5647 23.3764 85.9776 22.9637 85.3616 22.5944L48.6165 0.704798C46.377 -0.0699896 43.4273 -0.439281 41.2675 0.842377L3.36286 23.3692C3.13819 23.5067 2.92801 23.666 2.72508 23.8326H35.1288V23.8398Z"
+            fill="currentColor"
+          />
+          <path
+            d="M0.144951 28.8578C0.079723 29.2851 0.0434853 29.7123 0.0434853 30.1323L0 72.036C0 76.1778 1.95684 78.3936 5.26172 80.3631L39.4919 100.703L0.144951 28.8578Z"
+            fill="currentColor"
+          />
+          <path
+            d="M89.9203 28.7058L50.0588 101L86.6661 79.1539C88.7027 77.9374 90 75.0265 90 72.6442L89.9783 29.6037C89.9783 29.2923 89.9493 28.9954 89.913 28.6985L89.9203 28.7058Z"
+            fill="currentColor"
+          />
         </svg>
       </div>
 
@@ -469,11 +474,7 @@ export function FeatureTabs() {
         </div>
 
         {/* Vertical Tabs */}
-        <VerticalTabs
-          tabs={tabs}
-          value={activeTab}
-          onChange={setActiveTab}
-        >
+        <VerticalTabs tabs={tabs} value={activeTab} onChange={setActiveTab} mobileVariant="sheet">
           {tabs.map((tab) => (
             <div key={tab.id} data-tab-content={tab.id}>
               <div className="mb-6">
