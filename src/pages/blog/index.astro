@@ -33,10 +33,7 @@ const getPostUrl = (postId: string) => {
 };
 ---
 
-<BaseLayout
-  title="Blog"
-  description="Latest articles and updates"
->
+<BaseLayout title="Blog" description="Latest articles and updates">
   <Header
     slot="header"
     position="fixed"
@@ -44,6 +41,7 @@ const getPostUrl = (postId: string) => {
     showActiveState
     showCta
     cta={{ label: 'Get Started', href: '/#cta' }}
+    extraNav={[{ label: 'Features', href: '#features' }]}
     actions={[
       {
         icon: 'github',
@@ -64,92 +62,92 @@ const getPostUrl = (postId: string) => {
     showBlob
     blobPosition="left"
     titleElement="h1"
-    class="border-b border-border"
+    class="border-border border-b"
   >
     <Fragment slot="badge">
       <Icon name="book" size="sm" class="text-brand-500 mr-2" />
-      <span class="text-xs font-medium text-foreground-secondary">All posts</span>
+      <span class="text-foreground-secondary text-xs font-medium">All posts</span>
     </Fragment>
     <Fragment slot="title">Blog</Fragment>
-    <Fragment slot="description">
-      Latest articles and updates
-    </Fragment>
+    <Fragment slot="description"> Latest articles and updates </Fragment>
   </Hero>
 
   <!-- Featured Posts Section -->
-  {featuredPosts.length > 0 && (
-    <section class="py-16 bg-background">
-      <div class="mx-auto max-w-6xl px-6">
-        <h2 class="font-display text-2xl font-bold text-foreground mb-8 flex items-center gap-2">
-          <svg class="h-6 w-6 text-brand-500" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          Featured
-        </h2>
+  {
+    featuredPosts.length > 0 && (
+      <section class="bg-background py-16">
+        <div class="mx-auto max-w-6xl px-6">
+          <h2 class="font-display text-foreground mb-8 flex items-center gap-2 text-2xl font-bold">
+            <svg class="text-brand-500 h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            Featured
+          </h2>
 
-        <div class="grid gap-6 md:grid-cols-2">
-          {featuredPosts.map((post) => (
-            <BlogCard
-              title={post.data.title}
-              description={post.data.description}
-              href={getPostUrl(post.id)}
-              publishedAt={post.data.publishedAt}
-              tags={post.data.tags}
-              author={post.data.author}
-              image={post.data.image?.src}
-              featured={true}
-            />
-          ))}
+          <div class="grid gap-6 md:grid-cols-2">
+            {featuredPosts.map((post) => (
+              <BlogCard
+                title={post.data.title}
+                description={post.data.description}
+                href={getPostUrl(post.id)}
+                publishedAt={post.data.publishedAt}
+                tags={post.data.tags}
+                author={post.data.author}
+                image={post.data.image?.src}
+                featured={true}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
-  )}
+      </section>
+    )
+  }
 
   <!-- All Posts Section -->
-  <section class="py-16 bg-background-secondary">
+  <section class="bg-background-secondary py-16">
     <div class="mx-auto max-w-6xl px-6">
-      {(featuredPosts.length > 0 && nonFeaturedPosts.length > 0) && (
-        <h2 class="font-display text-2xl font-bold text-foreground mb-8">
-          All posts
-        </h2>
-      )}
+      {
+        featuredPosts.length > 0 && nonFeaturedPosts.length > 0 && (
+          <h2 class="font-display text-foreground mb-8 text-2xl font-bold">All posts</h2>
+        )
+      }
 
-      {regularPosts.length > 0 ? (
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {regularPosts.map((post) => (
-            <BlogCard
-              title={post.data.title}
-              description={post.data.description}
-              href={getPostUrl(post.id)}
-              publishedAt={post.data.publishedAt}
-              tags={post.data.tags}
-              author={post.data.author}
-              image={post.data.image?.src}
-            />
-          ))}
-        </div>
-      ) : posts.length === 0 ? (
-        <div class="text-center py-16">
-          <div class="mx-auto w-16 h-16 rounded-full bg-background flex items-center justify-center mb-4">
-            <Icon name="file-text" size="lg" class="text-foreground-muted" />
+      {
+        regularPosts.length > 0 ? (
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {regularPosts.map((post) => (
+              <BlogCard
+                title={post.data.title}
+                description={post.data.description}
+                href={getPostUrl(post.id)}
+                publishedAt={post.data.publishedAt}
+                tags={post.data.tags}
+                author={post.data.author}
+                image={post.data.image?.src}
+              />
+            ))}
           </div>
-          <p class="text-foreground-muted text-lg">No posts found</p>
-        </div>
-      ) : null}
+        ) : posts.length === 0 ? (
+          <div class="py-16 text-center">
+            <div class="bg-background mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+              <Icon name="file-text" size="lg" class="text-foreground-muted" />
+            </div>
+            <p class="text-foreground-muted text-lg">No posts found</p>
+          </div>
+        ) : null
+      }
     </div>
   </section>
 
   <!-- Newsletter CTA Section -->
-  <section class="py-20 bg-surface-invert text-on-invert">
+  <section class="bg-surface-invert text-on-invert py-20">
     <div class="mx-auto max-w-3xl px-6 text-center">
-      <h2 class="font-display text-3xl font-bold mb-4">
-        Subscribe
-      </h2>
-      <p class="text-on-invert-secondary text-lg mb-8">
+      <h2 class="font-display mb-4 text-3xl font-bold">Subscribe</h2>
+      <p class="text-on-invert-secondary mb-8 text-lg">
         Get the latest articles and updates delivered to your inbox.
       </p>
 
-      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto items-end">
+      <form class="mx-auto flex max-w-md flex-col items-end gap-4 sm:flex-row">
         <Input
           type="email"
           placeholder="Enter your email"

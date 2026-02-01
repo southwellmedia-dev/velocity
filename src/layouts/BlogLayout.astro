@@ -62,6 +62,7 @@ const fullUrl = new URL(Astro.url.pathname, Astro.site).toString();
     showActiveState
     showCta
     cta={{ label: 'Get Started', href: '/#cta' }}
+    extraNav={[{ label: 'Features', href: '#features' }]}
     actions={[
       {
         icon: 'github',
@@ -91,17 +92,19 @@ const fullUrl = new URL(Astro.url.pathname, Astro.site).toString();
       <Breadcrumbs items={breadcrumbs} class="mb-8" />
 
       <!-- Article Content -->
-      <div class="prose prose-lg max-w-none prose-headings:font-display prose-headings:font-bold prose-a:text-brand-600 hover:prose-a:text-brand-500 prose-code:text-brand-600 prose-code:bg-brand-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-background-secondary prose-pre:border prose-pre:border-border dark:prose-invert dark:prose-a:text-brand-400 dark:hover:prose-a:text-brand-300 dark:prose-code:text-brand-400 dark:prose-code:bg-brand-900/30">
+      <div
+        class="prose prose-lg prose-headings:font-display prose-headings:font-bold prose-a:text-brand-600 hover:prose-a:text-brand-500 prose-code:text-brand-600 prose-code:bg-brand-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-background-secondary prose-pre:border prose-pre:border-border dark:prose-invert dark:prose-a:text-brand-400 dark:hover:prose-a:text-brand-300 dark:prose-code:text-brand-400 dark:prose-code:bg-brand-900/30 max-w-none"
+      >
         <slot />
       </div>
 
       <!-- Article Footer -->
-      <footer class="mt-12 pt-8 border-t border-border">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+      <footer class="border-border mt-12 border-t pt-8">
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <!-- Back link -->
           <a
             href="/blog"
-            class="inline-flex items-center gap-2 text-sm font-medium text-brand-600 hover:text-brand-500 dark:text-brand-400 dark:hover:text-brand-300 transition-colors"
+            class="text-brand-600 hover:text-brand-500 dark:text-brand-400 dark:hover:text-brand-300 inline-flex items-center gap-2 text-sm font-medium transition-colors"
           >
             <svg
               class="h-4 w-4"
@@ -111,7 +114,8 @@ const fullUrl = new URL(Astro.url.pathname, Astro.site).toString();
               stroke="currentColor"
               stroke-width="2"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              ></path>
             </svg>
             Back to Blog
           </a>
@@ -124,16 +128,13 @@ const fullUrl = new URL(Astro.url.pathname, Astro.site).toString();
   </article>
 
   <!-- Related Posts -->
-  {tags.length > 0 && (
-    <div class="mx-auto max-w-6xl px-6 pb-16">
-      <RelatedPosts
-        currentSlug={slug}
-        tags={tags}
-        locale="en"
-        maxPosts={3}
-      />
-    </div>
-  )}
+  {
+    tags.length > 0 && (
+      <div class="mx-auto max-w-6xl px-6 pb-16">
+        <RelatedPosts currentSlug={slug} tags={tags} locale="en" maxPosts={3} />
+      </div>
+    )
+  }
 
   <Footer slot="footer" layout="simple" background="secondary" showCopyright={false} />
 </BaseLayout>
