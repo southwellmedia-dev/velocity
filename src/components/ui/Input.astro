@@ -9,17 +9,41 @@ interface Props extends HTMLAttributes<'input'> {
   hint?: string;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'invert';
+  /** Icon name to display at the start of the input */
+  leadingIcon?: string;
+  /** Icon name to display at the end of the input */
+  trailingIcon?: string;
 }
 
-const { label, error, hint, size = 'md', variant = 'default', class: className, id, ...attrs } = Astro.props;
+const { label, error, hint, size = 'md', variant = 'default', leadingIcon, trailingIcon, class: className, id, ...attrs } = Astro.props;
 
 const inputId = id || generateId('input');
 
-const sizes = {
-  sm: 'h-8 px-3 text-sm',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-4 text-base',
+const sizeConfig = {
+  sm: {
+    input: 'h-8 text-sm',
+    iconWrapper: 'w-8',
+    leadingPadding: 'pl-8',
+    trailingPadding: 'pr-8',
+    basePadding: 'px-3',
+  },
+  md: {
+    input: 'h-10 text-sm',
+    iconWrapper: 'w-10',
+    leadingPadding: 'pl-10',
+    trailingPadding: 'pr-10',
+    basePadding: 'px-4',
+  },
+  lg: {
+    input: 'h-12 text-base',
+    iconWrapper: 'w-12',
+    leadingPadding: 'pl-12',
+    trailingPadding: 'pr-12',
+    basePadding: 'px-4',
+  },
 };
+
+const config = sizeConfig[size];
 
 const variants = {
   default: cn(
@@ -41,7 +65,15 @@ const inputStyles = cn(
   'focus-visible:outline-none focus-visible:ring-2',
   'disabled:cursor-not-allowed disabled:opacity-50',
   variants[variant],
-  sizes[size]
+  config.input,
+  leadingIcon ? config.leadingPadding : config.basePadding,
+  trailingIcon && config.trailingPadding
+);
+
+const iconStyles = cn(
+  'absolute top-0 flex items-center justify-center h-full pointer-events-none',
+  'text-foreground-muted',
+  config.iconWrapper
 );
 
 const labelStyles = cn(
@@ -53,6 +85,9 @@ const hintStyles = cn(
   'text-sm',
   variant === 'invert' ? 'text-on-invert-muted' : 'text-muted-foreground'
 );
+
+// Dynamic icon import
+import Icon from './Icon.astro';
 ---
 
 <div class={cn('space-y-1.5', className)}>
@@ -64,13 +99,31 @@ const hintStyles = cn(
     )
   }
 
-  <input
-    id={inputId}
-    class={inputStyles}
-    aria-invalid={error ? 'true' : undefined}
-    aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
-    {...attrs}
-  />
+  <div class="relative">
+    {
+      leadingIcon && (
+        <div class={cn(iconStyles, 'left-0')}>
+          <Icon name={leadingIcon} size="sm" />
+        </div>
+      )
+    }
+
+    <input
+      id={inputId}
+      class={inputStyles}
+      aria-invalid={error ? 'true' : undefined}
+      aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+      {...attrs}
+    />
+
+    {
+      trailingIcon && (
+        <div class={cn(iconStyles, 'right-0')}>
+          <Icon name={trailingIcon} size="sm" />
+        </div>
+      )
+    }
+  </div>
 
   {
     error && (

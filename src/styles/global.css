@@ -544,7 +544,9 @@
   /* Position: Top (default) */
   [data-tooltip-position="top"] .tooltip-bubble {
     bottom: calc(100% + 8px);
+    top: auto;
     left: 50%;
+    right: auto;
     transform: translateX(-50%) scale(0.96);
   }
   [data-tooltip-position="top"] .tooltip-bubble.visible {
@@ -554,7 +556,9 @@
   /* Position: Bottom */
   [data-tooltip-position="bottom"] .tooltip-bubble {
     top: calc(100% + 8px);
+    bottom: auto;
     left: 50%;
+    right: auto;
     transform: translateX(-50%) scale(0.96);
   }
   [data-tooltip-position="bottom"] .tooltip-bubble.visible {
@@ -564,7 +568,9 @@
   /* Position: Left */
   [data-tooltip-position="left"] .tooltip-bubble {
     right: calc(100% + 8px);
+    left: auto;
     top: 50%;
+    bottom: auto;
     transform: translateY(-50%) scale(0.96);
   }
   [data-tooltip-position="left"] .tooltip-bubble.visible {
@@ -574,7 +580,9 @@
   /* Position: Right */
   [data-tooltip-position="right"] .tooltip-bubble {
     left: calc(100% + 8px);
+    right: auto;
     top: 50%;
+    bottom: auto;
     transform: translateY(-50%) scale(0.96);
   }
   [data-tooltip-position="right"] .tooltip-bubble.visible {
@@ -585,57 +593,5 @@
   .tooltip-bubble.visible {
     opacity: 1;
     visibility: visible;
-  }
-
-  /* Modern browsers with anchor positioning support */
-  @supports (position-area: top) {
-    .tooltip-bubble {
-      position: fixed;
-      position-try-fallbacks: flip-block, flip-inline;
-    }
-
-    [data-tooltip-position="top"] .tooltip-bubble {
-      position-area: top;
-      margin-bottom: 8px;
-      left: auto;
-      bottom: auto;
-      transform: scale(0.96);
-    }
-    [data-tooltip-position="top"] .tooltip-bubble.visible {
-      transform: scale(1);
-    }
-
-    [data-tooltip-position="bottom"] .tooltip-bubble {
-      position-area: bottom;
-      margin-top: 8px;
-      left: auto;
-      top: auto;
-      transform: scale(0.96);
-    }
-    [data-tooltip-position="bottom"] .tooltip-bubble.visible {
-      transform: scale(1);
-    }
-
-    [data-tooltip-position="left"] .tooltip-bubble {
-      position-area: left;
-      margin-right: 8px;
-      right: auto;
-      top: auto;
-      transform: scale(0.96);
-    }
-    [data-tooltip-position="left"] .tooltip-bubble.visible {
-      transform: scale(1);
-    }
-
-    [data-tooltip-position="right"] .tooltip-bubble {
-      position-area: right;
-      margin-left: 8px;
-      left: auto;
-      top: auto;
-      transform: scale(0.96);
-    }
-    [data-tooltip-position="right"] .tooltip-bubble.visible {
-      transform: scale(1);
-    }
   }
 }

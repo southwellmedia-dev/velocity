@@ -74,7 +74,7 @@ export function Radio({ ref, label, description, error, variant = 'default', cla
 
           {/* Content */}
           {(label || description) && (
-            <div className="flex-1 grid gap-1">
+            <div className="flex-1 grid gap-0.5">
               {label && (
                 <span className="text-sm font-semibold text-foreground">
                   {label}
@@ -83,7 +83,7 @@ export function Radio({ ref, label, description, error, variant = 'default', cla
               {description && (
                 <span
                   id={`${radioId}-description`}
-                  className="text-sm text-foreground-muted leading-relaxed"
+                  className="text-xs text-foreground-subtle leading-normal"
                 >
                   {description}
                 </span>
@@ -148,7 +148,7 @@ export function Radio({ ref, label, description, error, variant = 'default', cla
 
         {/* Label and description */}
         {(label || description) && (
-          <div className="grid gap-1 leading-tight">
+          <div className="grid gap-0.5 leading-tight">
             {label && (
               <span className="text-sm font-medium text-foreground">
                 {label}
@@ -157,7 +157,7 @@ export function Radio({ ref, label, description, error, variant = 'default', cla
             {description && (
               <span
                 id={`${radioId}-description`}
-                className="text-sm text-foreground-muted leading-snug"
+                className="text-xs text-foreground-subtle leading-normal"
               >
                 {description}
               </span>

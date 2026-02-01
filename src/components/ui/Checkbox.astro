@@ -9,55 +9,89 @@ interface Props extends HTMLAttributes<'input'> {
   error?: string;
 }
 
-const { label, description, error, class: className, id, ...attrs } = Astro.props;
+const { label, description, error, class: className, id, disabled, ...attrs } = Astro.props;
 
 const checkboxId = id || generateId('checkbox');
-
-const checkboxStyles = cn(
-  'h-4 w-4 shrink-0 rounded border border-border',
-  'transition-colors duration-[--transition-fast]',
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-  'disabled:cursor-not-allowed disabled:opacity-50',
-  'checked:bg-primary checked:border-primary checked:text-primary-foreground',
-  error && 'border-destructive focus-visible:ring-destructive'
-);
 ---
 
-<div class={cn('flex items-start gap-3', className)}>
-  <input
-    type="checkbox"
-    id={checkboxId}
-    class={checkboxStyles}
-    aria-invalid={error ? 'true' : undefined}
-    aria-describedby={description ? `${checkboxId}-description` : undefined}
-    {...attrs}
-  />
+<div class={cn('group', className)}>
+  <label
+    for={checkboxId}
+    class={cn(
+      'relative flex items-start gap-3 cursor-pointer',
+      'select-none',
+      disabled && 'cursor-not-allowed opacity-50'
+    )}
+  >
+    <!-- Custom checkbox visual -->
+    <div class="relative flex items-center justify-center mt-0.5">
+      <input
+        type="checkbox"
+        id={checkboxId}
+        class="peer sr-only"
+        aria-invalid={error ? 'true' : undefined}
+        aria-describedby={description ? `${checkboxId}-description` : undefined}
+        disabled={disabled}
+        {...attrs}
+      />
+      <!-- Checkbox box -->
+      <div
+        class={cn(
+          'h-[18px] w-[18px] shrink-0 rounded-[5px]',
+          'border-2 border-border',
+          'bg-background',
+          'transition-all duration-150 ease-out',
+          'peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background',
+          'peer-checked:bg-foreground peer-checked:border-foreground',
+          'group-hover:border-foreground-muted',
+          'peer-checked:group-hover:bg-foreground/90',
+          error && 'border-destructive peer-focus-visible:ring-destructive'
+        )}
+      />
+      <!-- Checkmark icon -->
+      <svg
+        class={cn(
+          'absolute h-3 w-3 text-background',
+          'opacity-0 scale-50',
+          'transition-all duration-150 ease-out',
+          'peer-checked:opacity-100 peer-checked:scale-100'
+        )}
+        viewBox="0 0 12 12"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M2.5 6L5 8.5L9.5 3.5" />
+      </svg>
+    </div>
+
+    <!-- Label and description -->
+    {
+      (label || description) && (
+        <div class="grid gap-0.5 leading-tight">
+          {label && (
+            <span class="text-sm font-medium text-foreground">
+              {label}
+            </span>
+          )}
+          {description && (
+            <span
+              id={`${checkboxId}-description`}
+              class="text-xs text-foreground-subtle leading-normal"
+            >
+              {description}
+            </span>
+          )}
+        </div>
+      )
+    }
+  </label>
 
   {
-    (label || description) && (
-      <div class="grid gap-1.5 leading-none">
-        {label && (
-          <label
-            for={checkboxId}
-            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            {label}
-          </label>
-        )}
-        {description && (
-          <p id={`${checkboxId}-description`} class="text-sm text-muted-foreground">
-            {description}
-          </p>
-        )}
-      </div>
+    error && (
+      <p class="mt-2 text-sm text-destructive pl-[30px]">{error}</p>
     )
   }
 </div>
-
-{
-  error && (
-    <p class="mt-1.5 text-sm text-destructive">
-      {error}
-    </p>
-  )
-}

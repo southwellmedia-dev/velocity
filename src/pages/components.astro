@@ -424,6 +424,19 @@ const categories = [
             </div>
           </div>
 
+          <!-- Input with Icons -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Input with Icons</span>
+              <span class="showcase-hint">Leading & trailing icons</span>
+            </div>
+            <div class="showcase-content space-y-5">
+              <Input label="Search" placeholder="Search..." leadingIcon="search" />
+              <Input label="Email" type="email" placeholder="you@example.com" leadingIcon="mail" />
+              <Input label="Website" placeholder="https://example.com" leadingIcon="globe" trailingIcon="external-link" />
+            </div>
+          </div>
+
           <!-- Textarea -->
           <div class="component-showcase">
             <div class="showcase-header">
@@ -457,12 +470,26 @@ const categories = [
           <div class="component-showcase">
             <div class="showcase-header">
               <span class="showcase-label">Checkboxes</span>
-              <span class="showcase-hint">Multi-select controls</span>
+              <span class="showcase-hint">Custom styled controls</span>
             </div>
             <div class="showcase-content space-y-4">
               <Checkbox label="I agree to the terms of service" />
               <Checkbox label="Send me product updates" checked />
               <Checkbox label="Enable notifications" description="Receive alerts for important updates" />
+              <Checkbox label="Disabled checkbox" disabled />
+            </div>
+          </div>
+
+          <!-- Radio Buttons -->
+          <div class="component-showcase">
+            <div class="showcase-header">
+              <span class="showcase-label">Radio Buttons</span>
+              <span class="showcase-hint">Single-select controls</span>
+            </div>
+            <div class="showcase-content space-y-4">
+              <Radio name="notify-default" value="all" label="All notifications" checked />
+              <Radio name="notify-default" value="important" label="Important only" description="Only critical updates" />
+              <Radio name="notify-default" value="none" label="None" />
             </div>
           </div>
         </div>
@@ -681,56 +708,134 @@ const categories = [
       </div>
 
       <div class="space-y-6">
-        <!-- Cards -->
+        <!-- Card Variants -->
         <div class="component-showcase">
           <div class="showcase-header">
-            <span class="showcase-label">Cards</span>
-            <span class="showcase-hint">Content containers</span>
+            <span class="showcase-label">Card Variants</span>
+            <span class="showcase-hint">5 visual styles</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+              <Card variant="default" padding="sm">
+                <p class="text-sm font-medium text-foreground">Default</p>
+                <p class="text-xs text-foreground-muted mt-1">Standard bordered card</p>
+              </Card>
+              <Card variant="solid" padding="sm">
+                <p class="text-sm font-medium text-foreground">Solid</p>
+                <p class="text-xs text-foreground-muted mt-1">Filled background</p>
+              </Card>
+              <Card variant="outline" padding="sm">
+                <p class="text-sm font-medium text-foreground">Outline</p>
+                <p class="text-xs text-foreground-muted mt-1">Thick border, no fill</p>
+              </Card>
+              <Card variant="ghost" padding="sm">
+                <p class="text-sm font-medium text-foreground">Ghost</p>
+                <p class="text-xs text-foreground-muted mt-1">Transparent container</p>
+              </Card>
+              <Card variant="elevated" padding="sm">
+                <p class="text-sm font-medium text-foreground">Elevated</p>
+                <p class="text-xs text-foreground-muted mt-1">With shadow depth</p>
+              </Card>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards with Icon (Structured) -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Structured Cards</span>
+            <span class="showcase-hint">With icon, title, subtitle & description</span>
           </div>
           <div class="showcase-content">
             <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              <Card hover>
-                <div class="flex items-start gap-4">
-                  <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
-                    <Icon name="zap" size="md" />
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h3 class="text-base font-bold text-foreground">Performance</h3>
-                    <p class="text-xs text-foreground-subtle mt-0.5 font-medium">100/100 Lighthouse</p>
-                  </div>
-                </div>
-                <div class="mt-4">
-                  <p class="text-sm text-foreground-muted leading-relaxed">Zero JavaScript by default. Islands architecture with selective hydration for optimal speed.</p>
+              <Card hover title="Performance" subtitle="100/100 Lighthouse" description="Zero JavaScript by default. Islands architecture with selective hydration for optimal speed.">
+                <Icon name="zap" size="md" slot="icon" />
+              </Card>
+
+              <Card hover title="Type-Safe" subtitle="Full TypeScript" description="Strict types throughout with IDE autocompletion and compile-time error checking.">
+                <Icon name="shield" size="md" slot="icon" />
+              </Card>
+
+              <Card hover title="i18n Ready" subtitle="Multi-language" description="Built-in translation system with SEO-friendly URLs and automatic locale detection.">
+                <Icon name="globe" size="md" slot="icon" />
+              </Card>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards without Icon -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Simple Cards</span>
+            <span class="showcase-hint">Title only, no icon</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <Card hover title="Getting Started" description="Quick setup guide to get your project running in minutes.">
+              </Card>
+
+              <Card hover title="Documentation" description="Comprehensive API reference and usage examples.">
+              </Card>
+
+              <Card hover title="Community" description="Join our Discord server and connect with other developers.">
+              </Card>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Content Cards -->
+        <div class="component-showcase">
+          <div class="showcase-header">
+            <span class="showcase-label">Custom Layouts</span>
+            <span class="showcase-hint">Stats, profiles, actions</span>
+          </div>
+          <div class="showcase-content">
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <!-- Stats Card -->
+              <Card>
+                <div class="text-center">
+                  <p class="text-xs font-medium text-foreground-subtle uppercase tracking-wider">Total Revenue</p>
+                  <p class="text-3xl font-bold text-foreground mt-1">$45,231</p>
+                  <p class="text-xs text-success mt-2 flex items-center justify-center gap-1">
+                    <Icon name="arrow-right" size="xs" class="rotate-[-45deg]" />
+                    +12.5% from last month
+                  </p>
                 </div>
               </Card>
 
-              <Card hover>
-                <div class="flex items-start gap-4">
-                  <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
-                    <Icon name="shield" size="md" />
-                  </div>
+              <!-- User Profile Card -->
+              <Card>
+                <div class="flex items-center gap-4">
+                  <Avatar size="lg" src="https://i.pravatar.cc/150?img=32" alt="Sarah Chen" />
                   <div class="flex-1 min-w-0">
-                    <h3 class="text-base font-bold text-foreground">Type-Safe</h3>
-                    <p class="text-xs text-foreground-subtle mt-0.5 font-medium">Full TypeScript</p>
+                    <h3 class="text-sm font-semibold text-foreground">Sarah Chen</h3>
+                    <p class="text-xs text-foreground-muted">Product Designer</p>
+                    <div class="flex items-center gap-2 mt-2">
+                      <Badge variant="success" class="text-[10px] px-1.5 py-0.5">Pro</Badge>
+                      <span class="text-xs text-foreground-subtle">San Francisco, CA</span>
+                    </div>
                   </div>
-                </div>
-                <div class="mt-4">
-                  <p class="text-sm text-foreground-muted leading-relaxed">Strict types throughout with IDE autocompletion and compile-time error checking.</p>
                 </div>
               </Card>
 
-              <Card hover>
-                <div class="flex items-start gap-4">
-                  <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
-                    <Icon name="globe" size="md" />
+              <!-- Action Card -->
+              <Card>
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="text-sm font-semibold text-foreground">velocity-app</h3>
+                    <p class="text-xs text-foreground-muted mt-0.5">Production deployment</p>
                   </div>
-                  <div class="flex-1 min-w-0">
-                    <h3 class="text-base font-bold text-foreground">i18n Ready</h3>
-                    <p class="text-xs text-foreground-subtle mt-0.5 font-medium">Multi-language</p>
-                  </div>
+                  <Badge variant="success">Live</Badge>
                 </div>
-                <div class="mt-4">
-                  <p class="text-sm text-foreground-muted leading-relaxed">Built-in translation system with SEO-friendly URLs and automatic locale detection.</p>
+                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-border">
+                  <Button size="sm" variant="outline" class="flex-1">
+                    <Icon name="eye" size="xs" />
+                    View
+                  </Button>
+                  <Button size="sm" variant="outline" class="flex-1">
+                    <Icon name="settings" size="xs" />
+                    Settings
+                  </Button>
                 </div>
               </Card>
             </div>

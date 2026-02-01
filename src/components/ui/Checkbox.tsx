@@ -68,7 +68,7 @@ export function Checkbox({ ref, label, description, error, className, id, ...pro
 
         {/* Label and description */}
         {(label || description) && (
-          <div className="grid gap-1 leading-tight">
+          <div className="grid gap-0.5 leading-tight">
             {label && (
               <span className="text-sm font-medium text-foreground">
                 {label}
@@ -77,7 +77,7 @@ export function Checkbox({ ref, label, description, error, className, id, ...pro
             {description && (
               <span
                 id={`${checkboxId}-description`}
-                className="text-sm text-foreground-muted leading-snug"
+                className="text-xs text-foreground-subtle leading-normal"
               >
                 {description}
               </span>

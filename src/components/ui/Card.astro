@@ -3,17 +3,31 @@ import type { HTMLAttributes } from 'astro/types';
 import { cn } from '@/lib/cn';
 
 interface Props extends HTMLAttributes<'div'> {
-  variant?: 'default' | 'ghost' | 'outline';
+  variant?: 'default' | 'solid' | 'outline' | 'ghost' | 'elevated';
   padding?: 'none' | 'sm' | 'md' | 'lg';
+  shadow?: 'none' | 'sm' | 'md' | 'lg';
   hover?: boolean;
   href?: string;
+  /** Card title */
+  title?: string;
+  /** Card subtitle/byline */
+  subtitle?: string;
+  /** Card description */
+  description?: string;
+  /** Whether to use the structured layout */
+  structured?: boolean;
 }
 
 const {
   variant = 'default',
   padding = 'md',
+  shadow = 'none',
   hover = false,
   href,
+  title,
+  subtitle,
+  description,
+  structured = false,
   class: className,
   ...attrs
 } = Astro.props;
@@ -22,8 +36,10 @@ const Element = href ? 'a' : 'div';
 
 const variants = {
   default: 'bg-card border border-card-border',
-  ghost: 'bg-transparent',
-  outline: 'bg-transparent border border-border',
+  solid: 'bg-secondary border border-transparent',
+  outline: 'bg-transparent border-2 border-border',
+  ghost: 'bg-transparent border border-transparent',
+  elevated: 'bg-card border border-border shadow-lg',
 };
 
 const paddings = {
@@ -33,17 +49,56 @@ const paddings = {
   lg: 'p-8',
 };
 
+const shadows = {
+  none: '',
+  sm: 'shadow-sm',
+  md: 'shadow-md',
+  lg: 'shadow-lg',
+};
+
 const cardStyles = cn(
-  'rounded-lg',
+  'rounded-xl',
   'transition-all duration-200 ease-out',
   variants[variant],
   paddings[padding],
-  hover && 'hover:border-border-strong hover:shadow-md cursor-pointer',
+  shadows[shadow],
+  hover && 'hover:border-border-strong hover:shadow-md hover:-translate-y-0.5 cursor-pointer',
   href && 'block',
   className
 );
+
+const hasIcon = Astro.slots.has('icon');
+const isStructured = structured || hasIcon || title;
 ---
 
 <Element class={cardStyles} href={href} {...attrs}>
-  <slot />
+  {isStructured ? (
+    <>
+      <div class="flex items-start gap-4">
+        {hasIcon && (
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+            <slot name="icon" />
+          </div>
+        )}
+        {(title || subtitle) && (
+          <div class="flex-1 min-w-0">
+            {title && (
+              <h3 class="text-base font-bold text-foreground">{title}</h3>
+            )}
+            {subtitle && (
+              <p class="text-xs text-foreground-subtle mt-0.5 font-medium">{subtitle}</p>
+            )}
+          </div>
+        )}
+      </div>
+      {description && (
+        <div class="mt-4">
+          <p class="text-sm text-foreground-muted leading-relaxed">{description}</p>
+        </div>
+      )}
+      <slot />
+    </>
+  ) : (
+    <slot />
+  )}
 </Element>

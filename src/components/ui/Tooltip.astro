@@ -14,8 +14,6 @@ interface Props {
 
 const { content, position = 'top', delay = 200, class: className } = Astro.props;
 
-// Generate unique anchor name for CSS anchor positioning
-const anchorId = `--tip-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
 <span
@@ -23,14 +21,12 @@ const anchorId = `--tip-${Math.random().toString(36).slice(2, 9)}`;
   data-tooltip
   data-tooltip-delay={delay}
   data-tooltip-position={position}
-  style={`anchor-name: ${anchorId};`}
 >
   <slot />
   <span
     class="tooltip-bubble"
     role="tooltip"
     data-tooltip-content
-    style={`position-anchor: ${anchorId};`}
   >
     {content}
   </span>

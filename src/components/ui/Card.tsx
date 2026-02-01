@@ -1,14 +1,27 @@
-import { type HTMLAttributes, type Ref } from 'react';
+import { type HTMLAttributes, type Ref, type ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
 type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 type CardShadow = 'none' | 'sm' | 'md' | 'lg';
+type CardVariant = 'default' | 'solid' | 'outline' | 'ghost' | 'elevated';
 
 interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ref'> {
   ref?: Ref<HTMLDivElement>;
   padding?: CardPadding;
   shadow?: CardShadow;
   hover?: boolean;
+  /** Visual style variant */
+  variant?: CardVariant;
+  /** Icon element to display in the card header */
+  icon?: ReactNode;
+  /** Card title */
+  title?: string;
+  /** Card subtitle/byline */
+  subtitle?: string;
+  /** Card description */
+  description?: string;
+  /** Whether to use the structured layout with icon/title/description */
+  structured?: boolean;
 }
 
 const paddings: Record<CardPadding, string> = {
@@ -25,10 +38,33 @@ const shadows: Record<CardShadow, string> = {
   lg: 'shadow-lg',
 };
 
-export function Card({ ref, padding = 'md', shadow = 'none', hover = false, className, children, ...props }: CardProps) {
+const variants: Record<CardVariant, string> = {
+  default: 'bg-card border border-border',
+  solid: 'bg-secondary border border-transparent',
+  outline: 'bg-transparent border-2 border-border',
+  ghost: 'bg-transparent border border-transparent',
+  elevated: 'bg-card border border-border shadow-lg',
+};
+
+export function Card({
+  ref,
+  padding = 'md',
+  shadow = 'none',
+  hover = false,
+  variant = 'default',
+  icon,
+  title,
+  subtitle,
+  description,
+  structured = false,
+  className,
+  children,
+  ...props
+}: CardProps) {
   const cardStyles = cn(
-    'rounded-xl border border-border bg-card',
+    'rounded-xl',
     'transition-all duration-200 ease-out',
+    variants[variant],
     paddings[padding],
     shadows[shadow],
     hover && [
@@ -39,6 +75,37 @@ export function Card({ ref, padding = 'md', shadow = 'none', hover = false, clas
     ],
     className
   );
+
+  // If using structured layout with icon/title/description
+  if (structured || icon || title) {
+    return (
+      <div ref={ref} className={cardStyles} {...props}>
+        <div className="flex items-start gap-4">
+          {icon && (
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 flex items-center justify-center text-brand-500 shrink-0">
+              {icon}
+            </div>
+          )}
+          {(title || subtitle) && (
+            <div className="flex-1 min-w-0">
+              {title && (
+                <h3 className="text-base font-bold text-foreground">{title}</h3>
+              )}
+              {subtitle && (
+                <p className="text-xs text-foreground-subtle mt-0.5 font-medium">{subtitle}</p>
+              )}
+            </div>
+          )}
+        </div>
+        {description && (
+          <div className="mt-4">
+            <p className="text-sm text-foreground-muted leading-relaxed">{description}</p>
+          </div>
+        )}
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div ref={ref} className={cardStyles} {...props}>
