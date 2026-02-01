@@ -1,0 +1,289 @@
+{
+  "$schema": "./component-registry.schema.json",
+  "version": "1.0.0",
+  "categories": {
+    "ui": {
+      "name": "UI Components",
+      "description": "Core building blocks - buttons, forms, cards, dialogs"
+    },
+    "patterns": {
+      "name": "Patterns",
+      "description": "Reusable form patterns"
+    },
+    "hero": {
+      "name": "Hero",
+      "description": "Flexible hero section component"
+    }
+  },
+  "utilities": {
+    "cn": {
+      "name": "cn utility",
+      "description": "Tailwind CSS class merging utility",
+      "files": ["src/lib/cn.ts"],
+      "npm": ["clsx", "tailwind-merge"]
+    }
+  },
+  "components": {
+    "button": {
+      "name": "Button",
+      "category": "ui",
+      "files": [
+        "src/components/ui/Button.astro",
+        "src/components/ui/Button.tsx"
+      ],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "card": {
+      "name": "Card",
+      "category": "ui",
+      "files": [
+        "src/components/ui/Card.astro",
+        "src/components/ui/Card.tsx"
+      ],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "input": {
+      "name": "Input",
+      "category": "ui",
+      "files": [
+        "src/components/ui/Input.astro",
+        "src/components/ui/Input.tsx"
+      ],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "icon": {
+      "name": "Icon",
+      "category": "ui",
+      "files": ["src/components/ui/Icon.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "badge": {
+      "name": "Badge",
+      "category": "ui",
+      "files": ["src/components/ui/Badge.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "alert": {
+      "name": "Alert",
+      "category": "ui",
+      "files": ["src/components/ui/Alert.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "dialog": {
+      "name": "Dialog",
+      "category": "ui",
+      "files": ["src/components/ui/Dialog.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "tabs": {
+      "name": "Tabs",
+      "category": "ui",
+      "files": ["src/components/ui/Tabs.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "select": {
+      "name": "Select",
+      "category": "ui",
+      "files": [
+        "src/components/ui/Select.astro",
+        "src/components/ui/Select.tsx"
+      ],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "checkbox": {
+      "name": "Checkbox",
+      "category": "ui",
+      "files": [
+        "src/components/ui/Checkbox.astro",
+        "src/components/ui/Checkbox.tsx"
+      ],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "radio": {
+      "name": "Radio",
+      "category": "ui",
+      "files": [
+        "src/components/ui/Radio.astro",
+        "src/components/ui/Radio.tsx"
+      ],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "textarea": {
+      "name": "Textarea",
+      "category": "ui",
+      "files": [
+        "src/components/ui/Textarea.astro",
+        "src/components/ui/Textarea.tsx"
+      ],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "tooltip": {
+      "name": "Tooltip",
+      "category": "ui",
+      "files": ["src/components/ui/Tooltip.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "dropdown": {
+      "name": "Dropdown",
+      "category": "ui",
+      "files": ["src/components/ui/Dropdown.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "skeleton": {
+      "name": "Skeleton",
+      "category": "ui",
+      "files": ["src/components/ui/Skeleton.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "logo": {
+      "name": "Logo",
+      "category": "ui",
+      "files": ["src/components/ui/Logo.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "code-block": {
+      "name": "CodeBlock",
+      "category": "ui",
+      "files": ["src/components/ui/CodeBlock.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "social-proof": {
+      "name": "SocialProof",
+      "category": "ui",
+      "files": ["src/components/ui/SocialProof.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "avatar": {
+      "name": "Avatar",
+      "category": "ui",
+      "files": ["src/components/ui/Avatar.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "terminal-demo": {
+      "name": "TerminalDemo",
+      "category": "ui",
+      "files": ["src/components/ui/TerminalDemo.tsx"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "contact-form": {
+      "name": "ContactForm",
+      "category": "patterns",
+      "files": ["src/components/patterns/ContactForm.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": ["input", "textarea", "button"]
+      },
+      "premium": false
+    },
+    "newsletter-form": {
+      "name": "NewsletterForm",
+      "category": "patterns",
+      "files": ["src/components/patterns/NewsletterForm.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": ["input", "button"]
+      },
+      "premium": false
+    },
+    "form-field": {
+      "name": "FormField",
+      "category": "patterns",
+      "files": ["src/components/patterns/FormField.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    },
+    "hero": {
+      "name": "Hero",
+      "category": "hero",
+      "files": ["src/components/hero/Hero.astro"],
+      "dependencies": {
+        "utilities": ["cn"],
+        "components": []
+      },
+      "premium": false
+    }
+  }
+}
