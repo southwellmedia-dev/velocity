@@ -272,7 +272,7 @@ const buttonId = `${menuId}-button`;
     hasMobileMenuSlot ? (
       <div
         id={menuId}
-        class="md:hidden hidden border-t border-border bg-background shadow-lg shadow-black/20"
+        class="md:hidden hidden border-t border-border bg-background shadow-[0_8px_24px_-12px_rgba(0,0,0,0.12)] opacity-0 origin-top scale-y-0"
         role="navigation"
         aria-label="Mobile navigation"
       >
@@ -281,7 +281,7 @@ const buttonId = `${menuId}-button`;
     ) : (
       <div
         id={menuId}
-        class="md:hidden hidden border-t border-border bg-background shadow-lg shadow-black/20"
+        class="md:hidden hidden border-t border-border bg-background shadow-[0_8px_24px_-12px_rgba(0,0,0,0.12)] opacity-0 origin-top scale-y-0"
         role="navigation"
         aria-label="Mobile navigation"
       >
@@ -367,7 +367,7 @@ const buttonId = `${menuId}-button`;
       }
 
       // Show menu and backdrop with animations
-      menu.classList.remove('hidden', 'animate-menu-up');
+      menu.classList.remove('hidden', 'animate-menu-up', 'opacity-0', 'scale-y-0');
       menu.classList.add('animate-menu-down');
       if (backdrop) {
         backdrop.classList.remove('pointer-events-none', 'animate-backdrop-out');
@@ -407,7 +407,7 @@ const buttonId = `${menuId}-button`;
 
       // Wait for animation to complete before hiding
       setTimeout(() => {
-        menu.classList.add('hidden');
+        menu.classList.add('hidden', 'opacity-0', 'scale-y-0');
         if (backdrop) {
           backdrop.classList.add('pointer-events-none');
         }

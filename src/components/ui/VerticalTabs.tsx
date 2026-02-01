@@ -53,6 +53,7 @@ export function VerticalTabs({
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState(defaultValue ?? tabs[0]?.id ?? '');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -61,13 +62,23 @@ export function VerticalTabs({
   const activeTabData = tabs.find(t => t.id === activeTabId);
   const ActiveIcon = activeTabData?.icon;
 
+  // Close dropdown with exit animation
+  const closeDropdown = useCallback(() => {
+    if (!isDropdownOpen || isClosing) return;
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsDropdownOpen(false);
+      setIsClosing(false);
+    }, 200); // Match animation duration
+  }, [isDropdownOpen, isClosing]);
+
   const handleTabChange = useCallback((id: string) => {
     if (!isControlled) {
       setInternalValue(id);
     }
     onChange?.(id);
-    setIsDropdownOpen(false);
-  }, [isControlled, onChange]);
+    closeDropdown();
+  }, [isControlled, onChange, closeDropdown]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -75,13 +86,13 @@ export function VerticalTabs({
 
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsDropdownOpen(false);
+        closeDropdown();
       }
     };
 
     const handleEscape = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setIsDropdownOpen(false);
+        closeDropdown();
         triggerRef.current?.focus();
       }
     };
@@ -93,7 +104,7 @@ export function VerticalTabs({
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [isDropdownOpen]);
+  }, [isDropdownOpen, closeDropdown]);
 
   // Reset focused index when dropdown closes
   useEffect(() => {
@@ -141,10 +152,10 @@ export function VerticalTabs({
         }
         break;
       case 'Tab':
-        setIsDropdownOpen(false);
+        closeDropdown();
         break;
     }
-  }, [isDropdownOpen, tabs, focusedIndex, handleTabChange]);
+  }, [isDropdownOpen, tabs, focusedIndex, handleTabChange, closeDropdown]);
 
   const handleDesktopKeyDown = useCallback((e: KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
     let newIndex = currentIndex;
@@ -377,12 +388,12 @@ export function VerticalTabs({
           </button>
 
           {/* Dropdown Panel */}
-          {isDropdownOpen && mobileVariant === 'dropdown' && (
+          {(isDropdownOpen || isClosing) && mobileVariant === 'dropdown' && (
             <>
               {/* Backdrop - click to close */}
               <div
                 className="fixed inset-0 z-40"
-                onClick={() => setIsDropdownOpen(false)}
+                onClick={closeDropdown}
                 aria-hidden="true"
               />
               {/* Panel */}
@@ -394,7 +405,7 @@ export function VerticalTabs({
                 className={cn(
                   'absolute z-50 w-full mt-2 p-1.5',
                   'rounded-xl border border-border bg-background/95 backdrop-blur-sm shadow-xl',
-                  'animate-in fade-in slide-in-from-top-2 duration-200',
+                  isClosing ? 'animate-dropdown-out' : 'animate-dropdown-in',
                   'flex flex-col gap-0.5'
                 )}
               >
@@ -405,12 +416,15 @@ export function VerticalTabs({
         </div>
 
         {/* Bottom Sheet */}
-        {isDropdownOpen && mobileVariant === 'sheet' && (
+        {(isDropdownOpen || isClosing) && mobileVariant === 'sheet' && (
           <>
             {/* Backdrop - frosted glass effect like mobile menu */}
             <div
-              className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm animate-backdrop"
-              onClick={() => setIsDropdownOpen(false)}
+              className={cn(
+                'fixed inset-0 z-40 bg-background/60 backdrop-blur-sm',
+                isClosing ? 'animate-backdrop-out' : 'animate-backdrop'
+              )}
+              onClick={closeDropdown}
               aria-hidden="true"
             />
             {/* Sheet Panel */}
@@ -422,7 +436,7 @@ export function VerticalTabs({
               className={cn(
                 'fixed inset-x-0 bottom-0 z-50 max-h-[70vh] overflow-auto',
                 'rounded-t-2xl border-t border-border bg-background shadow-2xl',
-                'animate-sheet-up',
+                isClosing ? 'animate-sheet-down' : 'animate-sheet-up',
                 'pb-safe'
               )}
             >
